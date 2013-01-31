@@ -1,10 +1,16 @@
 $(document).ready(function(){
 	
 	$.cookie.json = true;
-	calculateIndicators()
+
+	var punches = $.cookie('punches');
+		
+	if (punches != undefined) {
+		calculateIndicators(punches);
+	}
 	
 	$(document).everyTime('1s', function() {
-		calculateIndicators()
+		punches = $.cookie('punches');
+		updateIndicators(punches);
 	});
 	
 	$('#button').on('click', function(){
@@ -18,26 +24,81 @@ $(document).ready(function(){
 		saveInCookie(check);
 	});
 	
-	var myplugin;
-	if(!myplugin){
-		myplugin = $('#p1').cprogress({
-		   percent: 0, // starting position
-		   img1: '../images/v1.png', // background
-		   img2: '../images/v2.png', // foreground
-		   speed: 200, // speed (timeout)
-		   PIStep : 0.05, // every step foreground area is bigger about this val
-		   limit: 100, // end value
-		   loop : false, //if true, no matter if limit is set, progressbar will be running
-		   showPercent : true, //show hide percent
-		   onInit: function(){console.log('onInit');},
-		   onProgress: function(p){console.log('onProgress',p);}, //p=current percent
-		   onComplete: function(p){console.log('onComplete',p);}
-		});
-	}
+	$("#knob").knob({
+        /*change : function (value) {
+            //console.log("change : " + value);
+        },
+        release : function (value) {
+            console.log("release : " + value);
+        },
+        cancel : function () {
+            console.log("cancel : " + this.value);
+        },*/
+        draw : function () {
+
+            // "tron" case
+            if(this.$.data('skin') == 'tron') {
+
+                var a = this.angle(this.cv)  // Angle
+                    , sa = this.startAngle          // Previous start angle
+                    , sat = this.startAngle         // Start angle
+                    , ea                            // Previous end angle
+                    , eat = sat + a                 // End angle
+                    , r = 1;
+
+                this.g.lineWidth = this.lineWidth;
+
+                this.o.cursor
+                    && (sat = eat - 0.3)
+                    && (eat = eat + 0.3);
+
+                if (this.o.displayPrevious) {
+                    ea = this.startAngle + this.angle(this.v);
+                    this.o.cursor
+                        && (sa = ea - 0.3)
+                        && (ea = ea + 0.3);
+                    this.g.beginPath();
+                    this.g.strokeStyle = this.pColor;
+                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                    this.g.stroke();
+                }
+
+                this.g.beginPath();
+                this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+                this.g.stroke();
+
+                this.g.lineWidth = 2;
+                this.g.beginPath();
+                this.g.strokeStyle = this.o.fgColor;
+                this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                this.g.stroke();
+
+                return false;
+            }
+        }
+    });
+	
+	// var myplugin;
+	// if(!myplugin){
+		// myplugin = $('#p1').cprogress({
+		   // percent: 0, // starting position
+		   // img1: '../images/v1.png', // background
+		   // img2: '../images/v2.png', // foreground
+		   // speed: 200, // speed (timeout)
+		   // PIStep : 0.05, // every step foreground area is bigger about this val
+		   // limit: 0, // end value
+		   // loop : false, //if true, no matter if limit is set, progressbar will be running
+		   // showPercent : true, //show hide percent
+		   // onInit: function(){console.log('onInit');},
+		   // onProgress: function(p){console.log('onProgress',p);}, //p=current percent
+		   // onComplete: function(p){console.log('onComplete',p);}
+		// });
+	// }
 });
 
 function saveInCookie(check) {
-	// Préparation de l'enregistrement en cookie
+	// Prï¿½paration de l'enregistrement en cookie
 	var punch = {
 			'check' : check,
 			'date' : new Date().getTime()
@@ -55,64 +116,73 @@ function saveInCookie(check) {
 	$.cookie('punches', punches, {expires : 7});
 }
 
-function calculateIndicators() {
-
-	var punches = $.cookie('punches');
+function updateIndicators(punches) {
 		
 	if (punches != undefined) {
 		if (punches[punches.length-1]['check'] == 'I') {
-		
 			// Si le dernier check est un check in on modifie l'aspect du bouton
 			if (!$('#button').hasClass('on'))
 				$('#button').toggleClass('on');
-				
-			// Récupération de la date pour les calculs
-			var now = new Date();
 			
-			var todaysPunches = getTodaysPunches(punches);
-			
-			var previousPunch;
-			var modelCorrupted = false;
-			var workdayLength = 0;
-			
-			todaysPunches = todaysPunches.reverse();
-			
-			var previousPunch = getFirstCheckIn(todaysPunches);
-			
-			// Calcul du temps passé au travail dans la journée
-			var j = 1;
-			for (var index in todaysPunches) {
-				punch = todaysPunches[index];
-				if (previousPunch['check'] == punch['check']) {
-					modelCorrupted = true;
-					break;
-				}
-				if (punch['check'] == 'O' && previousPunch['check'] == 'I') {
-					workdayLength += punch['date'] - previousPunch['date'];
-				}
-				else if (todaysPunches.length == j && punch['check'] == 'I') {
-					workdayLength += now.getTime() - punch['date'];
-				}
-				j++;
-				previousPunch = punch;
-			}
-			
-			$('#time-spent').text(ms2string(workdayLength));
-			
-			// Récupération du dernier punch
-			var lastPunch = punches[punches.length-1]['date'];
-			lastPunch = new Date(lastPunch);
-			
-			$('#last-time-spent').text(diffDate(now,lastPunch));
-			
-			// Affichage de la taille du cookie par rapport au maximum autorisé
-			$('#cookie-size').text(sizeRatio(punches));
+			calculateIndicators(punches)
 		}
 	}
+	
+}
+
+function calculateIndicators(punches) {
+		
+	// Rï¿½cupï¿½ration de la date pour les calculs
+	var now = new Date();
+	
+	var todaysPunches = getTodaysPunches(punches);
+	
+	var previousPunch;
+	var modelCorrupted = false;
+	var workdayLength = 0;
+	
+	todaysPunches = todaysPunches.reverse();
+	
+	var previousPunch = getFirstCheckIn(todaysPunches);
+	
+	// Calcul du temps passï¿½ au travail dans la journï¿½e
+	var j = 1;
+	for (var index in todaysPunches) {
+		punch = todaysPunches[index];
+		if (previousPunch['check'] == punch['check']) {
+			modelCorrupted = true;
+			break;
+		}
+		if (punch['check'] == 'O' && previousPunch['check'] == 'I') {
+			workdayLength += punch['date'] - previousPunch['date'];
+		}
+		else if (todaysPunches.length == j && punch['check'] == 'I') {
+			workdayLength += now.getTime() - punch['date'];
+		}
+		j++;
+		previousPunch = punch;
+	}
+	
+	$('#time-spent').text(ms2string(workdayLength));
+	
+	// Rï¿½cupï¿½ration du dernier punch
+	var lastPunch = punches[punches.length-1]['date'];
+	lastPunch = new Date(lastPunch);
+	
+	$('#last-time-spent').text(diffDate(now,lastPunch));
+	
+	// Affichage de la taille du cookie par rapport au maximum autorisï¿½
+	$('#cookie-size').text(sizeRatio(punches));
+	
+	var indicators = {
+		'dayRatio' : workdayLength * 100 / (7 * 60 *60 * 1000 + 22 * 60 * 1000)
+	}
+	
+	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
 }
 
 function getFirstCheckIn(todaysPunches) {
-	// Récupération du premier check in de la journée
+	// Rï¿½cupï¿½ration du premier check in de la journï¿½e
 	do {
 		previousPunch = todaysPunches.shift();
 	} while (todaysPunches.length > 0 && previousPunch['check'] != 'I');
@@ -121,14 +191,14 @@ function getFirstCheckIn(todaysPunches) {
 
 function getTodaysPunches(punches) {
 
-	// Création de la date du jour à minuit (début de la journée)
+	// Crï¿½ation de la date du jour ï¿½ minuit (dï¿½but de la journï¿½e)
 	var dayStart = new Date();
 	dayStart.setHours(0);
 	dayStart.setMinutes(0);
 	dayStart.setSeconds(0);
 	dayStart.setMilliseconds(0);
 			
-	// Récupération dans le cookie des punches du jour
+	// Rï¿½cupï¿½ration dans le cookie des punches du jour
 	var i = 0;
 	var tempPunch;
 	var todaysPunches = [];

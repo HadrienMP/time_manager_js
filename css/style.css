@@ -105,7 +105,7 @@ a + span {
  	border-radius: 4px;
  	clear: both;
  	position: absolute;
- 	bottom: 0;
+ 	bottom: -10px;
  	left: 42%;
  	transition: background-color 350ms, box-shadow 700ms;
 	-o-transition: background-color 350ms, box-shadow 700ms;
@@ -118,21 +118,9 @@ a.on + span {
 	background-color: rgb(135,187,83);
 }
 
-.jCProgress {
+section canvas {
 	position: absolute;
-	z-index: -2;
-	margin-top:-17px;
-	margin-left: -18px;
+	top: -16px;
+	left: -17px;
 }
-
-.jCProgress > div.percent {
-     font: 18px/27px 'BebasRegular', Arial, sans-serif;
-     color:#ebebeb;
-     text-shadow: 1px 1px 1px #1f1f1f;
-
-     position:absolute;
-     margin-top:40px;
-     margin-left:22px;
-     text-align: center;
-     width:60px;
-}
+#knob {position: absolute;}
