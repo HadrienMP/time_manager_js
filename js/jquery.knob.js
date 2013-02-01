@@ -59,6 +59,7 @@
         this.isInit = false;
         this.fgColor = null; // main color
         this.pColor = null; // previous color
+		this.shadow = false; // Has an outer shadow or not
         this.dH = null; // draw hook
         this.cH = null; // change hook
         this.eH = null; // cancel hook
@@ -98,6 +99,7 @@
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
+					shadow : this.$.data('shadow') || false,
                     inputColor: this.$.data('inputcolor') || this.$.data('fgcolor') || '#87CEEB',
                     inline : false,
 
@@ -351,6 +353,8 @@
             } else {
                 this.fgColor = this.o.fgColor;
             }
+			
+			this.shadow = this.o.shadow;
 
             return this;
         };
