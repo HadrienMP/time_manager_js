@@ -126,6 +126,13 @@ function calculateIndicators(punches) {
 		'dayRatio' : workdayLength * 100 / (7 * 60 *60 * 1000 + 22 * 60 * 1000)
 	}
 	
+	// Si on a dépassé le temps alloué
+	if (indicators['dayRatio'] > 100) {
+		indicators['dayRatio'] = indicators['dayRatio'] - 100;
+		$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
+		$("#time-spent, #last-time-spent").css('color','#cc0000');
+	}
+	
 	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
 }
 
