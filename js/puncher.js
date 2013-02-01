@@ -20,68 +20,65 @@ $(document).ready(function(){
 		var check = 'O';
 		if ($('#button').hasClass('on')) {
 			check = 'I';
+			$("#knob").trigger('configure', {"fgColor":"#87bb53",});
+		} else {
+			$("#knob").trigger('configure', {"fgColor":"#E20000",});
 		}
 		saveInCookie(check);
 	});
 	
 	$("#knob").knob({
-        /*change : function (value) {
-            //console.log("change : " + value);
-        },
-        release : function (value) {
-            console.log("release : " + value);
-        },
-        cancel : function () {
-            console.log("cancel : " + this.value);
-        },*/
-        draw : function () {
-
-            // "tron" case
-            if(this.$.data('skin') == 'tron') {
-
-                var a = this.angle(this.cv)  // Angle
-                    , sa = this.startAngle          // Previous start angle
-                    , sat = this.startAngle         // Start angle
-                    , ea                            // Previous end angle
-                    , eat = sat + a                 // End angle
-                    , r = 1;
-
-                this.g.lineWidth = this.lineWidth;
-
-                this.o.cursor
-                    && (sat = eat - 0.3)
-                    && (eat = eat + 0.3);
-
-                if (this.o.displayPrevious) {
-                    ea = this.startAngle + this.angle(this.v);
-                    this.o.cursor
-                        && (sa = ea - 0.3)
-                        && (ea = ea + 0.3);
-                    this.g.beginPath();
-                    this.g.strokeStyle = this.pColor;
-                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
-                    this.g.stroke();
-                }
-
-                this.g.beginPath();
-                this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
-                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
-                this.g.stroke();
-
-                this.g.lineWidth = 2;
-                this.g.beginPath();
-                this.g.strokeStyle = this.o.fgColor;
-                this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-                this.g.stroke();
-
-                return false;
-            }
-        }
+		"fgColor":"#E20000",
+        draw : tronDraw
     });
 });
 
+function tronDraw() {
+
+	// "tron" case
+	if(this.$.data('skin') == 'tron') {
+
+		var a = this.angle(this.cv)  // Angle
+			, sa = this.startAngle          // Previous start angle
+			, sat = this.startAngle         // Start angle
+			, ea                            // Previous end angle
+			, eat = sat + a                 // End angle
+			, r = 1;
+
+		this.g.lineWidth = this.lineWidth;
+
+		this.o.cursor
+			&& (sat = eat - 0.3)
+			&& (eat = eat + 0.3);
+
+		if (this.o.displayPrevious) {
+			ea = this.startAngle + this.angle(this.v);
+			this.o.cursor
+				&& (sa = ea - 0.3)
+				&& (ea = ea + 0.3);
+			this.g.beginPath();
+			this.g.strokeStyle = this.pColor;
+			this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+			this.g.stroke();
+		}
+
+		this.g.beginPath();
+		this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+		this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+		this.g.stroke();
+
+		this.g.lineWidth = 2;
+		this.g.beginPath();
+		this.g.strokeStyle = this.o.fgColor;
+		this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+		this.g.stroke();
+
+		return false;
+	}
+}
+
 function saveInCookie(check) {
-	// Pr�paration de l'enregistrement en cookie
+	// Préparation de l'enregistrement en cookie
 	var punch = {
 			'check' : check,
 			'date' : new Date().getTime()
@@ -104,8 +101,10 @@ function updateIndicators(punches) {
 	if (punches != undefined) {
 		if (punches[punches.length-1]['check'] == 'I') {
 			// Si le dernier check est un check in on modifie l'aspect du bouton
-			if (!$('#button').hasClass('on'))
+			if (!$('#button').hasClass('on')) {
 				$('#button').toggleClass('on');
+				$("#knob").trigger('configure', {"fgColor":"#87bb53",});
+			}
 			
 			calculateIndicators(punches)
 		}
@@ -115,7 +114,7 @@ function updateIndicators(punches) {
 
 function calculateIndicators(punches) {
 		
-	// R�cup�ration de la date pour les calculs
+	// Récupération de la date pour les calculs
 	var now = new Date();
 	
 	var todaysPunches = getTodaysPunches(punches);
@@ -128,7 +127,7 @@ function calculateIndicators(punches) {
 	
 	var previousPunch = getFirstCheckIn(todaysPunches);
 	
-	// Calcul du temps pass� au travail dans la journ�e
+	// Calcul du temps passé au travail dans la journée
 	var j = 1;
 	for (var index in todaysPunches) {
 		punch = todaysPunches[index];
@@ -148,13 +147,16 @@ function calculateIndicators(punches) {
 	
 	$('#time-spent').text(ms2string(workdayLength));
 	
-	// R�cup�ration du dernier punch
-	var lastPunch = punches[punches.length-1]['date'];
-	lastPunch = new Date(lastPunch);
+	// Récupération du dernier punch
+	var lastPunch = getLastCheckIn(todaysPunches);
+	if (lastPunch != undefined) {
+		lastPunch = new Date(lastPunch);
+		$('#last-time-spent').text(diffDate(now,lastPunch));
+	} else {
+		$('#last-time-spent').text("0 s");
+	}	
 	
-	$('#last-time-spent').text(diffDate(now,lastPunch));
-	
-	// Affichage de la taille du cookie par rapport au maximum autoris�
+	// Affichage de la taille du cookie par rapport au maximum autorisé
 	$('#cookie-size').text(sizeRatio(punches));
 	
 	var indicators = {
@@ -165,23 +167,32 @@ function calculateIndicators(punches) {
 }
 
 function getFirstCheckIn(todaysPunches) {
-	// R�cup�ration du premier check in de la journ�e
+	// Récupération du premier check in de la journée
 	do {
-		previousPunch = todaysPunches.shift();
-	} while (todaysPunches.length > 0 && previousPunch['check'] != 'I');
-	return previousPunch;
+		firstCheckIn = todaysPunches.shift();
+	} while (todaysPunches.length > 0 && firstCheckIn['check'] != 'I');
+	
+	if (firstCheckIn != undefined && firstCheckIn['check'] != 'I')
+		firstCheckIn = undefined;
+		
+	return firstCheckIn;
+}
+
+function getLastCheckIn(todaysPunches) {
+	todaysPunches = todaysPunches.reverse();
+	return getFirstCheckIn(todaysPunches);
 }
 
 function getTodaysPunches(punches) {
 
-	// Cr�ation de la date du jour � minuit (d�but de la journ�e)
+	// Création de la date du jour é minuit (début de la journée)
 	var dayStart = new Date();
 	dayStart.setHours(0);
 	dayStart.setMinutes(0);
 	dayStart.setSeconds(0);
 	dayStart.setMilliseconds(0);
 			
-	// R�cup�ration dans le cookie des punches du jour
+	// Récupération dans le cookie des punches du jour
 	var i = 0;
 	var tempPunch;
 	var todaysPunches = [];
