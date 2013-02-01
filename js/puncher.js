@@ -84,9 +84,26 @@ function calculateIndicators(punches) {
 	var todaysPunchesTimeSpent = todaysPunches.reverse();
 	var todaysPunchesLastCheckIn = todaysPunchesTimeSpent.slice(0);
 	
-	var previousPunch = getFirstCheckIn(todaysPunchesTimeSpent);
+	// Récupération du dernier punch
+	var lastPunch = getLastCheckIn(todaysPunchesLastCheckIn);
+	if (lastPunch != undefined) {
+		lastPunchDate = new Date(lastPunch['date']);
+		$('#last-time-spent').text(diffDate(now,lastPunchDate));
+	} else {
+		$('#last-time-spent').text("0 s");
+	}	
+	
+	// Affichage de la taille du cookie par rapport au maximum autorisé
+	$('#cookie-size').text(sizeRatio(punches));
+	
+	var indicators = {
+		'dayRatio' : workdayLength * 100 / (7 * 60 *60 * 1000 + 22 * 60 * 1000)
+	}
+	
 	
 	// Calcul du temps passé au travail dans la journée
+	var previousPunch = getFirstCheckIn(todaysPunchesTimeSpent);
+	
 	var j = 1;
 	if (todaysPunchesTimeSpent.length == 0) {
 		workdayLength += now.getTime() - previousPunch['date'];
@@ -109,22 +126,6 @@ function calculateIndicators(punches) {
 	}
 	
 	$('#time-spent').text(ms2string(workdayLength));
-	
-	// Récupération du dernier punch
-	var lastPunch = getLastCheckIn(todaysPunchesLastCheckIn);
-	if (lastPunch != undefined) {
-		lastPunchDate = new Date(lastPunch['date']);
-		$('#last-time-spent').text(diffDate(now,lastPunchDate));
-	} else {
-		$('#last-time-spent').text("0 s");
-	}	
-	
-	// Affichage de la taille du cookie par rapport au maximum autorisé
-	$('#cookie-size').text(sizeRatio(punches));
-	
-	var indicators = {
-		'dayRatio' : workdayLength * 100 / (7 * 60 *60 * 1000 + 22 * 60 * 1000)
-	}
 	
 	// Si on a dépassé le temps alloué
 	if (indicators['dayRatio'] > 100) {
