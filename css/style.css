@@ -1,46 +1,8 @@
 body {
-	background: url('http://subtlepatterns.com/patterns/micro_carbon.png');
+	background: url('../images/micro_carbon.png');
 	font-size: 11px;
-	display: table;
-	padding: 50px;
-	margin: auto;
-}
-#wrapper {
-	display: table-row;
-}
-#puncherContainer {
-	width: 100px;
-	display: table-cell;
 }
 
-#tabs-container {
-	padding: 30px;
-	width: 300px;
-	display: table-cell;
-}
-
-	#tabs-container #progressbar {height: 10px;}
-		#tabs-container #progressbar .ui-progressbar-value {height: 8px;}
-
-#puncherContainer section {
-	margin: 20px auto 0;
-	width: 75px;
-	height: 95px;
-	position: relative;
-	text-align: center;
-}
-section#indicators {
-	margin: 30px auto;
-	width: 400px;
-	height: auto;
-	color: white;
-}
-	#indicators dd, #indicators dt {margin: 0}
-	#indicators dt {margin-top: 10px}
-	
-#puncherContainer :active, #puncherContainer :focus {
-	outline: 0;
-}
 /** Font-Face **/
 @font-face {
   font-family: "FontAwesome";
@@ -52,97 +14,94 @@ section#indicators {
   font-weight: normal;
   font-style: normal;
 }
-/** Styling the Button **/
-#puncherContainer #button {
-	font-family: "FontAwesome";
-	text-shadow: 0px 1px 1px rgba(250,250,250,0.1);
-	font-size: 32pt;
-	display: block;
-	position: relative;
+
+#wrapper {}
+	#content { }
+		#puncher-container { text-align: center; vertical-align: middle; padding: 30px;}
+			#puncher-container a {height: 200px; width: 150px; vertical-align: middle;}
+			#puncher-container a.corner-left, #puncher-container a.corner-right {text-indent: -70000px; }
+			#puncher-container a.corner-left {border-right: 2px solid #111111}
+			#puncher-container a.corner-right {border-left: 2px solid #111111}
+				#puncher-container section {
+					background: url('../images/micro_carbon.png');
+					position: relative;
+					top: -180px;
+					margin: auto;
+					z-index: 10;
+					border-radius: 100px;
+					border: 1px solid #111;
+					height: 157px;
+					width: 160px;
+					vertical-align: middle;
+					padding-top: 2px;
+					box-shadow: inset 0px 3px 0px #111;
+				}
+					#puncher-container a#puncher-button {
+						font-family: "FontAwesome";
+						padding-top: 23px;
+						border-radius: 100px;
+						height: 97px;
+						width: 120px;
+						margin: auto;
+						border: none;
+						margin-top: 15px;
+					}
+					#puncher-container a#puncher-button.box-active {
+						top: -85px;
+					}
+					
+				
+				#indicators-container {margin: auto;}
+					#cookie-state, #indicators-state {
+						font-size: 12px;
+						overflow: hidden;
+						height: 200px;
+						width: 0px; 
+						vertical-align: middle; 
+						background: url('../images/escheresque_ste.png'); 
+						box-shadow: none;
+					}
+				
+.corner-left {
+	border-radius: 50px 0 0 50px;
+}
+
+.corner-right {
+	border-radius: 0 50px 50px 0;
+}
+
+.box {
+	margin-left: -4px; 
+	display: inline-block; 
+	border: 1px solid #111;
+	font-size: 90px;
 	text-decoration: none;
-    box-shadow: 0px 3px 0px 0px rgb(34,34,34),
-    			0px 7px 10px 0px rgb(17,17,17),
-    			inset 0px 1px 1px 0px rgba(250, 250, 250, .2), 
-    			inset 0px -12px 35px 0px rgba(0, 0, 0, .5);
-	width: 70px;
-	height: 70px;
-	border: 0;
-	color: rgb(37,37,37);
-	border-radius: 35px;
-	text-align: center;
-	line-height: 79px;
-	background-color: rgb(83,87,93);
+	color: #999;
+	box-shadow: 0px 5px 0px #111;
+	background-image: linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
+	background-image: -o-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
+	background-image: -moz-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
+	background-image: -webkit-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
+	background-image: -ms-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
 
-	transition: color 350ms ease, text-shadow 350ms;
-		-o-transition: color 350ms ease, text-shadow 350ms;
-		-moz-transition: color 350ms ease, text-shadow 350ms;
-		-webkit-transition: color 350ms ease, text-shadow 350ms;
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.12, rgb(33,33,33)),
+		color-stop(0.65, rgb(64,64,64))
+	);
 }
-#puncherContainer #button:before {
-	content: "";
-	width: 80px;
-	height: 80px;
-	display: block;
-	z-index: -2;
-	position: absolute;
-	background-color: rgb(26,27,29);
-	left: -5px;
-	top: -2px;
-	border-radius: 40px;
-	box-shadow: 0px 1px 0px 0px rgba(250,250,250,0.1), 
-			 	inset 0px 1px 2px rgba(0, 0, 0, 0.5);
-}
-#puncherContainer #button:active {
-    box-shadow: 0px 0px 0px 0px rgb(34,34,34),
-    			0px 3px 7px 0px rgb(17,17,17),
-    			inset 0px 1px 1px 0px rgba(250, 250, 250, .2), 
-    			inset 0px -10px 35px 5px rgba(0, 0, 0, .5);
-    background-color: rgb(83,87,93);
-  	top: 3px;
-}
-#puncherContainer #button.on {
-    box-shadow: 0px 0px 0px 0px rgb(34,34,34),
-    			0px 3px 7px 0px rgb(17,17,17), 
-    			inset 0px 1px 1px 0px rgba(250, 250, 250, .2), 
-    			inset 0px -10px 35px 5px rgba(0, 0, 0, .5);
-    background-color: rgb(83,87,93);
-  	top: 3px;
- 	color: #fff;
-  	text-shadow: 0px 0px 3px rgb(250,250,250);
-}
-#puncherContainer #button:active:before, #puncherContainer #button.on:before {
-	top: -5px;
-	background-color: rgb(26,27,29);
-	box-shadow: 0px 1px 0px 0px rgba(250,250,250,0.1), 
-			 	inset 0px 1px 2px rgba(0, 0, 0, 0.5);
-}
-/* Styling the Indicator light */
-#puncherContainer #button + span {
-	display: block;
-	width: 8px;
-	height: 8px;
-	background-color: #aaa;
-	box-shadow: inset 0px 1px 0px 0px rgba(250,250,250,0.5),
-				0px 0px 1px 1px rgba(170,170,170,0.5);
- 	border-radius: 4px;
- 	clear: both;
- 	position: absolute;
- 	bottom: -10px;
- 	left: 42%;
- 	transition: background-color 350ms, box-shadow 700ms;
-	-o-transition: background-color 350ms, box-shadow 700ms;
-	-moz-transition: background-color 350ms, box-shadow 700ms;
-	-webkit-transition: background-color 350ms, box-shadow 700ms;
-}
-#puncherContainer #button.on + span {
-	box-shadow: inset 0px 1px 0px 0px rgba(250,250,250,0.5),
-				0px 0px 3px 2px rgba(135,187,83,0.5);
-	background-color: rgb(135,187,83);
+.box-active {
+	color: #fff;
+	text-shadow: 0px 0px 10px #fff;
+	box-shadow: 0px 0px 30px #26B3F7;
 }
 
-section canvas {
-	position: absolute;
-	top: -15px;
-	left: -17px;
-}
-#knob {position: absolute;}
+#cookie-button.cookie-active {width: 100px;}
+#cookie-state.cookie-active {width: 250px;}
+#indicators-button.cookie-active {margin-right: 200px;}
+
+.button-deployed {width: 100px !important;}
+.info-deployed {width: 250px !important;}
+.indicators-button-compensate {margin-right: 200px;}

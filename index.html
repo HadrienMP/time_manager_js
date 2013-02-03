@@ -17,27 +17,19 @@
 </head>
 <body>
 	<div id="wrapper">
-		<div id="puncherContainer">
-			<section>
-				<input type="text" id="knob"
-					data-width="105"
-			    	data-skin="tron"
-			    	data-thickness=".1" style="display: none" />
-				<a href="#" id="button">&#xF011;</a>
-				<span></span>
-			</section>		
-		</div>
-		<div id="tabs-container">
-			<h3>Indicateurs</h3>
-			<div>
-				<dl>
-					<dd>Temps passé</dd>
-					<dt></dt>l
-				</dl>
-			</div>
-			<h3>Taille du cookie</h3>
-			<div>
-				<div id="progressbar"></div>
+		<div id="content">
+			<div id="puncher-container">
+				<div id="indicators-container">
+					<a href="#cookie-state" id="cookie-button" class="box corner-left" title="Cookie" >C</a>
+					<div id="cookie-state" class="box" >
+						<p>Remplissage du cookie</p>
+					</div>
+					<div id="indicators" class="box" style="display: none" ></div>
+					<a href="#indicators" id="indicators-button" class="box corner-right" title="Indicateurs" >I</a>
+				</div>
+				<section>
+					<a id="puncher-button" class="box" href="#" >&#xF011;</a>
+				</section>
 			</div>
 		</div>
 	</div>

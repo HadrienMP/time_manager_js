@@ -2,21 +2,47 @@ $(document).ready(function(){
 	
     initPuncher();
     
-    $('#button').click(function(){
-		$(this).toggleClass('on');
-		if ($(this).hasClass('on')) powerOn();
-		else powerOff();
+    $('#puncher-button').click(function(){
+    	togglePuncherState();
+	});
+	
+	$('#cookie-button').click(function(){
+		toggleCookieState();
+	});
+	
+	$(window).resize(function() {
+    	initPuncher();
 	});
 });
 
+function togglePuncherState() {
+		if (!$('#puncher-button').hasClass('box-active')) {
+			$('#puncher-button').addClass('box-active', 200);
+			powerOn();
+		} else {
+			$('#puncher-button').removeClass('box-active', 200);
+			powerOff();	
+		}
+}
+
+function toggleCookieState() {
+	if (!$('#cookie-button').hasClass('cookie-active')) {
+		$('#cookie-button, #cookie-state, #indicators-button').addClass('cookie-active', 1000);
+	} else {
+		$('#cookie-button, #cookie-state, #indicators-button').removeClass('cookie-active', 1000);
+	}
+}
+
 function initPuncher() {
+	$('#puncher-container').css('position', 'relative');
+	$('#puncher-container').css('top', $(window).height() / 2 - $('#puncher-container').height() / 2);
 	$.cookie.json = true;
 	$("#knob").knob({
 		"fgColor":"#aaa",
         draw : tronDraw
     });
 	$( "#progressbar" ).progressbar();
-	$('#tabs-container').accordion();
+	$('#tabs').tabs();
 }
 
 /**
