@@ -15,10 +15,10 @@ $(document).ready(function(){
 		updateIndicators(punches);
 	});
 	
-	$('#button').on('click', function(){
+	$('#knob').on('click', function(){
 		$(this).toggleClass('on');
 		var check = 'O';
-		if ($('#button').hasClass('on')) {
+		if ($('#knob').hasClass('on')) {
 			check = 'I';
 			$("#knob").trigger('configure', {"fgColor":"#87bb53", "shadow" : true});
 		} else {
@@ -32,12 +32,12 @@ function initPage(punches) {
 	if (punches != undefined) {
 		if (punches[punches.length-1]['check'] == 'I') {
 			// Si le dernier check est un check in on modifie l'aspect du bouton
-			if (!$('#button').hasClass('on')) {
-				$('#button').toggleClass('on');
+			if (!$('#knob').hasClass('on')) {
+				$('#knob').toggleClass('on');
 				$("#knob").trigger('configure', {"fgColor":"#87bb53", "shadow" : true});
 			}
 			
-			calculateIndicators(punches)
+			calculateIndicators(punches);
 		}
 	}
 }
@@ -64,7 +64,7 @@ function saveInCookie(check) {
 function updateIndicators(punches) {
 	if (punches != undefined) {
 		if (punches[punches.length-1]['check'] == 'I') {			
-			calculateIndicators(punches)
+			calculateIndicators(punches);
 		}
 	}
 	
@@ -103,38 +103,40 @@ function calculateIndicators(punches) {
 	
 	// Calcul du temps passé au travail dans la journée
 	var previousPunch = getFirstCheckIn(todaysPunchesTimeSpent);
-	
-	var j = 1;
-	if (todaysPunchesTimeSpent.length == 0) {
-		workdayLength += now.getTime() - previousPunch['date'];
-	} else {
-		for (var index in todaysPunchesTimeSpent) {
-			punch = todaysPunchesTimeSpent[index];
-			if (previousPunch['check'] == punch['check']) {
-				modelCorrupted = true;
-				break;
+	if (previousPunch != undefined) {
+		
+		var j = 1;
+		if (todaysPunchesTimeSpent.length == 0) {
+			workdayLength += now.getTime() - previousPunch['date'];
+		} else {
+			for (var index in todaysPunchesTimeSpent) {
+				punch = todaysPunchesTimeSpent[index];
+				if (previousPunch['check'] == punch['check']) {
+					modelCorrupted = true;
+					break;
+				}
+				if (punch['check'] == 'O' && previousPunch['check'] == 'I') {
+					workdayLength += punch['date'] - previousPunch['date'];
+				}
+				else if (todaysPunchesTimeSpent.length == j && punch['check'] == 'I') {
+					workdayLength += now.getTime() - punch['date'];
+				}
+				j++;
+				previousPunch = punch;
 			}
-			if (punch['check'] == 'O' && previousPunch['check'] == 'I') {
-				workdayLength += punch['date'] - previousPunch['date'];
-			}
-			else if (todaysPunchesTimeSpent.length == j && punch['check'] == 'I') {
-				workdayLength += now.getTime() - punch['date'];
-			}
-			j++;
-			previousPunch = punch;
 		}
+		
+		$('#time-spent').text(ms2string(workdayLength));
+		
+		// Si on a dépassé le temps alloué
+		if (indicators['dayRatio'] > 100) {
+			indicators['dayRatio'] = indicators['dayRatio'] - 100;
+			$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
+			$("#time-spent, #last-time-spent").css('color','#cc0000');
+		}
+		
+		$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
 	}
-	
-	$('#time-spent').text(ms2string(workdayLength));
-	
-	// Si on a dépassé le temps alloué
-	if (indicators['dayRatio'] > 100) {
-		indicators['dayRatio'] = indicators['dayRatio'] - 100;
-		$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
-		$("#time-spent, #last-time-spent").css('color','#cc0000');
-	}
-	
-	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
 }
 
 function getFirstCheckIn(todaysPunches) {

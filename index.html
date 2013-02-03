@@ -4,32 +4,42 @@
 	<meta charset="utf-8" />
 	<title>Puncher</title>
 	<link rel="stylesheet" href="css/style.css">
-	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+	<link href="css/dark-hive/jquery-ui-1.10.0.custom.css" rel="stylesheet">
+	
+	<script type="text/javascript" src="js/jquery-1.9.0.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.10.0.custom.js"></script>
 	<script type="text/javascript" src="js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="js/jquery.timers.js"></script>
 	<script type="text/javascript" src="js/jquery.knob.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
 	<script type="text/javascript" src="js/knob-init.js"></script>
-	<script type="text/javascript" src="js/puncher.js"></script>
+	<script type="text/javascript" src="js/puncher2.js"></script>
 </head>
 <body>
-	<section>
-		<input type="text" id="knob"
-			data-width="105"
-	    	data-skin="tron"
-	    	data-thickness=".1" style="display: none" />
-		<a href="#" id="button">&#xF011;</a>
-		<span></span>
-	</section>
-	<section id="indicators">
-		<dl>
-			<dt>Journée de travail :</dt>
-			<dd id="time-spent"></dd>
-			<dt>Temps depuis check in :</dt>
-			<dd id="last-time-spent"></dd>
-			<dt>Taille cookie :</dt>
-			<dd id="cookie-size"></dd>
-		</dl>
-	</section>
+	<div id="wrapper">
+		<div id="puncherContainer">
+			<section>
+				<input type="text" id="knob"
+					data-width="105"
+			    	data-skin="tron"
+			    	data-thickness=".1" style="display: none" />
+				<a href="#" id="button">&#xF011;</a>
+				<span></span>
+			</section>		
+		</div>
+		<div id="tabs-container">
+			<h3>Indicateurs</h3>
+			<div>
+				<dl>
+					<dd>Temps passé</dd>
+					<dt></dt>l
+				</dl>
+			</div>
+			<h3>Taille du cookie</h3>
+			<div>
+				<div id="progressbar"></div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

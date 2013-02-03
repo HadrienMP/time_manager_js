@@ -73,5 +73,5 @@ function roughSizeOfObject( object ) {
 }
 
 function sizeRatio(object) {
-	return (Math.round(roughSizeOfObject(object) * 100 * 100 / 4095) / 100) + ' %';
+	return (Math.round(roughSizeOfObject(object) * 100 * 100 / 2188) / 100);
 }
