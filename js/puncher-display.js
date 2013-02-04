@@ -30,6 +30,7 @@ function initPuncher() {
 	$(window).resize(function() {
     	centerPuncher();
 	});
+	$('#progressbar').progressbar();
 }
 
 function centerPuncher() {
@@ -43,10 +44,8 @@ function centerPuncher() {
 	
 	$('#cookie-section').width($(window).width() / 2);
 	$('#indicators-section').width($(window).width() / 2);
-	$('#cookie-section').css('left', 0);
+	$('#cookie-section').css('right', $(window).width() / 2);
 	$('#indicators-section').css('left', $(window).width() / 2);
-	
-	$('#cookie-button').css('margin-left',$('#cookie-section').width() - $('#cookie-button').width());
 	
 	$('#puncher-section').css('left', $(window).width() / 2 - $('#puncher-section').width() / 2);
 	

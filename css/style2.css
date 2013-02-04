@@ -1,4 +1,7 @@
-body { background: url('../images/micro_carbon.png'); font-size: 11px; }
+body { 
+	background: url('../images/micro_carbon.png'); 
+	font-size: 11px; 
+}
 
 /** Font-Face **/
 @font-face {
@@ -18,7 +21,7 @@ body { background: url('../images/micro_carbon.png'); font-size: 11px; }
 
 ####################################################################################*/
 
-#puncher-container  section {vertical-align: middle; font-family: "FontAwesome";}
+#puncher-container section {vertical-align: middle;}
 #puncher-container section, #puncher-container div {text-align: center;}
 
 /*####################################################################################
@@ -26,21 +29,33 @@ body { background: url('../images/micro_carbon.png'); font-size: 11px; }
 								Indicateurs
 
 ####################################################################################*/
-
+#puncher-container #cookie-section, 
+#puncher-container #indicators-section {min-width: 350px;}
+#puncher-container #cookie-section {text-align: right;}
+#puncher-container #indicators-section {text-align: left;}
 	#puncher-container a#cookie-button, 
 	#puncher-container a#indicators-button { height: 130px; width: 100px; text-indent: -70000px;}
+	#puncher-container a#cookie-button {text-align: left;}
 	#puncher-container #cookie-state, 
 	#puncher-container #indicators {
 		z-index: 2; 
-		font-size: 12px; 
+		font-size: 17px; 
 		overflow: hidden; 
-		height: 130px; 
+		height: 110px; 
 		width: 0px;
 		background: url('../images/escheresque_ste.png');
 		box-shadow: none;
 		vertical-align: bottom;
-		position: absolute;
+		border: none;
+		padding: 20px 0 0 0;
 	}
+	#puncher-container #cookie-state p {margin-bottom: 10px;}
+	/*
+	 * FIXME
+	 * Hack To delete some space between the buttons...
+	 */
+	#puncher-container #cookie-state {margin-left: -3px; border-right: 1px solid #000;}
+	#puncher-container #indicators-button {margin-left: -3px;}
 	
 /*####################################################################################
 
@@ -55,7 +70,7 @@ body { background: url('../images/micro_carbon.png'); font-size: 11px; }
 	border-radius: 100px; 
 	border: 1px solid #111; 
 	height: 97px; 
-	width: 100px; 
+	width: 97px; 
 	box-shadow: inset 0px 3px 0px #111;
 }
 	#puncher-container a#puncher-button { 
@@ -65,18 +80,19 @@ body { background: url('../images/micro_carbon.png'); font-size: 11px; }
 		margin: auto; 
 		border: none; 
 		margin-top: 10px; 
+		font-family: "FontAwesome";
 	}
 	#puncher-container a#puncher-button.box-active {top: -85px;}
 		#puncher-container a#puncher-button span {margin-top: 12px; display: inline-block;}
 
 /*####################################################################################
 
-								Classes générales
+								Classes gï¿½nï¿½rales
 
 ####################################################################################*/
 	
 .box {
-	display: block; 
+	display: inline-block; 
 	border: 1px solid #111;
 	font-size: 65px;
 	text-decoration: none;
@@ -102,12 +118,11 @@ body { background: url('../images/micro_carbon.png'); font-size: 11px; }
 
 /*####################################################################################
 
-	Affichage des panneaux d'information en mode déployés
+	Affichage des panneaux d'information en mode dï¿½ployï¿½s
 	
 ####################################################################################*/
 
-#cookie-button.cookie-active { width: 70px; box-shadow: 0px 0px 30px #26B3F7; }
-#cookie-state.cookie-active {width: 250px;}
-
-#indicators-button.indicators-active { width: 70px; box-shadow: 0px 0px 30px #26B3F7;}
-#indicators.indicators-active {width: 250px;}
+#puncher-container #cookie-button.cookie-active,
+#puncher-container #indicators-button.indicators-active { width: 50px; box-shadow: 0px 0px 30px #26B3F7; }
+#puncher-container #cookie-state.cookie-active,
+#puncher-container #indicators.indicators-active {width: 250px; padding-right: 60px; padding-left: 20px;}
