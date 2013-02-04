@@ -52,7 +52,7 @@ body {
 					
 				
 				#indicators-container {margin: auto;}
-					#cookie-state, #indicators-state {
+					#cookie-state, #indicators {
 						font-size: 12px;
 						overflow: hidden;
 						height: 200px;
@@ -98,10 +98,14 @@ body {
 	box-shadow: 0px 0px 30px #26B3F7;
 }
 
+/*
+	Affichage des panneaux d'information en mode déployés
+*/
+
 #cookie-button.cookie-active {width: 100px;}
 #cookie-state.cookie-active {width: 250px;}
 #indicators-button.cookie-active {margin-right: 200px;}
 
-.button-deployed {width: 100px !important;}
-.info-deployed {width: 250px !important;}
-.indicators-button-compensate {margin-right: 200px;}
+#indicators-button.indicators-active {width: 100px;}
+#indicators.indicators-active {width: 250px;}
+#cookie-button.indicators-active {margin-left: 200px;}
