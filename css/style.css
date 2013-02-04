@@ -17,7 +17,7 @@ body {
 
 #wrapper {}
 	#content { }
-		#puncher-container { text-align: center; vertical-align: middle; padding: 30px;}
+		#puncher-container {text-align: center; vertical-align: middle; height: 210px; overflow: hidden;}
 			#puncher-container a {height: 200px; width: 150px; vertical-align: middle;}
 			#puncher-container a.corner-left, #puncher-container a.corner-right {text-indent: -70000px; }
 			#puncher-container a.corner-left {border-right: 2px solid #111111}
@@ -53,6 +53,7 @@ body {
 				
 				#indicators-container {margin: auto;}
 					#cookie-state, #indicators {
+						z-index: 2;
 						font-size: 12px;
 						overflow: hidden;
 						height: 200px;
@@ -102,10 +103,42 @@ body {
 	Affichage des panneaux d'information en mode déployés
 */
 
-#cookie-button.cookie-active {width: 100px;}
-#cookie-state.cookie-active {width: 250px;}
-#indicators-button.cookie-active {margin-right: 200px;}
+#cookie-button.cookie-active {
+ 	width: 70px;
+/* 	background-image: linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+	background-image: -o-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+	background-image: -moz-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+	background-image: -webkit-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+	background-image: -ms-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
 
-#indicators-button.indicators-active {width: 100px;}
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.12, #19127C),
+		color-stop(0.65, #2A21DD)
+	); */
+	box-shadow: 0px 0px 30px #26B3F7;
+}
+#cookie-state.cookie-active {width: 250px;}
+#indicators-button.cookie-active {margin-right: 170px;}
+
+#indicators-button.indicators-active {
+	width: 70px;
+/* 	background-image: linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+	background-image: -o-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+	background-image: -moz-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+	background-image: -webkit-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+	background-image: -ms-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.12, #19127C),
+		color-stop(0.65, #2A21DD)
+	); */
+	box-shadow: 0px 0px 30px #26B3F7;
+}
 #indicators.indicators-active {width: 250px;}
-#cookie-button.indicators-active {margin-left: 200px;}
+#cookie-button.indicators-active {margin-left: 170px;}
