@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Puncher</title>
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style2.css">
 	<link href="css/dark-hive/jquery-ui-1.10.0.custom.css" rel="stylesheet">
 	
 	<script type="text/javascript" src="js/jquery-1.9.0.js"></script>
@@ -14,23 +15,34 @@
 	<script type="text/javascript" src="js/utils.js"></script>
 	<script type="text/javascript" src="js/knob-init.js"></script>
 	<script type="text/javascript" src="js/puncher-display.js"></script>
-	<script type="text/javascript" src="js/puncher2.js"></script>
+	<script type="text/javascript" src="js/puncher3.js"></script>
 </head>
 <body>
 	<div id="wrapper">
 		<div id="content">
 			<div id="puncher-container">
-				<div id="indicators-container">
+				
+				<!-- Informations sur le cookie -->
+				<section id="cookie-section">
 					<a href="#cookie-state" id="cookie-button" class="box corner-left" title="Cookie" >C</a>
 					<div id="cookie-state" class="box" >
 						<p>Remplissage du cookie</p>
 					</div>
-					<div id="indicators" class="box" ></div>
-					<a href="#indicators" id="indicators-button" class="box corner-right" title="Indicateurs" >I</a>
-				</div>
-				<section>
-					<a id="puncher-button" class="box" href="#" >&#xF011;</a>
 				</section>
+				
+				<!-- Le bouton puncher -->
+				<section id="puncher-section">
+					<a id="puncher-button" class="box" href="#" ><span>&#xF011;</span></a>
+				</section>
+				
+				<!-- Indicateurs en rapport avec les dates de punch -->
+				<section id="indicators-section">
+					<div id="indicators" class="box" >
+						<p>Remplissage du cookie</p>
+					</div>
+					<a href="#indicators" id="indicators-button" class="box corner-right" title="Indicateurs" >I</a>
+				</section>
+				
 			</div>
 		</div>
 	</div>

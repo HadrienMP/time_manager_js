@@ -1,0 +1,113 @@
+body { background: url('../images/micro_carbon.png'); font-size: 11px; }
+
+/** Font-Face **/
+@font-face {
+  font-family: "FontAwesome";
+  src: url("../fonts/fontawesome-webfont.eot");
+  src: url("../fonts/fontawesome-webfont.eot?#iefix") format('eot'), 
+  	   url("../fonts/fontawesome-webfont.woff") format('woff'), 
+  	   url("../fonts/fontawesome-webfont.ttf") format('truetype'), 
+  	   url("../fonts/fontawesome-webfont.svg#FontAwesome") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*####################################################################################
+
+								Styles communs
+
+####################################################################################*/
+
+#puncher-container  section {vertical-align: middle; font-family: "FontAwesome";}
+#puncher-container section, #puncher-container div {text-align: center;}
+
+/*####################################################################################
+
+								Indicateurs
+
+####################################################################################*/
+
+	#puncher-container a#cookie-button, 
+	#puncher-container a#indicators-button { height: 130px; width: 100px; text-indent: -70000px;}
+	#puncher-container #cookie-state, 
+	#puncher-container #indicators {
+		z-index: 2; 
+		font-size: 12px; 
+		overflow: hidden; 
+		height: 130px; 
+		width: 0px;
+		background: url('../images/escheresque_ste.png');
+		box-shadow: none;
+		vertical-align: bottom;
+		position: absolute;
+	}
+	
+/*####################################################################################
+
+								Puncher
+
+####################################################################################*/
+
+#puncher-container section#puncher-section { 
+	background: url('../images/micro_carbon.png'); 
+	z-index: 10;
+	position: relative;
+	border-radius: 100px; 
+	border: 1px solid #111; 
+	height: 97px; 
+	width: 100px; 
+	box-shadow: inset 0px 3px 0px #111;
+}
+	#puncher-container a#puncher-button { 
+		border-radius: 100px; 
+		height: 75px; 
+		width: 75px; 
+		margin: auto; 
+		border: none; 
+		margin-top: 10px; 
+	}
+	#puncher-container a#puncher-button.box-active {top: -85px;}
+		#puncher-container a#puncher-button span {margin-top: 12px; display: inline-block;}
+
+/*####################################################################################
+
+								Classes générales
+
+####################################################################################*/
+	
+.box {
+	display: block; 
+	border: 1px solid #111;
+	font-size: 65px;
+	text-decoration: none;
+	color: #999;
+	box-shadow: 0px 5px 0px #111;
+	background-image: linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
+	background-image: -o-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
+	background-image: -moz-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
+	background-image: -webkit-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
+	background-image: -ms-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
+
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.12, rgb(33,33,33)),
+		color-stop(0.65, rgb(64,64,64))
+	);
+}
+.box-active { color: #fff; text-shadow: 0px 0px 10px #fff; box-shadow: 0px 0px 30px #26B3F7; }
+.corner-left { border-radius: 30px 0 0 30px; }
+.corner-right { border-radius: 0 30px 30px 0; }
+
+/*####################################################################################
+
+	Affichage des panneaux d'information en mode déployés
+	
+####################################################################################*/
+
+#cookie-button.cookie-active { width: 70px; box-shadow: 0px 0px 30px #26B3F7; }
+#cookie-state.cookie-active {width: 250px;}
+
+#indicators-button.indicators-active { width: 70px; box-shadow: 0px 0px 30px #26B3F7;}
+#indicators.indicators-active {width: 250px;}
