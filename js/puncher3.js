@@ -19,7 +19,7 @@ $(document).ready(function(){
 		toggleIndicatorsState();
 	});
 	$('#delete-cookie').click(function(){
-		$( "#dialog-confirm" ).dialog({
+		$( "#delete-warning" ).dialog({
 			resizable: false,
 			height:140,
 			modal: true,
