@@ -22,13 +22,13 @@ $(document).ready(function(){
 		$( "#delete-warning" ).dialog({
 			resizable: false,
 			height:140,
-			modal: true,
+			modal: false,
 			buttons: {
-				"Vider": function() {
-					viderCookie();
+				"Annuler": function() {
 					$( this ).dialog( "close" );
 				},
-				"Annuler": function() {
+				"Vider": function() {
+					viderCookie();
 					$( this ).dialog( "close" );
 				}
 			}

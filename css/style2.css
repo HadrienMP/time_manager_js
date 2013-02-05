@@ -50,6 +50,7 @@ body {
 		border: none;
 		padding: 0;
 		position: relative;
+		color: white;
 	}
 		#puncher-container #cookie-state > div {margin: 20px 60px 0 20px; width: 170px;}
 		#puncher-container #indicators > div {margin: 20px 20px 0 60px; width: 170px;}
@@ -61,7 +62,7 @@ body {
 	 * Hack To delete some space between the buttons...
 	 */
 	#puncher-container #cookie-state {margin-left: -3px; border-right: 1px solid #000;}
-	#puncher-container #indicators-button {margin-left: -3px;}
+	#puncher-container #indicators-button {margin-left: -3px; border-left-width: 2px;}
 	
 /*####################################################################################
 
@@ -139,6 +140,6 @@ body {
 #puncher-container #cookie-button.cookie-active,
 #puncher-container #indicators-button.indicators-active { width: 50px; box-shadow: 0px 0px 30px #26B3F7; }
 #puncher-container #cookie-state.cookie-active,
-#puncher-container #indicators.indicators-active {width: 250px;}
+#puncher-container #indicators.indicators-active {width: 250px; }
 /* FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing */
 #puncher-container #cookie-button.indicators-active {z-index: 2;}
