@@ -25,29 +25,6 @@ function toggleIndicatorsState() {
 	}
 }
 
-function initPuncher() {
-	centerPuncher();
-	$(window).resize(function() {
-    	centerPuncher();
-	});
-	initCookieInfos();
-}
-
-function initCookieInfos() {
-	// Progressbar init
-	$('#progressbar').progressbar();
-	var punches = $.cookie('punches');
-	if (punches != undefined) {
-		punches = JSON.parse(punches);
-		$("#progressbar").progressbar( "option", "value", sizeRatio(punches) );
-	}
-	else {
-		$("#progressbar").progressbar( "option", "value", 0 );
-	}
-	
-	$('#delete-cookie').button();
-}
-
 function centerPuncher() {
 
 	// Centrage automatique

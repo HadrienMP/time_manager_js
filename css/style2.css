@@ -49,26 +49,13 @@ body {
 		vertical-align: bottom;
 		border: none;
 		padding: 0;
+		position: relative;
 	}
-		#puncher-container #cookie-state > div {margin: 20px 60px 0 20px;}
-		#puncher-container #indicators > div {margin: 20px 20px 0 60px;}
+		#puncher-container #cookie-state > div {margin: 20px 60px 0 20px; width: 170px;}
+		#puncher-container #indicators > div {margin: 20px 20px 0 60px; width: 170px;}
+			#puncher-container #cookie-state button,
+			#puncher-container #cookie-state #progressbar,
 			#puncher-container #cookie-state p {margin-bottom: 10px;}
-			#puncher-container #cookie-state #progressbar {margin-bottom: 10px;}
-			#puncher-container div.ui-progressbar-value {
-				background-image: linear-gradient(bottom, #0727bc 12%, #082fe2 65%);
-				background-image: -o-linear-gradient(bottom, #0727bc 12%, #082fe2 65%);
-				background-image: -moz-linear-gradient(bottom, #0727bc 12%, #082fe2 65%);
-				background-image: -webkit-linear-gradient(bottom, #0727bc 12%, #082fe2 65%);
-				background-image: -ms-linear-gradient(bottom, #0727bc 12%, #082fe2 65%);
-
-				background-image: -webkit-gradient(
-					linear,
-					left bottom,
-					left top,
-					color-stop(0.12, #0727bc),
-					color-stop(0.65, #082fe2)
-				);
-			}
 	/*
 	 * FIXME
 	 * Hack To delete some space between the buttons...
@@ -106,7 +93,7 @@ body {
 
 /*####################################################################################
 
-								Classes g�n�rales
+								Classes générales
 
 ####################################################################################*/
 	
@@ -137,7 +124,15 @@ body {
 
 /*####################################################################################
 
-	Affichage des panneaux d'information en mode d�ploy�s
+								Elements cachés
+
+####################################################################################*/
+
+#messages {display: none;}
+
+/*####################################################################################
+
+	Affichage des panneaux d'information en mode déployés
 	
 ####################################################################################*/
 

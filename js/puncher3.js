@@ -19,10 +19,27 @@ $(document).ready(function(){
 		toggleIndicatorsState();
 	});
 	$('#delete-cookie').click(function(){
-		$.removeCookie('punches');
-		initCookieInfos();
+		$( "#dialog-confirm" ).dialog({
+			resizable: false,
+			height:140,
+			modal: true,
+			buttons: {
+				"Vider": function() {
+					viderCookie();
+					$( this ).dialog( "close" );
+				},
+				"Annuler": function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
 	});
 });
+
+function viderCookie() {
+	$.removeCookie('punches');
+	initCookieInfos();
+}
 
 /**
  * Turns the puncher's power on
@@ -74,4 +91,41 @@ function saveInCookie(check) {
 	$.cookie('punches', punches, {expires : 7});
 	
 	$( "#progressbar" ).progressbar( "option", "value", sizeRatio(punches) );
+}
+
+function initPuncher() {
+	centerPuncher();
+	$(window).resize(function() {
+    	centerPuncher();
+	});
+	
+	var punches = $.cookie('punches');
+	initCookieInfos(punches);
+	initIndicators(punches);
+}
+
+function initIndicators(punches) {
+	$('#temps-total');
+}
+
+function todayCheckInTime(punches) {
+	
+}
+
+function initCookieInfos(punches) {
+	// Progressbar init
+	$('#progressbar').progressbar();
+	
+	// Gets the size ratio of the cookie informations
+	if (punches != undefined) {
+		punches = JSON.parse(punches);
+		$("#progressbar").progressbar( "option", "value", sizeRatio(punches) );
+	}
+	else {
+		$("#progressbar").progressbar( "option", "value", 0 );
+	}
+	
+	// Button init
+	$('#delete-cookie').button({ icons: { primary: "ui-icon-trash" }, text: false });
+	$('#delete-cookies').button({ icons: { primary: "ui-icon-closethick" } , text: false});
 }
