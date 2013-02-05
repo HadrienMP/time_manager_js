@@ -18,6 +18,10 @@ $(document).ready(function(){
 	$('#indicators-button').click(function(){
 		toggleIndicatorsState();
 	});
+	$('#delete-cookie').click(function(){
+		$.removeCookie('punches');
+		initCookieInfos();
+	});
 });
 
 /**
