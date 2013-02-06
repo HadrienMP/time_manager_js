@@ -33,6 +33,7 @@ $(document).ready(function(){
 function viderCookie() {
 	$.removeCookie('punches');
 	initCookieInfos();
+	powerOff();
 }
 
 /**

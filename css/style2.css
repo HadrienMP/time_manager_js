@@ -20,7 +20,7 @@ body {
 								Styles communs
 
 ####################################################################################*/
-
+#puncher-container {height: 132px; width: 100%;}
 #puncher-container section {vertical-align: middle;}
 #puncher-container section, #puncher-container div {text-align: center;}
 #puncher-container .ui-widget {font-size: 0.8em;}

@@ -35,15 +35,17 @@ function centerPuncher() {
 
 	// Centrage automatique
 	var sections = ['cookie-section','indicators-section', 'puncher-section'];
+	$('#puncher-container').css('position','absolute');
+	$('#puncher-container').css('top', Math.floor($(window).height() / 2 - $('#puncher-container').height() / 2));
 	for (var index in sections) {
 		$('#' + sections[index]).css('position','absolute');
-		$('#' + sections[index]).css('top', Math.floor($(window).height() / 2 - $('#' + sections[index]).height() / 2));
+		$('#' + sections[index]).css('top', Math.floor($('#puncher-container').height() / 2 - $('#' + sections[index]).height() / 2));
 	}
 	
-	$('#cookie-section').width($(window).width() / 2);
-	$('#indicators-section').width($(window).width() / 2);
-	$('#cookie-section').css('right', $(window).width() / 2);
-	$('#indicators-section').css('left', $(window).width() / 2);
+	$('#cookie-section').width($('#puncher-container').width() / 2);
+	$('#indicators-section').width($('#puncher-container').width() / 2);
+	$('#cookie-section').css('right', $('#puncher-container').width() / 2);
+	$('#indicators-section').css('left', $('#puncher-container').width() / 2);
 	
-	$('#puncher-section').css('left', Math.floor($(window).width() / 2 - $('#puncher-section').width() / 2));
+	$('#puncher-section').css('left', Math.floor($('#puncher-container').width() / 2 - $('#puncher-section').width() / 2));
 }
