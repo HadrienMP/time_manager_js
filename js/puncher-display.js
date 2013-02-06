@@ -35,8 +35,8 @@ function centerPuncher() {
 
 	// Centrage automatique
 	var sections = ['cookie-section','indicators-section', 'puncher-section'];
-	$('#puncher-container').css('position','absolute');
-	$('#puncher-container').css('top', Math.floor($(window).height() / 2 - $('#puncher-container').height() / 2));
+	$('#content').css('position','absolute');
+	$('#content').css('top', Math.floor($(window).height() / 2 - $('#content').height() / 2));
 	for (var index in sections) {
 		$('#' + sections[index]).css('position','absolute');
 		$('#' + sections[index]).css('top', Math.floor($('#puncher-container').height() / 2 - $('#' + sections[index]).height() / 2));

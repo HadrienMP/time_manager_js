@@ -31,7 +31,7 @@
 					
 				<!-- Cookie informations -->
 				<section id="cookie-section">
-					<a href="#cookie-state" id="cookie-button" class="box corner-left" title="Cookie" >C</a>
+					<a href="#cookie-state" id="cookie-button" class="box corner-left" title="Cookie" >&lt;</a>
 					<div id="cookie-state" class="box" >
 						<div>
 							<p>Remplissage du cookie</p>
@@ -61,12 +61,29 @@
 							</dl>
 						</div>
 					</div>
-					<a href="#indicators" id="indicators-button" class="box corner-right" title="Indicateurs" >I</a>
+					<a href="#indicators" id="indicators-button" class="box corner-right" title="Indicateurs" >&gt;</a>
 				</section>
 			</div>
 			
-			<!-- Hidden Warning and Error Messages -->
-			<div id="messages">
+			<!-- The options container -->
+			<div id="options-buttons-container">
+				<a href="#" id="options-button" class="button" >Options</a>
+			</div>
+			
+			<!-- Hidden Modal boxes -->
+			<div id="modals-container">
+				
+				<div id="options-container" title="Options">					 
+					<div id="days-picker">
+						<p>Jours : <span></span></p>
+						<div class="slider"></div>
+					</div>
+					<div id="hours-picker">
+						<p>Heures : <span></span></p>
+						<div class="slider"></div>
+					</div>
+				</div>
+				
 				<div id="delete-warning" title="Suppression">
 					<p>
 						<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>

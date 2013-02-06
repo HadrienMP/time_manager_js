@@ -3,37 +3,65 @@ $(document).ready(function(){
 	initPuncher();
 	$.cookie.json = true;
 	
+	/*
+	 * Starts or stops the puncher
+	 */
 	$('#puncher-button').click(function(){
     	togglePuncherState();
 	});
+	/*
+	 * Opens or closes the cookie information pane
+	 */
 	$('#cookie-button').click(function(){
 		toggleCookieState();
 	});
+	/*
+	 * Opens or closes the indicators information pane
+	 */
 	$('#indicators-button').click(function(){
 		toggleIndicatorsState();
 	});
+	/*
+	 * Deals with the deletion of the cookie by providing a confirmation box
+	 */
 	$('#delete-cookie').click(function(){
 		$( "#delete-warning" ).dialog({
 			resizable: false,
 			height:140,
 			modal: false,
 			buttons: {
-				"Annuler": function() {
+				"Vider": function() {
+					eraseCookie();
 					$( this ).dialog( "close" );
 				},
-				"Vider": function() {
-					viderCookie();
+				"Annuler": function() {
 					$( this ).dialog( "close" );
 				}
 			}
 		});
 	});
+	$('#options-button').click(function() {
+		$('#options-container').dialog({
+			show: {
+				effect: "scale",
+				duration: 200
+			},
+			hide: {
+				effect: "scale",
+				duration: 200
+			}
+		});
+	});
 });
 
-function viderCookie() {
+/**
+ * Deletes the user's cookie and resets all of his data
+ */
+function eraseCookie() {
 	$.removeCookie('punches');
 	initCookieInfos();
 	powerOff();
+	updateIndicators();
 }
 
 /**
@@ -107,13 +135,18 @@ function initPuncher() {
 	// Loads the initial data of the puncher
 	$.cookie.json = true;
 	var punches = $.cookie('punches');
-	if (punches[punches.length -1]['check'] == 'I') {
+	if (punches != undefined && punches[punches.length -1]['check'] == 'I') {
 		powerOn();
 	}
 	initCookieInfos(punches);
 	updateIndicators(punches);
+	initOptions();
 }
 
+/**
+ * Inits the cookie information such as size rate
+ * @param {Object} punches the punches from the cookie
+ */
 function initCookieInfos(punches) {
 	// Progressbar init
 	var progressbar = $( "#progressbar" ), progressLabel = $( ".progress-label" );
@@ -135,6 +168,10 @@ function initCookieInfos(punches) {
 	$('#delete-cookies').button({ icons: { primary: "ui-icon-closethick" } , text: false});
 }
 
+/**
+ * Updates the indicator values on the screen
+ * @param {Object} punches optionnal parameter
+ */
 function updateIndicators(punches) {
 	var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
 	
@@ -151,4 +188,32 @@ function updateIndicators(punches) {
 	}
 	
 	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
+}
+
+/**
+ * Inits the options container etc.
+ */
+function initOptions() {
+	$('#options-buttons-container .button').button({ icons: { primary: "ui-icon-gear" }, text: false });
+	$('#options-container #hours-picker .slider').slider({
+      value: 7,
+      orientation: "horizontal",
+      range: "min",
+      animate: true,
+      min: 0,
+      max: 23
+    });
+	$('#options-container #days-picker .slider').slider({
+      value: 0,
+      orientation: "horizontal",
+      range: "min",
+      animate: true,
+      min: 0,
+      max: 365,
+      slide: function( event, ui ) {
+      	$( "#days-picker p span" ).val( ui.value );
+      }
+    });
+    
+    $( "#days-picker p span" ).val($( "#options-container #days-picker .slider" ).slider( "value") );
 }

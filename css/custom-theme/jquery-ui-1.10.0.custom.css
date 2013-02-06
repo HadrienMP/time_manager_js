@@ -268,6 +268,7 @@ input.ui-button {
 .ui-button-icon-only .ui-icon {
 	left: 50%;
 	margin-left: -8px;
+	margin-top: -9px;
 }
 .ui-button-text-icon-primary .ui-button-icon-primary,
 .ui-button-text-icons .ui-button-icon-primary,

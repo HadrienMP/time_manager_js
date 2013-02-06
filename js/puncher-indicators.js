@@ -1,13 +1,13 @@
 function calculateIndicators(punches) {
 	var indicators = [];
-	// Sécurisation si le contenu du cookie est vide
+	// Sï¿½curisation si le contenu du cookie est vide
 	if (punches == undefined) {
 		indicators['totalTime'] = 0;
 		indicators['dayRatio'] = 0;
 	} else {
 		var totalTime = todaysTotalTime(punches);
 		indicators['totalTime'] = totalTime;
-		indicators['dayRatio'] = totalTime * 100 / (7 * 60 *60 * 1000 + 22 * 60 * 1000);
+		indicators['dayRatio'] = indicators['totalTime'] * 100 / (7 * 60 *60 * 1000 + 22 * 60 * 1000);
 	}
 	return indicators;
 }
@@ -20,7 +20,7 @@ function todaysTotalTime(punches) {
 	var modelCorrupted = false;
 	var workdayLength = 0;
 
-	// Calcul du temps passé au travail dans la journée
+	// Calcul du temps passï¿½ au travail dans la journï¿½e
 	var previousPunch = getFirstCheckIn(todaysPunches);
 	if (previousPunch != undefined) {
 		
@@ -49,7 +49,7 @@ function todaysTotalTime(punches) {
 }
 
 function getFirstCheckIn(todaysPunches) {
-	// Récupération du premier check in de la journée
+	// Rï¿½cupï¿½ration du premier check in de la journï¿½e
 	var firstCheckIn;
 	do {
 		firstCheckIn = todaysPunches.shift();
@@ -68,14 +68,14 @@ function getLastCheckIn(todaysPunches) {
 
 function getTodaysPunches(punches) {
 
-	// Création de la date du jour é minuit (début de la journée)
+	// Crï¿½ation de la date du jour ï¿½ minuit (dï¿½but de la journï¿½e)
 	var dayStart = new Date();
 	dayStart.setHours(0);
 	dayStart.setMinutes(0);
 	dayStart.setSeconds(0);
 	dayStart.setMilliseconds(0);
 			
-	// Récupération dans le cookie des punches du jour
+	// Rï¿½cupï¿½ration dans le cookie des punches du jour
 	var i = 0;
 	var tempPunch;
 	var todaysPunches = [];

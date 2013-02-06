@@ -17,13 +17,22 @@ body {
 
 /*####################################################################################
 
-								Styles communs
+									Divers
 
 ####################################################################################*/
-#puncher-container {height: 132px; width: 100%;}
-#puncher-container section {vertical-align: middle;}
-#puncher-container section, #puncher-container div {text-align: center;}
-#puncher-container .ui-widget {font-size: 0.8em;}
+#content {height: 172px; width: 100%;}
+	#puncher-container {height: 132px; width: 100%; position: relative;}
+	#puncher-container section {vertical-align: middle;}
+	#puncher-container section, #puncher-container div {text-align: center;}
+	#puncher-container .ui-widget {font-size: 0.8em;}
+	
+	#options-buttons-container {width: 30px; margin: 20px auto;}
+		#options-buttons-container .ui-button {box-shadow: 0px 3px 0px #111;}
+	
+	#modals-container {display: none;}
+		#options-container {margin-top: 10px;}
+			#options-container p {width: 30%; float: left;}
+			#options-container .slider {margin: 10px 0; margin-left: 29%; width: 70%;}
 
 /*####################################################################################
 
@@ -105,8 +114,8 @@ body {
 	width: 0 !important; 
 	height: 0 !important;
 	position: relative;
-	top: -2px;
-	left: -1px;
+	top: -3px;
+	left: -2px;
 }
 
 /*####################################################################################
@@ -148,7 +157,6 @@ body {
 
 ####################################################################################*/
 
-#messages {display: none;}
 
 /*####################################################################################
 
