@@ -1,9 +1,9 @@
 function togglePuncherState() {
 	if (!$('#puncher-button').hasClass('box-active')) {
-		$('#puncher-button').addClass('box-active', 200);
+		$('#puncher-button').addClass('box-active');
 		powerOn();
 	} else {
-		$('#puncher-button').removeClass('box-active', 200);
+		$('#puncher-button').removeClass('box-active');
 		powerOff();	
 	}
 }
@@ -35,7 +35,7 @@ function centerPuncher() {
 	var sections = ['cookie-section','indicators-section', 'puncher-section'];
 	for (var index in sections) {
 		$('#' + sections[index]).css('position','absolute');
-		$('#' + sections[index]).css('top', $(window).height() / 2 - $('#' + sections[index]).height() / 2);
+		$('#' + sections[index]).css('top', Math.floor($(window).height() / 2 - $('#' + sections[index]).height() / 2));
 	}
 	
 	$('#cookie-section').width($(window).width() / 2);
@@ -43,7 +43,5 @@ function centerPuncher() {
 	$('#cookie-section').css('right', $(window).width() / 2);
 	$('#indicators-section').css('left', $(window).width() / 2);
 	
-	$('#puncher-section').css('left', $(window).width() / 2 - $('#puncher-section').width() / 2);
-	
-	
+	$('#puncher-section').css('left', Math.floor($(window).width() / 2 - $('#puncher-section').width() / 2));
 }

@@ -46,7 +46,7 @@ function viderCookie() {
  */
 function powerOn() {
 	// Changes the color of the progress bar
-	$("#knob").trigger('configure', {"fgColor":"#87bb53", "shadow" : true});
+	$("#knob").trigger('configure', {"fgColor":"#26B3F7", "shadow" : true});
 	
 	// Regular update of the progress bar and indicators
 	$(document).everyTime('1s', 'puncherTimer', function() {
@@ -94,6 +94,12 @@ function saveInCookie(check) {
 }
 
 function initPuncher() {
+	
+	$("#knob").knob({
+		"fgColor":"#aaa",
+        draw : tronDraw
+    });
+	
 	centerPuncher();
 	$(window).resize(function() {
     	centerPuncher();

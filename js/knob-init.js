@@ -1,55 +1,51 @@
 function tronDraw() {
 
-	// "tron" case
-	if(this.$.data('skin') == 'tron') {
+	var a = this.angle(this.cv)  // Angle
+		, sa = this.startAngle          // Previous start angle
+		, sat = this.startAngle         // Start angle
+		, ea                            // Previous end angle
+		, eat = sat + a                 // End angle
+		, r = 1;
 
-		var a = this.angle(this.cv)  // Angle
-			, sa = this.startAngle          // Previous start angle
-			, sat = this.startAngle         // Start angle
-			, ea                            // Previous end angle
-			, eat = sat + a                 // End angle
-			, r = 1;
+	this.g.lineWidth = this.lineWidth;
 
-		this.g.lineWidth = this.lineWidth;
+	this.o.cursor
+		&& (sat = eat - 0.3)
+		&& (eat = eat + 0.3);
 
+	if (this.o.displayPrevious) {
+		ea = this.startAngle + this.angle(this.v);
 		this.o.cursor
-			&& (sat = eat - 0.3)
-			&& (eat = eat + 0.3);
-
-		if (this.o.displayPrevious) {
-			ea = this.startAngle + this.angle(this.v);
-			this.o.cursor
-				&& (sa = ea - 0.3)
-				&& (ea = ea + 0.3);
-			this.g.beginPath();
-			this.g.strokeStyle = this.pColor;
-			this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
-			if (this.shadow) {
-				this.g.shadowColor = this.pColor;
-				this.g.shadowBlur = 5;
-			}
-			this.g.stroke();
-		}
-
+			&& (sa = ea - 0.3)
+			&& (ea = ea + 0.3);
 		this.g.beginPath();
-		this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
-		this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+		this.g.strokeStyle = this.pColor;
+		this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
 		if (this.shadow) {
-			this.g.shadowColor = this.fgColor;
+			this.g.shadowColor = this.pColor;
 			this.g.shadowBlur = 5;
 		}
 		this.g.stroke();
-
-		this.g.lineWidth = 2;
-		this.g.beginPath();
-		this.g.strokeStyle = this.o.fgColor;
-		this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-		if (this.shadow) {
-			this.g.shadowColor = this.fgColor;
-			this.g.shadowBlur = 5;
-		}
-		this.g.stroke();
-
-		return false;
 	}
+
+	this.g.beginPath();
+	this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+	this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+	if (this.shadow) {
+		this.g.shadowColor = this.fgColor;
+		this.g.shadowBlur = 5;
+	}
+	this.g.stroke();
+
+	this.g.lineWidth = 2;
+	this.g.beginPath();
+	this.g.strokeStyle = this.o.fgColor;
+	this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+	if (this.shadow) {
+		this.g.shadowColor = this.fgColor;
+		this.g.shadowBlur = 5;
+	}
+	this.g.stroke();
+
+	return false;
 }
