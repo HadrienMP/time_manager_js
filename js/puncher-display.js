@@ -1,10 +1,12 @@
 function togglePuncherState() {
 	if (!$('#puncher-button').hasClass('box-active')) {
-		$('#puncher-button').addClass('box-active');
 		powerOn();
+		// Save the state
+		saveInCookie('I');
 	} else {
-		$('#puncher-button').removeClass('box-active');
 		powerOff();	
+		// Save the state
+		saveInCookie('O');
 	}
 }
 

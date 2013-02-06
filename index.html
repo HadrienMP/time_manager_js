@@ -21,14 +21,13 @@
 	<script type="text/javascript" src="js/utils.js"></script>
 	<script type="text/javascript" src="js/knob-init.js"></script>
 	<script type="text/javascript" src="js/puncher-display.js"></script>
+	<script type="text/javascript" src="js/puncher-indicators.js"></script>
 	<script type="text/javascript" src="js/puncher3.js"></script>
 </head>
 <body>
 	<div id="wrapper">
 		<div id="content">
 			<div id="puncher-container">
-				
-				<!-- Knob that represents the % of time spent for the day -->
 					
 				<!-- Cookie informations -->
 				<section id="cookie-section">
@@ -45,8 +44,10 @@
 				
 				<!-- The puncher button -->
 				<section id="puncher-section">
+					<!-- Knob that represents the % of time spent for the day -->
 					<input id="knob" data-width="100" data-height="100" data-inline="false" data-thickness=".1"
 						data-skin="tron" data-displayInput="false" />
+					<!-- The real puncher button -->
 					<a id="puncher-button" class="box" href="#" ><span>&#xF011;</span></a>
 				</section>
 				
@@ -56,7 +57,7 @@
 						<div>
 							<dl>
 								<dt>Temps total journée</dt>
-								<dd id="temps-total"></dd>
+								<dd id="total-time"></dd>
 							</dl>
 						</div>
 					</div>

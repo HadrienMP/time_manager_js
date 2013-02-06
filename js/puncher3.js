@@ -5,13 +5,7 @@ $(document).ready(function(){
 	
 	$('#puncher-button').click(function(){
     	togglePuncherState();
-		if ($('#puncher-button').hasClass('box-active')) {
-			powerOn();
-		} else {
-			powerOff();	
-		}
 	});
-	
 	$('#cookie-button').click(function(){
 		toggleCookieState();
 	});
@@ -45,27 +39,26 @@ function viderCookie() {
  * Turns the puncher's power on
  */
 function powerOn() {
+	$('#puncher-button').addClass('box-active');
 	// Changes the color of the progress bar
 	$("#knob").trigger('configure', {"fgColor":"#26B3F7", "shadow" : true});
 	
 	// Regular update of the progress bar and indicators
 	$(document).everyTime('1s', 'puncherTimer', function() {
 		console.log('Is Timing...');
+		updateIndicators();
 	});
-	// Save the state
-	saveInCookie('I');
 }
 
 /**
  * Turns the puncher's power off
  */
 function powerOff() {
+	$('#puncher-button').removeClass('box-active');
 	// Changes the color of the progress bar
 	$("#knob").trigger('configure', {"fgColor":"#aaa", "shadow" : false});
 	// Stops the update of the progress bar
 	$(document).stopTime('puncherTimer');
-	// Save the state
-	saveInCookie('O');
 }
 
 /**
@@ -93,29 +86,47 @@ function saveInCookie(check) {
 	$( "#progressbar" ).progressbar( "option", "value", sizeRatio(punches) );
 }
 
+/**
+ * Inits the application's data and displays everything at it's right place
+ */
 function initPuncher() {
-	
+	// Displays the circular loading bar using jquery.knob
 	$("#knob").knob({
 		"fgColor":"#aaa",
         draw : tronDraw
     });
 	
+	// Centers the puncher on the page
 	centerPuncher();
 	$(window).resize(function() {
     	centerPuncher();
 	});
-	
+
+	// Loads the initial data of the puncher
+	$.cookie.json = true;
 	var punches = $.cookie('punches');
+	if (punches[punches.length -1]['check'] == 'I') {
+		powerOn();
+	}
 	initCookieInfos(punches);
-	initIndicators(punches);
+	updateIndicators(punches);
 }
 
-function initIndicators(punches) {
-	$('#temps-total');
-}
-
-function todayCheckInTime(punches) {
+function updateIndicators(punches) {
+	var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
 	
+	var indicators = calculateIndicators(punches);
+	
+	$('#total-time').text(ms2string(indicators['totalTime']));
+		
+	// Si on a dépassé le temps alloué
+	if (indicators['dayRatio'] > 100) {
+		indicators['dayRatio'] = indicators['dayRatio'] - 100;
+		$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
+		$("#time-spent, #last-time-spent").css('color','#cc0000');
+	}
+	
+	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
 }
 
 function initCookieInfos(punches) {
@@ -128,7 +139,6 @@ function initCookieInfos(punches) {
 	
 	// Gets the size ratio of the cookie informations
 	if (punches != undefined) {
-		punches = JSON.parse(punches);
 		progressbar.progressbar( "option", "value", sizeRatio(punches) );
 	}
 	else {
