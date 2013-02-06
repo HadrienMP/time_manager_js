@@ -106,7 +106,7 @@ body {
 	height: 0 !important;
 	position: relative;
 	top: -2px;
-	left: -2px;
+	left: -1px;
 }
 
 /*####################################################################################
@@ -137,6 +137,7 @@ body {
 	);
 }
 .box-active { color: #fff; text-shadow: 0px 0px 10px #fff; box-shadow: 0px 0px 30px #26B3F7; }
+.box-active.over-time {box-shadow: 0px 0px 30px #c00;}
 .corner-left { border-radius: 30px 0 0 30px; }
 .corner-right { border-radius: 0 30px 30px 0; }
 .progress-label {text-align: center; width: 100%; float: left; margin-top: 5px; text-shadow: 1px 1px 0 #111;}

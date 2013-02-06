@@ -55,6 +55,7 @@ function powerOn() {
  */
 function powerOff() {
 	$('#puncher-button').removeClass('box-active');
+	$('#puncher-button').removeClass('over-time');
 	// Changes the color of the progress bar
 	$("#knob").trigger('configure', {"fgColor":"#aaa", "shadow" : false});
 	// Stops the update of the progress bar
@@ -112,23 +113,6 @@ function initPuncher() {
 	updateIndicators(punches);
 }
 
-function updateIndicators(punches) {
-	var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
-	
-	var indicators = calculateIndicators(punches);
-	
-	$('#total-time').text(ms2string(indicators['totalTime']));
-		
-	// Si on a dépassé le temps alloué
-	if (indicators['dayRatio'] > 100) {
-		indicators['dayRatio'] = indicators['dayRatio'] - 100;
-		$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
-		$("#time-spent, #last-time-spent").css('color','#cc0000');
-	}
-	
-	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
-}
-
 function initCookieInfos(punches) {
 	// Progressbar init
 	var progressbar = $( "#progressbar" ), progressLabel = $( ".progress-label" );
@@ -148,4 +132,22 @@ function initCookieInfos(punches) {
 	// Button init
 	$('#delete-cookie').button({ icons: { primary: "ui-icon-trash" }, text: false });
 	$('#delete-cookies').button({ icons: { primary: "ui-icon-closethick" } , text: false});
+}
+
+function updateIndicators(punches) {
+	var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
+	
+	var indicators = calculateIndicators(punches);
+	
+	$('#total-time').text(ms2string(indicators['totalTime']));
+		
+	// Si on a dépassé le temps alloué
+	if (indicators['dayRatio'] > 100) {
+		$('#puncher-button').addClass('over-time');
+		indicators['dayRatio'] = indicators['dayRatio'] - 100;
+		$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
+		$("#time-spent, #last-time-spent").css('color','#cc0000');
+	}
+	
+	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
 }
