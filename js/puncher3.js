@@ -114,15 +114,19 @@ function todayCheckInTime(punches) {
 
 function initCookieInfos(punches) {
 	// Progressbar init
-	$('#progressbar').progressbar();
+	var progressbar = $( "#progressbar" ), progressLabel = $( ".progress-label" );
+	  
+	progressbar.progressbar({change: function() {
+        progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+    }});
 	
 	// Gets the size ratio of the cookie informations
 	if (punches != undefined) {
 		punches = JSON.parse(punches);
-		$("#progressbar").progressbar( "option", "value", sizeRatio(punches) );
+		progressbar.progressbar( "option", "value", sizeRatio(punches) );
 	}
 	else {
-		$("#progressbar").progressbar( "option", "value", 0 );
+		progressbar.progressbar( "option", "value", 0 );
 	}
 	
 	// Button init
