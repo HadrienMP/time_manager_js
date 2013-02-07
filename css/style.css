@@ -1,6 +1,6 @@
-body {
-	background: url('../images/micro_carbon.png');
-	font-size: 11px;
+body { 
+	background: url('../images/micro_carbon.png'); 
+	font-size: 11px; 
 }
 
 /** Font-Face **/
@@ -15,67 +15,128 @@ body {
   font-style: normal;
 }
 
-#wrapper {}
-	#content { }
-		#puncher-container {text-align: center; vertical-align: middle; height: 210px; overflow: hidden;}
-			#puncher-container a {height: 200px; width: 150px; vertical-align: middle;}
-			#puncher-container a.corner-left, #puncher-container a.corner-right {text-indent: -70000px; }
-			#puncher-container a.corner-left {border-right: 2px solid #111111}
-			#puncher-container a.corner-right {border-left: 2px solid #111111}
-				#puncher-container section {
-					background: url('../images/micro_carbon.png');
-					position: relative;
-					top: -180px;
-					margin: auto;
-					z-index: 10;
-					border-radius: 100px;
-					border: 1px solid #111;
-					height: 157px;
-					width: 160px;
-					vertical-align: middle;
-					padding-top: 2px;
-					box-shadow: inset 0px 3px 0px #111;
-				}
-					#puncher-container a#puncher-button {
-						font-family: "FontAwesome";
-						padding-top: 23px;
-						border-radius: 100px;
-						height: 97px;
-						width: 120px;
-						margin: auto;
-						border: none;
-						margin-top: 15px;
-					}
-					#puncher-container a#puncher-button.box-active {
-						top: -85px;
-					}
-					
-				
-				#indicators-container {margin: auto;}
-					#cookie-state, #indicators {
-						z-index: 2;
-						font-size: 12px;
-						overflow: hidden;
-						height: 200px;
-						width: 0px; 
-						vertical-align: middle; 
-						background: url('../images/escheresque_ste.png'); 
-						box-shadow: none;
-					}
-				
-.corner-left {
-	border-radius: 50px 0 0 50px;
+strong {font-weight: bold;}
+
+/*####################################################################################
+
+									Divers
+
+####################################################################################*/
+#content {height: 172px; width: 100%;}
+	#puncher-container {height: 132px; width: 100%; position: relative;}
+	#puncher-container section {vertical-align: middle;}
+	#puncher-container section, #puncher-container div {text-align: center;}
+	#puncher-container .ui-widget {font-size: 0.8em;}
+	
+	#options-buttons-container {width: 30px; margin: 20px auto;}
+		#options-buttons-container .ui-button {box-shadow: 0px 3px 0px #111;}
+	
+	#modals-container {display: none;}
+		#total-time-options {margin-top: 10px;}
+			#total-time-options  .ui-state-error {margin: 0 0 10px;}
+				#total-time-options  .ui-state-error  p {margin: 10px 0; text-align: justify;}
+			#total-time-options p.ui-widget-header {padding: 5px; margin-bottom: 15px;}
+				#total-time-options p span {float: left; margin: -2px 5px 0 0;}
+			#total-time-options p.two-a-row {padding: 0 2%; margin-bottom: 10px; width: 45%; display: inline-block; text-align: center;}
+				#total-time-options label,
+				#total-time-options input  {display: inline-block; margin: 0;}
+				#total-time-options label {width: 70px; text-align: left; margin-left: 10px;}
+				#total-time-options input  {text-align: center;}
+
+/*####################################################################################
+
+								Indicateurs
+
+####################################################################################*/
+#puncher-container #cookie-section, 
+#puncher-container #indicators-section {min-width: 350px;}
+#puncher-container #cookie-section {text-align: right;}
+#puncher-container #indicators-section {text-align: left;}
+	#puncher-container a#cookie-button, 
+	#puncher-container a#indicators-button { height: 130px; width: 100px; text-indent: -70000px; position: relative;}
+	#puncher-container a#cookie-button {text-align: left;}
+	#puncher-container #cookie-state, 
+	#puncher-container #indicators {
+		z-index: 2; 
+		font-size: 17px; 
+		overflow: hidden; 
+		height: 130px; 
+		width: 0px;
+		background: url('../images/escheresque_ste.png');
+		box-shadow: none;
+		vertical-align: bottom;
+		border: none;
+		padding: 0;
+		position: relative;
+		color: white;
+	}
+		#puncher-container #cookie-state > div {margin: 20px 60px 0 20px; width: 170px;}
+		#puncher-container #indicators > div {margin: 20px 20px 0 60px; width: 170px;}
+			#puncher-container #cookie-state button,
+			#puncher-container #cookie-state #progressbar,
+			#puncher-container #cookie-state p {margin-bottom: 10px;}
+	/*
+	 * FIXME
+	 * Hack To delete some space between the buttons...
+	 */
+	#puncher-container #cookie-state {margin-left: -3px; border-right: 1px solid #000;}
+	#puncher-container #indicators-button {margin-left: -3px;}
+	
+/*####################################################################################
+
+								Puncher
+
+####################################################################################*/
+
+#puncher-container section#puncher-section { 
+	background: url('../images/micro_carbon.png'); 
+	z-index: 10;
+	position: relative;
+	border-radius: 100px; 
+	border: 2px solid #111; 
+	height: 97px; 
+	width: 97px; 
+	box-shadow: inset 0px 3px 0px #111;
+}
+	#puncher-container a#puncher-button { 
+		border-radius: 100px; 
+		height: 75px; 
+		width: 75px; 
+		margin: auto; 
+		border: none; 
+		margin-top: 10px; 
+		font-family: "FontAwesome";
+		position: relative;
+		z-index: 1000;
+	}
+		#puncher-container a#puncher-button span {margin-top: 12px; display: inline-block;}
+		
+/*####################################################################################
+
+									Knob
+
+####################################################################################*/
+
+#puncher-container #knob-wrapper {
+	z-index: 11; 
+	display: block !important; 
+	width: 0 !important; 
+	height: 0 !important;
+	position: relative;
+	top: -3px;
+	left: -2px;
 }
 
-.corner-right {
-	border-radius: 0 50px 50px 0;
-}
+/*####################################################################################
 
+								Classes générales
+
+####################################################################################*/
+	
 .box {
-	margin-left: -4px; 
 	display: inline-block; 
 	border: 1px solid #111;
-	font-size: 90px;
+	font-size: 65px;
 	text-decoration: none;
 	color: #999;
 	box-shadow: 0px 5px 0px #111;
@@ -93,52 +154,28 @@ body {
 		color-stop(0.65, rgb(64,64,64))
 	);
 }
-.box-active {
-	color: #fff;
-	text-shadow: 0px 0px 10px #fff;
-	box-shadow: 0px 0px 30px #26B3F7;
-}
+.box-active { color: #fff; text-shadow: 0px 0px 10px #fff; box-shadow: 0px 0px 30px #26B3F7; }
+.box-active.over-time {box-shadow: 0px 0px 30px #c00;}
+.corner-left { border-radius: 30px 0 0 30px; }
+.corner-right { border-radius: 0 30px 30px 0; }
+.progress-label {text-align: center; width: 100%; float: left; margin-top: 5px; text-shadow: 1px 1px 0 #111;}
 
-/*
-	Affichage des panneaux d'information en mode d�ploy�s
-*/
+/*####################################################################################
 
-#cookie-button.cookie-active {
- 	width: 70px;
-/* 	background-image: linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
-	background-image: -o-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
-	background-image: -moz-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
-	background-image: -webkit-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
-	background-image: -ms-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
+								Elements cachés
 
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0.12, #19127C),
-		color-stop(0.65, #2A21DD)
-	); */
-	box-shadow: 0px 0px 30px #26B3F7;
-}
-#cookie-state.cookie-active {width: 250px;}
-#indicators-button.cookie-active {margin-right: 170px;}
+####################################################################################*/
 
-#indicators-button.indicators-active {
-	width: 70px;
-/* 	background-image: linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
-	background-image: -o-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
-	background-image: -moz-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
-	background-image: -webkit-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
-	background-image: -ms-linear-gradient(bottom, #19127C 12%, #2A21DD 65%);
 
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0.12, #19127C),
-		color-stop(0.65, #2A21DD)
-	); */
-	box-shadow: 0px 0px 30px #26B3F7;
-}
-#indicators.indicators-active {width: 250px;}
-#cookie-button.indicators-active {margin-left: 170px;}
+/*####################################################################################
+
+	Affichage des panneaux d'information en mode déployés
+	
+####################################################################################*/
+
+#puncher-container #cookie-button.cookie-active,
+#puncher-container #indicators-button.indicators-active { width: 50px; box-shadow: 0px 0px 30px #26B3F7; }
+#puncher-container #cookie-state.cookie-active,
+#puncher-container #indicators.indicators-active {width: 250px; }
+/* FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing */
+#puncher-container #cookie-button.indicators-active {z-index: 2;}

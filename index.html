@@ -1,36 +1,124 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<!-- Meta data -->
 	<meta charset="utf-8" />
 	<title>Puncher</title>
-	<link rel="stylesheet" href="css/style.css">
-	<link href="css/dark-hive/jquery-ui-1.10.0.custom.css" rel="stylesheet">
 	
-	<script type="text/javascript" src="js/jquery-1.9.0.js"></script>
-	<script type="text/javascript" src="js/jquery-ui-1.10.0.custom.js"></script>
-	<script type="text/javascript" src="js/jquery.cookie.js"></script>
-	<script type="text/javascript" src="js/jquery.timers.js"></script>
-	<script type="text/javascript" src="js/jquery.knob.js"></script>
+	<!-- CSS Styles -->
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/jquery.reject.css">
+	<link href="css/custom-theme/jquery-ui-1.10.0.custom.css" rel="stylesheet">
+	
+	<!-- JS Libraries -->
+	<script type="text/javascript" src="js/lib/jquery-1.9.0.js"></script>
+	<script type="text/javascript" src="js/lib/jquery-ui-1.10.0.custom.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.cookie.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.reject.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.timers.js"></script>
+	<![if !IE]>
+	<script type="text/javascript" src="js/lib/jquery.knob.js"></script>
+	<![endif]>
+	
+	<!-- Specific JS files -->
+	<![if !IE]>
 	<script type="text/javascript" src="js/utils.js"></script>
 	<script type="text/javascript" src="js/knob-init.js"></script>
 	<script type="text/javascript" src="js/puncher-display.js"></script>
-	<script type="text/javascript" src="js/puncher2.js"></script>
+	<script type="text/javascript" src="js/puncher-indicators.js"></script>
+	<script type="text/javascript" src="js/puncher.js"></script>
+	<![endif]>
+	<script type="text/javascript">
+		$(function() {
+			$.reject({  
+				reject: {msie: true },
+				imagePath: '/images/reject/'
+			});
+		});
+	</script>
 </head>
 <body>
 	<div id="wrapper">
 		<div id="content">
 			<div id="puncher-container">
-				<div id="indicators-container">
-					<a href="#cookie-state" id="cookie-button" class="box corner-left" title="Cookie" >C</a>
+					
+				<!-- Cookie informations -->
+				<section id="cookie-section">
+					<a href="#cookie-state" id="cookie-button" class="box corner-left" title="Cookie" >&lt;</a>
 					<div id="cookie-state" class="box" >
-						<p>Remplissage du cookie</p>
+						<div>
+							<p>Remplissage du cookie</p>
+							<div id="progressbar"><div class="progress-label">0%</div></div>
+							<button id="delete-cookie" title="Vider le cookie">&nbsp;</button>
+							<button id="delete-cookies" title="Supprimer tous les cookies">&nbsp;</button>
+						</div>
 					</div>
-					<div id="indicators" class="box" ></div>
-					<a href="#indicators" id="indicators-button" class="box corner-right" title="Indicateurs" >I</a>
-				</div>
-				<section>
-					<a id="puncher-button" class="box" href="#" >&#xF011;</a>
 				</section>
+				
+				<!-- The puncher button -->
+				<section id="puncher-section">
+					<!-- Knob that represents the % of time spent for the day -->
+					<input id="knob" data-width="100" data-height="100" data-inline="false" data-thickness=".1"
+						data-skin="tron" data-displayInput="false" />
+					<!-- The real puncher button -->
+					<a id="puncher-button" class="box" href="#" ><span>&#xF011;</span></a>
+				</section>
+				
+				<!-- Indicators relative to check in dates -->
+				<section id="indicators-section">
+					<div id="indicators" class="box" >
+						<div>
+							<dl>
+								<dt>Temps total journée</dt>
+								<dd id="total-time"></dd>
+							</dl>
+						</div>
+					</div>
+					<a href="#indicators" id="indicators-button" class="box corner-right" title="Indicateurs" >&gt;</a>
+				</section>
+			</div>
+			
+			<!-- The options container -->
+			<div id="options-buttons-container">
+				<a href="#" id="options-button" class="button" >Options</a>
+			</div>
+			
+			<!-- Hidden Modal boxes -->
+			<div id="modals-container">
+				
+				<div id="options-container" title="Options">
+					<div id="total-time-options" title="Durée totale">
+						<div class="ui-state-error ui-corner-all" style="padding: 0 .7em; display: none">
+							<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+							<strong>Alerte:</strong> Veuillez initialiser la durée totale pour une journée. Sans ça les indicateurs ne peuvent pas être calculés.</p>
+						</div>
+						<p class="two-a-row">
+							<input id="days" name="days" type="text" size="3" maxLength="3"/>
+							<label for="days">Jours</label>
+						</p>
+						<p class="two-a-row">
+							<input id="hours" name="hours" type="text" size="3" maxLength="3"/>
+							<label for="hours">Heures</label>
+						</p>
+						<p class="two-a-row">
+							<input id="minutes" name="minutes" type="text" size="3" maxLength="3"/>
+							<label for="minutes">Minutes</label>
+						</p>
+						<p class="two-a-row">
+							<input id="seconds" name="seconds" type="text" size="3" maxLength="3"/>
+							<label for="seconds">Secondes</label>
+						</p>
+					</div>
+				</div>
+				
+				<div id="delete-warning" title="Suppression">
+					<p>
+						<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+						Vous êtes sur le point de supprimmer toutes vos données de check-in de la journée.
+						Êtes-sûrs de vouloir faire cela?
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>

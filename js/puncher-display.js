@@ -1,38 +1,66 @@
 function togglePuncherState() {
 	if (!$('#puncher-button').hasClass('box-active')) {
-		$('#puncher-button').addClass('box-active', 200);
 		powerOn();
+		// Save the state
+		saveInCookie('I');
 	} else {
-		$('#puncher-button').removeClass('box-active', 200);
 		powerOff();	
+		// Save the state
+		saveInCookie('O');
 	}
 }
 
 function toggleCookieState() {
 	if (!$('#cookie-button').hasClass('cookie-active')) {
-		$('#cookie-button, #cookie-state, #indicators-button').addClass('cookie-active', 1000, "easeInOutCubic");
+		$('#cookie-button, #cookie-state').addClass('cookie-active', 1000, "easeInOutCubic");
 	} else {
-		$('#cookie-button, #cookie-state, #indicators-button').removeClass('cookie-active', 1000, "easeInOutCubic");
+		// FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing
+		$('#cookie-button').removeClass('indicators-active');
+		$('#cookie-button, #cookie-state').removeClass('cookie-active', 1000, "easeInOutCubic");
 	}
 }
 
 
 function toggleIndicatorsState() {
 	if (!$('#indicators-button').hasClass('indicators-active')) {
-		$('#cookie-button, #indicators, #indicators-button').addClass('indicators-active', 1000, "easeInOutCubic");
+		$('#indicators, #indicators-button').addClass('indicators-active', 1000, "easeInOutCubic");
 	} else {
-		$('#cookie-button, #indicators, #indicators-button').removeClass('indicators-active', 1000, "easeInOutCubic");
+		// FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing
+		$('#cookie-button').addClass('indicators-active');
+		$('#indicators, #indicators-button').removeClass('indicators-active', 1000, "easeInOutCubic");
 	}
 }
 
-function initPuncher() {
-	// Centrage vertical automatique
-	$('#puncher-container').css('position', 'relative');
-	$('#puncher-container').css('top', $(window).height() / 2 - $('#indicators-container').height() / 2);
-	$.cookie.json = true;
-	$("#knob").knob({
-		"fgColor":"#aaa",
-        draw : tronDraw
-    });
-	$( "#progressbar" ).progressbar();
+function centerPuncher() {
+
+	// Centrage automatique
+	var sections = ['cookie-section','indicators-section', 'puncher-section'];
+	$('#content').css('position','absolute');
+	$('#content').css('top', Math.floor($(window).height() / 2 - $('#content').height() / 2));
+	for (var index in sections) {
+		$('#' + sections[index]).css('position','absolute');
+		$('#' + sections[index]).css('top', Math.floor($('#puncher-container').height() / 2 - $('#' + sections[index]).height() / 2));
+	}
+	
+	$('#cookie-section').width($('#puncher-container').width() / 2);
+	$('#indicators-section').width($('#puncher-container').width() / 2);
+	$('#cookie-section').css('right', $('#puncher-container').width() / 2);
+	$('#indicators-section').css('left', $('#puncher-container').width() / 2);
+	
+	$('#puncher-section').css('left', Math.floor($('#puncher-container').width() / 2 - $('#puncher-section').width() / 2));
+}
+
+function noParametres() {
+	$('#total-time-options div.ui-state-error').show();
+	showParametresIfNotDisplaying();
+}
+
+function showParametresIfNotDisplaying() {
+	if (!$('#total-time-options').dialog("isOpen")) {
+		showParametres();
+	}
+}
+
+function showParametres() {
+	$('#total-time-options').dialog("open");
 }

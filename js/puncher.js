@@ -1,47 +1,90 @@
 $(document).ready(function(){
-	
-	$("#knob").knob({
-		"fgColor":"#aaa",
-        draw : tronDraw
-    });
-	
+    
+	initPuncher();
 	$.cookie.json = true;
-	var punches = $.cookie('punches');
 	
-	initPage(punches);
-	
-	$(document).everyTime('1s', function() {
-		punches = $.cookie('punches');
-		updateIndicators(punches);
+	/*
+	 * Starts or stops the puncher
+	 */
+	$('#puncher-button').click(function(){
+    	togglePuncherState();
 	});
-	
-	$('#knob').on('click', function(){
-		$(this).toggleClass('on');
-		var check = 'O';
-		if ($('#knob').hasClass('on')) {
-			check = 'I';
-			$("#knob").trigger('configure', {"fgColor":"#87bb53", "shadow" : true});
-		} else {
-			$("#knob").trigger('configure', {"fgColor":"#aaa", "shadow" : false});
-		}
-		saveInCookie(check);
+	/*
+	 * Opens or closes the cookie information pane
+	 */
+	$('#cookie-button').click(function(){
+		toggleCookieState();
+	});
+	/*
+	 * Opens or closes the indicators information pane
+	 */
+	$('#indicators-button').click(function(){
+		toggleIndicatorsState();
+	});
+	/*
+	 * Deals with the deletion of the cookie by providing a confirmation box
+	 */
+	$('#delete-cookie').click(function(){
+		$( "#delete-warning" ).dialog({
+			resizable: false,
+			height:140,
+			modal: false,
+			buttons: {
+				"Vider": function() {
+					eraseCookie();
+					$( this ).dialog( "close" );
+				},
+				"Annuler": function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+	});
+	$('#options-button').click(function() {
+		showParametres();
 	});
 });
 
-function initPage(punches) {
-	if (punches != undefined) {
-		if (punches[punches.length-1]['check'] == 'I') {
-			// Si le dernier check est un check in on modifie l'aspect du bouton
-			if (!$('#knob').hasClass('on')) {
-				$('#knob').toggleClass('on');
-				$("#knob").trigger('configure', {"fgColor":"#87bb53", "shadow" : true});
-			}
-			
-			calculateIndicators(punches);
-		}
-	}
+/**
+ * Deletes the user's cookie and resets all of his data
+ */
+function eraseCookie() {
+	$.removeCookie('punches');
+	initCookieInfos();
+	powerOff();
+	updateIndicators();
 }
 
+/**
+ * Turns the puncher's power on
+ */
+function powerOn() {
+	$('#puncher-button').addClass('box-active');
+	// Changes the color of the progress bar
+	$("#knob").trigger('configure', {"fgColor":"#26B3F7", "shadow" : true});
+	
+	// Regular update of the progress bar and indicators
+	$(document).everyTime('1s', 'puncherTimer', function() {
+		updateIndicators();
+	});
+}
+
+/**
+ * Turns the puncher's power off
+ */
+function powerOff() {
+	$('#puncher-button').removeClass('box-active');
+	$('#puncher-button').removeClass('over-time');
+	// Changes the color of the progress bar
+	$("#knob").trigger('configure', {"fgColor":"#aaa", "shadow" : false});
+	// Stops the update of the progress bar
+	$(document).stopTime('puncherTimer');
+}
+
+/**
+ * Saves the state and time of the punch
+ * @param string check either I or O
+ */
 function saveInCookie(check) {
 	// Préparation de l'enregistrement en cookie
 	var punch = {
@@ -59,126 +102,129 @@ function saveInCookie(check) {
 
 	// Enregistrement du cookie
 	$.cookie('punches', punches, {expires : 7});
+	
+	$( "#progressbar" ).progressbar( "option", "value", sizeRatio(punches) );
 }
 
-function updateIndicators(punches) {
+/**
+ * Inits the application's data and displays everything at it's right place
+ */
+function initPuncher() {
+	// Displays the circular loading bar using jquery.knob
+	$("#knob").knob({
+		"fgColor":"#aaa",
+        draw : tronDraw
+    });
+	
+	// Centers the puncher on the page
+	centerPuncher();
+	$(window).resize(function() {
+    	centerPuncher();
+	});
+
+	// Loads the initial data of the puncher
+	$.cookie.json = true;
+	var parametres = $.cookie('parametres');
+	var punches = $.cookie('punches');
+	if (punches != undefined && punches[punches.length -1]['check'] == 'I') {
+		powerOn();
+	}
+	
+	// Loads all the other initial datas
+	initOptions(parametres);
+	initCookieInfos(punches);
+	updateIndicators(punches, parametres);
+}
+
+/**
+ * Inits the cookie information such as size rate
+ * @param {Object} punches the punches from the cookie
+ */
+function initCookieInfos(punches) {
+	// Progressbar init
+	var progressbar = $( "#progressbar" ), progressLabel = $( ".progress-label" );
+	  
+	progressbar.progressbar({change: function() {
+        progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+    }});
+	
+	// Gets the size ratio of the cookie informations
 	if (punches != undefined) {
-		if (punches[punches.length-1]['check'] == 'I') {			
-			calculateIndicators(punches);
-		}
+		progressbar.progressbar( "option", "value", sizeRatio(punches) );
+	}
+	else {
+		progressbar.progressbar( "option", "value", 0 );
 	}
 	
+	// Button init
+	$('#delete-cookie').button({ icons: { primary: "ui-icon-trash" }, text: false });
+	$('#delete-cookies').button({ icons: { primary: "ui-icon-closethick" } , text: false});
 }
 
-function calculateIndicators(punches) {
+/**
+ * Updates the indicator values on the screen
+ * @param {Object} punches optionnal parameter
+ */
+function updateIndicators(punches, parametres) {
+	var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
+	var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
+	
+	var indicators = calculateIndicators(punches, parametres);
+	
+	$('#total-time').text(ms2string(indicators['totalTime']));
 		
-	// Récupération de la date pour les calculs
-	var now = new Date();
-	
-	var todaysPunches = getTodaysPunches(punches);
-	
-	var previousPunch;
-	var modelCorrupted = false;
-	var workdayLength = 0;
-	
-	var todaysPunchesTimeSpent = todaysPunches.reverse();
-	var todaysPunchesLastCheckIn = todaysPunchesTimeSpent.slice(0);
-	
-	// Récupération du dernier punch
-	var lastPunch = getLastCheckIn(todaysPunchesLastCheckIn);
-	if (lastPunch != undefined) {
-		lastPunchDate = new Date(lastPunch['date']);
-		$('#last-time-spent').text(diffDate(now,lastPunchDate));
-	} else {
-		$('#last-time-spent').text("0 s");
-	}	
-	
-	// Affichage de la taille du cookie par rapport au maximum autorisé
-	$('#cookie-size').text(sizeRatio(punches));
-	
-	var indicators = {
-		'dayRatio' : workdayLength * 100 / (7 * 60 *60 * 1000 + 22 * 60 * 1000)
+	// Si on a dépassé le temps alloué
+	if (indicators['dayRatio'] > 100) {
+		$('#puncher-button').addClass('over-time');
+		indicators['dayRatio'] = indicators['dayRatio'] - 100;
+		$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
+		$("#time-spent, #last-time-spent").css('color','#cc0000');
+	}
+	else if ($('#puncher-button').hasClass('over-time')) {
+		$('#puncher-button').removeClass('over-time');
+		$("#time-spent, #last-time-spent").css('color','');
+		powerOn();
 	}
 	
+	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
+	$('#puncher-button').attr('title', Math.round(indicators['dayRatio']) + '%');
+}
+
+/**
+ * Inits the options container etc.
+ */
+function initOptions(parametres) {
+	$('#options-buttons-container .button').button({ icons: { primary: "ui-icon-clock" }, text: false });
 	
-	// Calcul du temps passé au travail dans la journée
-	var previousPunch = getFirstCheckIn(todaysPunchesTimeSpent);
-	if (previousPunch != undefined) {
-		
-		var j = 1;
-		if (todaysPunchesTimeSpent.length == 0) {
-			workdayLength += now.getTime() - previousPunch['date'];
-		} else {
-			for (var index in todaysPunchesTimeSpent) {
-				punch = todaysPunchesTimeSpent[index];
-				if (previousPunch['check'] == punch['check']) {
-					modelCorrupted = true;
-					break;
-				}
-				if (punch['check'] == 'O' && previousPunch['check'] == 'I') {
-					workdayLength += punch['date'] - previousPunch['date'];
-				}
-				else if (todaysPunchesTimeSpent.length == j && punch['check'] == 'I') {
-					workdayLength += now.getTime() - punch['date'];
-				}
-				j++;
-				previousPunch = punch;
-			}
-		}
-		
-		$('#time-spent').text(ms2string(workdayLength));
-		
-		// Si on a dépassé le temps alloué
-		if (indicators['dayRatio'] > 100) {
-			indicators['dayRatio'] = indicators['dayRatio'] - 100;
-			$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
-			$("#time-spent, #last-time-spent").css('color','#cc0000');
-		}
-		
-		$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
+	if (parametres != undefined) {
+		$('#days').val(parametres['days']);
+		$('#hours').val(parametres['hours']);
+		$('#minutes').val(parametres['minutes']);
+		$('#seconds').val(parametres['seconds']);
 	}
-}
-
-function getFirstCheckIn(todaysPunches) {
-	// Récupération du premier check in de la journée
-	var firstCheckIn;
-	do {
-		firstCheckIn = todaysPunches.shift();
-	} while (todaysPunches.length > 0 && firstCheckIn['check'] != 'I');
 	
-	if (firstCheckIn != undefined && firstCheckIn['check'] != 'I')
-		firstCheckIn = undefined;
-		
-	return firstCheckIn;
+	$('#total-time-options').dialog({
+		draggable: false,
+		autoOpen: false,
+		show: {
+			effect: "scale",
+			duration: 300
+		},
+		hide: {
+			effect: "scale",
+			duration: 300
+		},
+		close: saveParametres,
+	});
+	$('#total-time-options').dialog("close");
 }
 
-function getLastCheckIn(todaysPunches) {
-	todaysPunches = todaysPunches.reverse();
-	return getFirstCheckIn(todaysPunches);
+function saveParametres() {
+	var parametres = {
+		'days' : $('#total-time-options #days').val(),
+		'hours' : $('#total-time-options #hours').val(),
+		'minutes' : $('#total-time-options #minutes').val(),
+		'seconds' : $('#total-time-options #seconds').val()
+	};
+	$.cookie('parametres',parametres);
 }
-
-function getTodaysPunches(punches) {
-
-	// Création de la date du jour é minuit (début de la journée)
-	var dayStart = new Date();
-	dayStart.setHours(0);
-	dayStart.setMinutes(0);
-	dayStart.setSeconds(0);
-	dayStart.setMilliseconds(0);
-			
-	// Récupération dans le cookie des punches du jour
-	var i = 0;
-	var tempPunch;
-	var todaysPunches = [];
-	while (i < punches.length) {
-		i++;
-		tempPunch = punches[punches.length-i]
-		punchDate = new Date(tempPunch['date']);
-		if (punchDate < dayStart) {
-			break;
-		}
-		todaysPunches.push(tempPunch);
-	}
-	return todaysPunches;
-}
-

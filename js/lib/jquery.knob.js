@@ -154,12 +154,13 @@
                             this.o.height + 'px"></canvas>');
             this.c = this.$c[0].getContext("2d");
 
+			// Add an id to the wrapping div in order to able to move it around if needed
             this.$
-                .wrap($('<div style="' + (this.o.inline ? 'display:inline;' : '') +
+                .wrap($('<div id="' + this.$.attr('id') + '-wrapper" style="' + (this.o.inline ? 'display:inline;' : '') +
                         'width:' + this.o.width + 'px;height:' +
                         this.o.height + 'px;"></div>'))
                 .before(this.$c);
-
+				
             if (this.v instanceof Object) {
                 this.cv = {};
                 this.copy(this.v, this.cv);
