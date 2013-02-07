@@ -30,9 +30,14 @@ body {
 		#options-buttons-container .ui-button {box-shadow: 0px 3px 0px #111;}
 	
 	#modals-container {display: none;}
-		#options-container {margin-top: 10px;}
-			#options-container p {width: 30%; float: left;}
-			#options-container .slider {margin: 10px 0; margin-left: 29%; width: 70%;}
+		#total-time-options {margin-top: 10px;}
+			#total-time-options p.ui-widget-header {padding: 5px; margin-bottom: 15px;}
+				#total-time-options p span {float: left; margin: -2px 5px 0 0;}
+			#total-time-options p.two-a-row {padding: 0 2%; margin-bottom: 10px; width: 45%; display: inline-block; text-align: center;}
+				#total-time-options label,
+				#total-time-options input  {display: inline-block; margin: 0;}
+				#total-time-options label {width: 70px; text-align: left; margin-left: 10px;}
+				#total-time-options input  {text-align: center;}
 
 /*####################################################################################
 

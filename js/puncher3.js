@@ -41,13 +41,13 @@ $(document).ready(function(){
 		});
 	});
 	$('#options-button').click(function() {
-		$('#options-container').dialog({
+		$('#total-time-options').dialog({
 			show: {
-				effect: "scale",
+				effect: "fade",
 				duration: 200
 			},
 			hide: {
-				effect: "scale",
+				effect: "fade",
 				duration: 200
 			}
 		});
@@ -194,26 +194,7 @@ function updateIndicators(punches) {
  * Inits the options container etc.
  */
 function initOptions() {
-	$('#options-buttons-container .button').button({ icons: { primary: "ui-icon-gear" }, text: false });
-	$('#options-container #hours-picker .slider').slider({
-      value: 7,
-      orientation: "horizontal",
-      range: "min",
-      animate: true,
-      min: 0,
-      max: 23
-    });
-	$('#options-container #days-picker .slider').slider({
-      value: 0,
-      orientation: "horizontal",
-      range: "min",
-      animate: true,
-      min: 0,
-      max: 365,
-      slide: function( event, ui ) {
-      	$( "#days-picker p span" ).val( ui.value );
-      }
-    });
-    
-    $( "#days-picker p span" ).val($( "#options-container #days-picker .slider" ).slider( "value") );
+	$('#options-buttons-container .button').button({ icons: { primary: "ui-icon-clock" }, text: false });
+	$('#hours').val(7);
+	$('#minutes').val(22);
 }

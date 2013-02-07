@@ -6,7 +6,7 @@ function calculateIndicators(punches) {
 		indicators['dayRatio'] = 0;
 	} else {
 		var totalTime = todaysTotalTime(punches);
-		indicators['totalTime'] = totalTime;
+		indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
 		indicators['dayRatio'] = indicators['totalTime'] * 100 / (7 * 60 *60 * 1000 + 22 * 60 * 1000);
 	}
 	return indicators;

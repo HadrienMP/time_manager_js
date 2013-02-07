@@ -8,21 +8,35 @@
 	<!-- CSS Styles -->
 	<link rel="stylesheet" href="css/reset.css">
 	<link rel="stylesheet" href="css/style2.css">
+	<link rel="stylesheet" href="css/jquery.reject.css">
 	<link href="css/custom-theme/jquery-ui-1.10.0.custom.css" rel="stylesheet">
 	
 	<!-- JS Libraries -->
 	<script type="text/javascript" src="js/jquery-1.9.0.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.10.0.custom.js"></script>
 	<script type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="js/jquery.reject.js"></script>
 	<script type="text/javascript" src="js/jquery.timers.js"></script>
+	<![if !IE]>
 	<script type="text/javascript" src="js/jquery.knob.js"></script>
+	<![endif]>
 	
 	<!-- Specific JS files -->
+	<![if !IE]>
 	<script type="text/javascript" src="js/utils.js"></script>
 	<script type="text/javascript" src="js/knob-init.js"></script>
 	<script type="text/javascript" src="js/puncher-display.js"></script>
 	<script type="text/javascript" src="js/puncher-indicators.js"></script>
 	<script type="text/javascript" src="js/puncher3.js"></script>
+	<![endif]>
+	<script type="text/javascript">
+		$(function() {
+			$.reject({  
+				reject: {msie: true },
+				imagePath: '/images/reject/'
+			});
+		});
+	</script>
 </head>
 <body>
 	<div id="wrapper">
@@ -73,14 +87,24 @@
 			<!-- Hidden Modal boxes -->
 			<div id="modals-container">
 				
-				<div id="options-container" title="Options">					 
-					<div id="days-picker">
-						<p>Jours : <span></span></p>
-						<div class="slider"></div>
-					</div>
-					<div id="hours-picker">
-						<p>Heures : <span></span></p>
-						<div class="slider"></div>
+				<div id="options-container" title="Options">
+					<div id="total-time-options" title="Durée totale">
+						<p class="two-a-row">
+							<input id="days" name="days" type="text" size="3" maxLength="3"/>
+							<label for="days">Jours</label>
+						</p>
+						<p class="two-a-row">
+							<input id="hours" name="hours" type="text" size="3" maxLength="3"/>
+							<label for="hours">Heures</label>
+						</p>
+						<p class="two-a-row">
+							<input id="minutes" name="minutes" type="text" size="3" maxLength="3"/>
+							<label for="minutes">Minutes</label>
+						</p>
+						<p class="two-a-row">
+							<input id="seconds" name="seconds" type="text" size="3" maxLength="3"/>
+							<label for="seconds">Secondes</label>
+						</p>
 					</div>
 				</div>
 				
