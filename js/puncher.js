@@ -186,8 +186,8 @@ function updateIndicators(punches, parametres) {
 		powerOn();
 	}
 	
-	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
-	$('#puncher-button').attr('title', Math.round(indicators['dayRatio']) + '%');
+	$("#knob").val(Math.round(indicators['dayRatio'] * 100) / 100).trigger('change');
+	$('#puncher-button').attr('title', (Math.round(indicators['dayRatio'] * 100) / 100) + '%');
 }
 
 /**
