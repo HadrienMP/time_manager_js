@@ -49,3 +49,18 @@ function centerPuncher() {
 	
 	$('#puncher-section').css('left', Math.floor($('#puncher-container').width() / 2 - $('#puncher-section').width() / 2));
 }
+
+function noParametres() {
+	$('#total-time-options div.ui-state-error').show();
+	showParametresIfNotDisplaying();
+}
+
+function showParametresIfNotDisplaying() {
+	if (!$('#total-time-options').dialog("isOpen")) {
+		showParametres();
+	}
+}
+
+function showParametres() {
+	$('#total-time-options').dialog("open");
+}

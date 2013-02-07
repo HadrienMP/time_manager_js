@@ -15,6 +15,8 @@ body {
   font-style: normal;
 }
 
+strong {font-weight: bold;}
+
 /*####################################################################################
 
 									Divers
@@ -31,6 +33,8 @@ body {
 	
 	#modals-container {display: none;}
 		#total-time-options {margin-top: 10px;}
+			#total-time-options  .ui-state-error {margin: 0 0 10px;}
+				#total-time-options  .ui-state-error  p {margin: 10px 0; text-align: justify;}
 			#total-time-options p.ui-widget-header {padding: 5px; margin-bottom: 15px;}
 				#total-time-options p span {float: left; margin: -2px 5px 0 0;}
 			#total-time-options p.two-a-row {padding: 0 2%; margin-bottom: 10px; width: 45%; display: inline-block; text-align: center;}

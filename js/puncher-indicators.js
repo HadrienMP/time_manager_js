@@ -1,15 +1,49 @@
 function calculateIndicators(punches) {
 	var indicators = [];
+	
+	// Récupération des paramètres de l'application
+	var parametres = $.cookie('parametres');
+	if (parametres == undefined) {
+		noParametres();
+	}
+	else {
+		if (parametres['days'] == undefined) {
+			parametres['days'] = 0;
+		}
+		if (parametres['hours'] == undefined) {
+			parametres['hours'] = 0;
+		}
+		if (parametres['minutes'] == undefined) {
+			parametres['minutes'] = 0;
+		}
+		if (parametres['seconds'] == undefined) {
+			parametres['seconds'] = 0;
+		}
+	}
+	
 	// S�curisation si le contenu du cookie est vide
-	if (punches == undefined) {
+	if (punches == undefined || parametres == undefined) {
 		indicators['totalTime'] = 0;
 		indicators['dayRatio'] = 0;
 	} else {
 		var totalTime = todaysTotalTime(punches);
 		indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
-		indicators['dayRatio'] = indicators['totalTime'] * 100 / (7 * 60 *60 * 1000 + 22 * 60 * 1000);
+		indicators['dayRatio'] = timeRatio(indicators['totalTime'], parametres);
 	}
 	return indicators;
+}
+
+function timeRatio(totalTime,parametres) {
+
+	var divider = parametres['days'] * 24 * 60 * 60 * 1000;
+	divider += parametres['hours'] * 60 * 60 * 1000;
+	divider += parametres['minutes'] * 60 * 1000;
+	divider += parametres['seconds'] * 1000;
+	
+	if (divider != 0) {
+		return totalTime * 100 / divider
+	}
+	return 0;
 }
 
 function todaysTotalTime(punches) {

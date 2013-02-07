@@ -41,16 +41,7 @@ $(document).ready(function(){
 		});
 	});
 	$('#options-button').click(function() {
-		$('#total-time-options').dialog({
-			show: {
-				effect: "fade",
-				duration: 200
-			},
-			hide: {
-				effect: "fade",
-				duration: 200
-			}
-		});
+		showParametres();
 	});
 });
 
@@ -138,9 +129,11 @@ function initPuncher() {
 	if (punches != undefined && punches[punches.length -1]['check'] == 'I') {
 		powerOn();
 	}
+	
+	// Loads all the other initial datas
+	initOptions();
 	initCookieInfos(punches);
 	updateIndicators(punches);
-	initOptions();
 }
 
 /**
@@ -188,6 +181,7 @@ function updateIndicators(punches) {
 	}
 	
 	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
+	$('#puncher-button').attr('title', Math.round(indicators['dayRatio']) + '%');
 }
 
 /**
@@ -197,4 +191,28 @@ function initOptions() {
 	$('#options-buttons-container .button').button({ icons: { primary: "ui-icon-clock" }, text: false });
 	$('#hours').val(7);
 	$('#minutes').val(22);
+	$('#total-time-options').dialog({
+		draggable: false,
+		autoOpen: false,
+		show: {
+			effect: "scale",
+			duration: 300
+		},
+		hide: {
+			effect: "scale",
+			duration: 300
+		},
+		close: saveParametres,
+	});
+	$('#total-time-options').dialog("close");
+}
+
+function saveParametres() {
+	var parametres = {
+		'days' : $('#total-time-options #days').val(),
+		'hours' : $('#total-time-options #hours').val(),
+		'minutes' : $('#total-time-options #minutes').val(),
+		'seconds' : $('#total-time-options #seconds').val()
+	};
+	$.cookie('parametres',parametres);
 }
