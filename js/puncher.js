@@ -180,6 +180,11 @@ function updateIndicators(punches, parametres) {
 		$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
 		$("#time-spent, #last-time-spent").css('color','#cc0000');
 	}
+	else if ($('#puncher-button').hasClass('over-time')) {
+		$('#puncher-button').removeClass('over-time');
+		$("#time-spent, #last-time-spent").css('color','');
+		powerOn();
+	}
 	
 	$("#knob").val(Math.round(indicators['dayRatio'])).trigger('change');
 	$('#puncher-button').attr('title', Math.round(indicators['dayRatio']) + '%');
