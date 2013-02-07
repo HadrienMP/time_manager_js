@@ -1,8 +1,7 @@
-function calculateIndicators(punches) {
+function calculateIndicators(punches, parametres) {
 	var indicators = [];
 	
 	// Récupération des paramètres de l'application
-	var parametres = $.cookie('parametres');
 	if (parametres == undefined) {
 		noParametres();
 	}

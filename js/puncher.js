@@ -124,15 +124,16 @@ function initPuncher() {
 
 	// Loads the initial data of the puncher
 	$.cookie.json = true;
+	var parametres = $.cookie('parametres');
 	var punches = $.cookie('punches');
 	if (punches != undefined && punches[punches.length -1]['check'] == 'I') {
 		powerOn();
 	}
 	
 	// Loads all the other initial datas
-	initOptions();
+	initOptions(parametres);
 	initCookieInfos(punches);
-	updateIndicators(punches);
+	updateIndicators(punches, parametres);
 }
 
 /**
@@ -164,10 +165,11 @@ function initCookieInfos(punches) {
  * Updates the indicator values on the screen
  * @param {Object} punches optionnal parameter
  */
-function updateIndicators(punches) {
+function updateIndicators(punches, parametres) {
 	var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
+	var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
 	
-	var indicators = calculateIndicators(punches);
+	var indicators = calculateIndicators(punches, parametres);
 	
 	$('#total-time').text(ms2string(indicators['totalTime']));
 		
@@ -186,10 +188,16 @@ function updateIndicators(punches) {
 /**
  * Inits the options container etc.
  */
-function initOptions() {
+function initOptions(parametres) {
 	$('#options-buttons-container .button').button({ icons: { primary: "ui-icon-clock" }, text: false });
-	$('#hours').val(7);
-	$('#minutes').val(22);
+	
+	if (parametres != undefined) {
+		$('#days').val(parametres['days']);
+		$('#hours').val(parametres['hours']);
+		$('#minutes').val(parametres['minutes']);
+		$('#seconds').val(parametres['seconds']);
+	}
+	
 	$('#total-time-options').dialog({
 		draggable: false,
 		autoOpen: false,
