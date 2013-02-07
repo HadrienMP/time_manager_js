@@ -226,5 +226,5 @@ function saveParametres() {
 		'minutes' : $('#total-time-options #minutes').val(),
 		'seconds' : $('#total-time-options #seconds').val()
 	};
-	$.cookie('parametres',parametres);
+	$.cookie('parametres',parametres, {expires: 7});
 }
