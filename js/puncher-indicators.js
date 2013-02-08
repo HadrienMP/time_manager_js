@@ -24,21 +24,36 @@ function calculateIndicators(punches, parametres) {
 	if (punches == undefined || parametres == undefined) {
 		indicators['totalTime'] = 0;
 		indicators['dayRatio'] = 0;
+		indicators['timeDifference'] = 0;
+		indicators['isOverTime'] = false;
 	} else {
 		var totalTime = todaysTotalTime(punches);
 		indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
 		indicators['dayRatio'] = timeRatio(indicators['totalTime'], parametres);
+		indicators['timeDifference'] = timeDifference(indicators['totalTime'], parametres);
+		indicators['isOverTime'] = indicators['dayRatio'] > 100;
+		if (indicators['isOverTime']) {
+			indicators['dayRatio'] -= 100;
+		}
 	}
 	return indicators;
 }
 
-function timeRatio(totalTime,parametres) {
+function timeDifference(totalTime, parametres) {
+	var totalTimeMax = parametres2Ms(parametres);
+	return totalTime - totalTimeMax;
+}
 
-	var divider = parametres['days'] * 24 * 60 * 60 * 1000;
-	divider += parametres['hours'] * 60 * 60 * 1000;
-	divider += parametres['minutes'] * 60 * 1000;
-	divider += parametres['seconds'] * 1000;
-	
+function parametres2Ms(parametres) {
+	var ms = parametres['days'] * 24 * 60 * 60 * 1000;
+	ms += parametres['hours'] * 60 * 60 * 1000;
+	ms += parametres['minutes'] * 60 * 1000;
+	ms += parametres['seconds'] * 1000;
+	return ms;
+}
+
+function timeRatio(totalTime,parametres) {
+	var divider = parametres2Ms(parametres);
 	if (divider != 0) {
 		return totalTime * 100 / divider
 	}

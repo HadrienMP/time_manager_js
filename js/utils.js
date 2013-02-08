@@ -4,14 +4,20 @@ function diffDate(date1, date2) {
 
 function ms2string(ms) {
 
+	var diff = '';
+	if (ms < 0) {
+		ms = -ms;
+		diff += '- ';
+	}
+
 	var s = ms/1000;
 	var m = s/60;
 	var h = m/60;
 	var d = h/24;
 	
-	mF = Math.floor(m);
-	hF = Math.floor(h);
-	dF = Math.floor(d);
+	var mF = Math.floor(m);
+	var hF = Math.floor(h);
+	var dF = Math.floor(d);
 	
 	s = (m - mF)*60;
 	m = (h - hF)*60;
@@ -22,7 +28,6 @@ function ms2string(ms) {
 	h = Math.floor(h);
 	d = Math.floor(d);
 	
-	var diff = '';
 	if (d > 0)
 		diff += d + ' days ';
 	if (h > 0)

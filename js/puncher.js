@@ -170,22 +170,24 @@ function updateIndicators(punches, parametres) {
 	var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
 	
 	var indicators = calculateIndicators(punches, parametres);
-	
-	$('#total-time').text(ms2string(indicators['totalTime']));
-		
+	var timeDifference = ms2string(indicators['timeDifference']);
 	// Si on a dépassé le temps alloué
-	if (indicators['dayRatio'] > 100) {
-		$('#puncher-button').addClass('over-time');
-		indicators['dayRatio'] = indicators['dayRatio'] - 100;
-		$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
-		$("#time-spent, #last-time-spent").css('color','#cc0000');
+	if (indicators['isOverTime']) {
+		if (!$('#puncher-container').hasClass('over-time')) {
+			// Modification des styles pour passer en rouge
+			$('#puncher-container').addClass('over-time');
+			$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
+		}
+		// Rectification des indicateurs
+		timeDifference = "+ " + timeDifference;
 	}
-	else if ($('#puncher-button').hasClass('over-time')) {
-		$('#puncher-button').removeClass('over-time');
-		$("#time-spent, #last-time-spent").css('color','');
+	else if ($('#puncher-container').hasClass('over-time')) {
+		$('#puncher-container').removeClass('over-time');
 		powerOn();
 	}
 	
+	$('#total-time').text(ms2string(indicators['totalTime']));
+	$('#time-difference').text(timeDifference);
 	$("#knob").val(Math.round(indicators['dayRatio'] * 100) / 100).trigger('change');
 	$('#puncher-button').attr('title', (Math.round(indicators['dayRatio'] * 100) / 100) + '%');
 }
