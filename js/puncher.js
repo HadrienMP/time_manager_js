@@ -134,6 +134,20 @@ function initPuncher() {
 	initOptions(parametres);
 	initCookieInfos(punches);
 	updateIndicators(punches, parametres);
+	initToolTip();
+}
+
+function initToolTip() {
+	$(document).tooltip();
+	$('#puncher-button').tooltip({
+		position: { my: "left top+15", at: "left+3 bottom" }
+    });
+	$('#cookie-button').tooltip({
+		position: { my: "right center", at: "left-15 center" }
+	});
+	$('#indicators-button').tooltip({
+		position: { my: "left+15 center", at: "right center" }
+	});
 }
 
 /**
@@ -141,6 +155,7 @@ function initPuncher() {
  * @param {Object} punches the punches from the cookie
  */
 function initCookieInfos(punches) {
+
 	// Progressbar init
 	var progressbar = $( "#progressbar" ), progressLabel = $( ".progress-label" );
 	  
