@@ -1,38 +1,41 @@
 function diffDate(date1, date2) {
-	return ms2string(date1 - date2);
+    return ms2string(date1 - date2);
 }
 
 function ms2string(ms) {
 
-	var s = ms/1000;
-	var m = s/60;
-	var h = m/60;
-	var d = h/24;
-	
-	mF = Math.floor(m);
-	hF = Math.floor(h);
-	dF = Math.floor(d);
-	
-	s = (m - mF)*60;
-	m = (h - hF)*60;
-	h = (d - dF)*24;
-	
-	s = Math.floor(s);
-	m = Math.floor(m);
-	h = Math.floor(h);
-	d = Math.floor(d);
-	
-	var diff = '';
-	if (d > 0)
-		diff += d + ' days ';
-	if (h > 0)
-		diff += h + ' h ';
-	if (m > 0)
-		diff += m + ' min ';
-		
-	diff += s + ' s';
-	
-	return  diff;
+    var s = ms/1000;
+    var m = s/60;
+    var h = m/60;
+    var d = h/24;
+
+    mF = Math.floor(m);
+    hF = Math.floor(h);
+    dF = Math.floor(d);
+
+    s = (m - mF)*60;
+    m = (h - hF)*60;
+    h = (d - dF)*24;
+
+    s = Math.floor(s);
+    m = Math.floor(m);
+    h = Math.floor(h);
+    d = Math.floor(d);
+
+    var diff = '';
+    if (d > 0) {
+        diff += d + ' days ';
+    }
+    if (h > 0) {
+        diff += h + ' h ';
+    }
+    if (m > 0) {
+        diff += m + ' min ';
+    }
+
+    diff += s + ' s';
+
+    return  diff;
 }
 
 function roughSizeOfObject( object ) {
@@ -57,10 +60,14 @@ function roughSizeOfObject( object ) {
             objectList.push( value );
             for (var i in value) {
                 try {
-                    if (i == 'Blob') bytes += value[i].size || 0;
+                    if (i === 'Blob') {
+                        bytes += value[i].size || 0;
+                    }
                     stack.push(value[i]);
                     stack.push(i);
-                } catch(e) {};
+                } catch(e) {
+                    console.log('roughSizeOfObject erreur de calcul');
+                };
             };
         }
     }
@@ -68,5 +75,5 @@ function roughSizeOfObject( object ) {
 }
 
 function sizeRatio(object) {
-	return (Math.round(roughSizeOfObject(object) * 100 * 100 / 2188) / 100);
+    return (Math.round(roughSizeOfObject(object) * 100 * 100 / 2188) / 100);
 }
