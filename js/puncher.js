@@ -48,36 +48,36 @@ $(document).ready(function(){
  * Deletes the user's cookie and resets all of his data
  */
 function eraseCookie() {
-	$.removeCookie('punches');
-	initCookieInfos();
-	powerOff();
-	updateIndicators();
+    $.removeCookie('punches');
+    initCookieInfos();
+    powerOff();
+    updateIndicators();
 }
 
 /**
  * Turns the puncher's power on
  */
 function powerOn() {
-	$('#puncher-button').addClass('box-active');
-	// Changes the color of the progress bar
-	$("#knob").trigger('configure', {"fgColor":"#26B3F7", "shadow" : true});
-	
-	// Regular update of the progress bar and indicators
-	$(document).everyTime('1s', 'puncherTimer', function() {
-		updateIndicators();
-	});
+    $('#puncher-button').addClass('box-active');
+    // Changes the color of the progress bar
+    $("#knob").trigger('configure', {"fgColor":"#26B3F7", "shadow" : true});
+
+    // Regular update of the progress bar and indicators
+    $(document).everyTime('1s', 'puncherTimer', function() {
+        updateIndicators();
+    });
 }
 
 /**
  * Turns the puncher's power off
  */
 function powerOff() {
-	$('#puncher-button').removeClass('box-active');
-	$('#puncher-button').removeClass('over-time');
-	// Changes the color of the progress bar
-	$("#knob").trigger('configure', {"fgColor":"#aaa", "shadow" : false});
-	// Stops the update of the progress bar
-	$(document).stopTime('puncherTimer');
+    $('#puncher-button').removeClass('box-active');
+    $('#puncher-button').removeClass('over-time');
+    // Changes the color of the progress bar
+    $("#knob").trigger('configure', {"fgColor":"#aaa", "shadow" : false});
+    // Stops the update of the progress bar
+    $(document).stopTime('puncherTimer');
 }
 
 /**
@@ -85,54 +85,54 @@ function powerOff() {
  * @param string check either I or O
  */
 function saveInCookie(check) {
-	// Préparation de l'enregistrement en cookie
-	var punch = {
-			'check' : check,
-			'date' : new Date().getTime()
-		};
-		
-	var punches = $.cookie('punches');
-	if (punches == undefined) {
-		punches = [punch];
-	}
-	else {
-		punches.push(punch);
-	}
+    // Préparation de l'enregistrement en cookie
+    var punch = {
+            'check' : check,
+            'date' : new Date().getTime()
+        };
 
-	// Enregistrement du cookie
-	$.cookie('punches', punches, {expires : 7});
-	
-	$( "#progressbar" ).progressbar( "option", "value", sizeRatio(punches) );
+    var punches = $.cookie('punches');
+    if (punches === undefined) {
+        punches = [punch];
+    }
+    else {
+        punches.push(punch);
+    }
+
+    // Enregistrement du cookie
+    $.cookie('punches', punches, {expires : 7});
+
+    $( "#progressbar" ).progressbar( "option", "value", sizeRatio(punches) );
 }
 
 /**
  * Inits the application's data and displays everything at it's right place
  */
 function initPuncher() {
-	// Displays the circular loading bar using jquery.knob
-	$("#knob").knob({
-		"fgColor":"#aaa",
+    // Displays the circular loading bar using jquery.knob
+    $("#knob").knob({
+        "fgColor":"#aaa",
         draw : tronDraw
     });
-	
-	// Centers the puncher on the page
-	centerPuncher();
-	$(window).resize(function() {
-    	centerPuncher();
-	});
 
-	// Loads the initial data of the puncher
-	$.cookie.json = true;
-	var parametres = $.cookie('parametres');
-	var punches = $.cookie('punches');
-	if (punches != undefined && punches[punches.length -1]['check'] == 'I') {
-		powerOn();
-	}
-	
-	// Loads all the other initial datas
-	initOptions(parametres);
-	initCookieInfos(punches);
-	updateIndicators(punches, parametres);
+    // Centers the puncher on the page
+    centerPuncher();
+    $(window).resize(function() {
+        centerPuncher();
+    });
+
+    // Loads the initial data of the puncher
+    $.cookie.json = true;
+    var parametres = $.cookie('parametres');
+    var punches = $.cookie('punches');
+    if (punches !== undefined && punches[punches.length -1]['check'] === 'I') {
+        powerOn();
+    }
+
+    // Loads all the other initial datas
+    initOptions(parametres);
+    initCookieInfos(punches);
+    updateIndicators(punches, parametres);
 	initToolTip();
 }
 
@@ -154,25 +154,24 @@ function initToolTip() {
  * @param {Object} punches the punches from the cookie
  */
 function initCookieInfos(punches) {
+    // Progressbar init
+    var progressbar = $( "#progressbar" ), progressLabel = $( ".progress-label" );
 
-	// Progressbar init
-	var progressbar = $( "#progressbar" ), progressLabel = $( ".progress-label" );
-	  
-	progressbar.progressbar({change: function() {
+    progressbar.progressbar({change: function() {
         progressLabel.text( progressbar.progressbar( "value" ) + "%" );
     }});
-	
-	// Gets the size ratio of the cookie informations
-	if (punches != undefined) {
-		progressbar.progressbar( "option", "value", sizeRatio(punches) );
-	}
-	else {
-		progressbar.progressbar( "option", "value", 0 );
-	}
-	
-	// Button init
-	$('#delete-cookie').button({ icons: { primary: "ui-icon-trash" }, text: false });
-	$('#delete-cookies').button({ icons: { primary: "ui-icon-closethick" } , text: false});
+
+    // Gets the size ratio of the cookie informations
+    if (punches !== undefined) {
+        progressbar.progressbar( "option", "value", sizeRatio(punches) );
+    }
+    else {
+        progressbar.progressbar( "option", "value", 0 );
+    }
+
+    // Button init
+    $('#delete-cookie').button({ icons: { primary: "ui-icon-trash" }, text: false });
+    $('#delete-cookies').button({ icons: { primary: "ui-icon-closethick" } , text: false});
 }
 
 /**
@@ -253,11 +252,11 @@ function initOptions(parametres) {
 }
 
 function saveParametres() {
-	var parametres = {
-		'days' : $('#total-time-options #days').val(),
-		'hours' : $('#total-time-options #hours').val(),
-		'minutes' : $('#total-time-options #minutes').val(),
-		'seconds' : $('#total-time-options #seconds').val()
-	};
-	$.cookie('parametres',parametres, {expires: 7});
+    var parametres = {
+        'days' : $('#total-time-options #days').val(),
+        'hours' : $('#total-time-options #hours').val(),
+        'minutes' : $('#total-time-options #minutes').val(),
+        'seconds' : $('#total-time-options #seconds').val()
+    };
+    $.cookie('parametres',parametres, {expires: 7});
 }
