@@ -3,3 +3,4 @@ mongoose
 /mongoose.conf
 /.project
 /.sonar
+/.sass-cache
