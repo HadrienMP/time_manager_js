@@ -137,7 +137,7 @@ function initPuncher() {
 }
 
 function initToolTip() {
-	$(document).tooltip();
+	$('#options-buttons-container').tooltip();
 	$('#puncher-button').tooltip({
 		position: { my: "left top+15", at: "left+3 bottom" }
     });
