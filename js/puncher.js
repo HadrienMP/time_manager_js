@@ -40,9 +40,8 @@ $(document).ready(function(){
 			}
 		});
 	});
-	$('#options-button').click(function() {
-		showParametres();
-	});
+	$('#time-options-button').click(showTimeParametres);
+	$('#options-button').click(showParametres);
 });
 
 /**
@@ -211,7 +210,12 @@ function updateIndicators(punches, parametres) {
  * Inits the options container etc.
  */
 function initOptions(parametres) {
-	$('#options-buttons-container .button').button({ icons: { primary: "ui-icon-clock" }, text: false });
+
+	$('#options-buttons-container #time-options-button').button({ icons: { primary: "ui-icon-clock" }, text: false });
+	$('#options-buttons-container #options-button').button({ icons: { primary: "ui-icon-gear" }, text: false });
+	
+	$('#tooltips-options').buttonset();
+	$('#button-tooltip-options').buttonset();
 	
 	if (parametres != undefined) {
 		$('#days').val(parametres['days']);
@@ -233,7 +237,19 @@ function initOptions(parametres) {
 		},
 		close: saveParametres,
 	});
-	$('#total-time-options').dialog("close");
+	
+	$('#options').dialog({
+		draggable: false,
+		autoOpen: false,
+		show: {
+			effect: "scale",
+			duration: 300
+		},
+		hide: {
+			effect: "scale",
+			duration: 300
+		}
+	});
 }
 
 function saveParametres() {

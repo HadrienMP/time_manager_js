@@ -83,13 +83,14 @@
 			
 			<!-- The options container -->
 			<div id="options-buttons-container">
-				<a href="#" id="options-button" class="button" >Options</a>
+				<a href="#" id="time-options-button" class="button" >Options de temps</a>
+				<a href="#" id="options-button" class="button" >Options Générales</a>
 			</div>
 			
 			<!-- Hidden Modal boxes -->
 			<div id="modals-container">
 				
-				<div id="options-container" title="Options">
+				<div id="options-container">
 					<div id="total-time-options" title="Durée totale">
 						<div class="ui-state-error ui-corner-all" style="padding: 0 .7em; display: none">
 							<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
@@ -111,6 +112,21 @@
 							<input id="seconds" name="seconds" type="text" size="3" maxLength="3"/>
 							<label for="seconds">Secondes</label>
 						</p>
+					</div>
+					
+					<div id="options" title="Options">
+						<form>
+							<p>Infos bulles&nbsp;:</p>
+							<div id="tooltips-options">
+								<input id="tooltips-on" name="tooltips" type="radio" checked="checked" /><label for="tooltips-on">On</label>
+								<input id="tooltips-off" name="tooltips" type="radio" /><label for="tooltips-off">Off</label>
+							</div>
+							<p>Info bulle Bouton&nbsp;:</p>
+							<div id="button-tooltip-options">
+								<input id="button-tooltip-on" name="button-tooltip" type="radio" checked="checked" /><label for="button-tooltip-on">On</label>
+								<input id="button-tooltip-off" name="button-tooltip" type="radio" /><label for="button-tooltip-off">Off</label>
+							</div>
+						</form>
 					</div>
 				</div>
 				

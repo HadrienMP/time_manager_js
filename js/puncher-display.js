@@ -50,17 +50,20 @@ function centerPuncher() {
 	$('#puncher-section').css('left', Math.floor($('#puncher-container').width() / 2 - $('#puncher-section').width() / 2));
 }
 
-function noParametres() {
+function noTimeParametres() {
 	$('#total-time-options div.ui-state-error').show();
-	showParametresIfNotDisplaying();
+	showTimeParametresIfNotDisplaying();
 }
 
-function showParametresIfNotDisplaying() {
+function showTimeParametresIfNotDisplaying() {
 	if (!$('#total-time-options').dialog("isOpen")) {
-		showParametres();
+		showTimeParametres();
 	}
 }
 
-function showParametres() {
+function showTimeParametres() {
 	$('#total-time-options').dialog("open");
+}
+function showParametres() {
+	$('#options').dialog("open");
 }

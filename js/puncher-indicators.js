@@ -3,7 +3,7 @@ function calculateIndicators(punches, parametres) {
 	
 	// Récupération des paramètres de l'application
 	if (parametres == undefined) {
-		noParametres();
+		noTimeParametres();
 	}
 	else {
 		if (parametres['days'] == undefined) {
