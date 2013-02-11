@@ -5,7 +5,7 @@ Time Manager JS permet de suivre le temps que vous passez sur une tâche, un pro
 
 Demo
 ----
-Une démonstration du code courant fonctionnel est accessible à l'url suivante : http://dl.dropbox.com/u/46671240/time_manager_js/index.html#
+Une démonstration du code courant fonctionnel est accessible à l'url suivante : http://time-manager.hadrienmp.com
 
 Fonctionnement
 --------------
