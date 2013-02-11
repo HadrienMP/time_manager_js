@@ -151,19 +151,7 @@ strong {font-weight: bold;}
 	text-decoration: none;
 	color: #999;
 	box-shadow: 0px 5px 0px #111;
-	background-image: linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
-	background-image: -o-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
-	background-image: -moz-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
-	background-image: -webkit-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
-	background-image: -ms-linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%);
-
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0.12, rgb(33,33,33)),
-		color-stop(0.65, rgb(64,64,64))
-	);
+	@include background(linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%));
 }
 .box-active { color: #fff; text-shadow: 0px 0px 10px #fff; box-shadow: 0px 0px 30px #26B3F7; }
 .corner-left { border-radius: 30px 0 0 30px; }
