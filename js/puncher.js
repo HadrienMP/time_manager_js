@@ -42,6 +42,11 @@ $(document).ready(function(){
 	});
 	$('#time-options-button').click(showTimeParametres);
 	$('#options-button').click(showParametres);
+    
+    // Regular update of the progress bar and indicators
+    $(document).everyTime('1s', 'puncherTimer', function() {
+        updateIndicators();
+    });
 });
 
 /**
@@ -61,11 +66,10 @@ function powerOn() {
     $('#puncher-button').addClass('box-active');
     // Changes the color of the progress bar
     $("#knob").trigger('configure', {"fgColor":"#26B3F7", "shadow" : true});
+}
 
-    // Regular update of the progress bar and indicators
-    $(document).everyTime('1s', 'puncherTimer', function() {
-        updateIndicators();
-    });
+function isPowerOn() {
+    return $('#puncher-button').hasClass('box-active');
 }
 
 /**
@@ -76,8 +80,6 @@ function powerOff() {
     $('#puncher-button').removeClass('over-time');
     // Changes the color of the progress bar
     $("#knob").trigger('configure', {"fgColor":"#aaa", "shadow" : false});
-    // Stops the update of the progress bar
-    $(document).stopTime('puncherTimer');
 }
 
 /**
@@ -179,32 +181,52 @@ function initCookieInfos(punches) {
  * @param {Object} punches optionnal parameter
  */
 function updateIndicators(punches, parametres) {
-	var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
-	var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
-	
-	var indicators = calculateIndicators(punches, parametres);
-	var timeDifference = ms2string(indicators['timeDifference']);
-	// Si on a dépassé le temps alloué
-	if (indicators['isOverTime']) {
-		if (!$('#puncher-container').hasClass('over-time')) {
-			// Modification des styles pour passer en rouge
-			$('#puncher-container').addClass('over-time');
-			$("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
-		}
-		// Rectification des indicateurs
-		timeDifference = "+ " + timeDifference;
-	}
-	else if ($('#puncher-container').hasClass('over-time')) {
-		$('#puncher-container').removeClass('over-time');
-		powerOn();
-	}
-	
-	$('#total-time').text(ms2string(indicators['totalTime']));
-	$('#time-difference').text(timeDifference);
-	$('#time-end').text(indicators['timeEnd']);
-	$("#knob").val(Math.round(indicators['dayRatio'] * 100) / 100).trigger('change');
-	$('#puncher-button').attr('title', (Math.round(indicators['dayRatio'] * 100) / 100) + '%');
+
+    if (isPowerOn() || $('#total-time').text() === '') {
+        var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
+        var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
+        
+        var indicators = calculateIndicators(punches, parametres);
+        var timeDifference = ms2string(indicators['timeDifference']);
+        // Si on a dépassé le temps alloué
+        if (indicators['isOverTime']) {
+            if (!$('#puncher-container').hasClass('over-time')) {
+                // Modification des styles pour passer en rouge
+                $('#puncher-container').addClass('over-time');
+                $("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
+            }
+            // Rectification des indicateurs
+            timeDifference = "+ " + timeDifference;
+        }
+        else if ($('#puncher-container').hasClass('over-time')) {
+            $('#puncher-container').removeClass('over-time');
+            powerOn();
+        }
+        
+        // For each indicator we store its raw value in order to be able 
+        // to get it fast and calculate new indicators without having to 
+        // parses the punches everytime
+        
+        $('#total-time').text(ms2string(indicators['totalTime']));
+        $('#ms-total-time').text(indicators['totalTime']);
+        
+        $('#time-difference').text(timeDifference);
+        $('#ms-time-difference').text(indicators['timeDifference']);
+        
+        $('#time-end').text(myDateFormat(indicators['timeEnd']));
+        $('#ms-time-end').text(indicators['timeEnd']);
+        
+        $("#knob").val(Math.round(indicators['dayRatio'] * 100) / 100).trigger('change');
+        $('#puncher-button').attr('title', (Math.round(indicators['dayRatio'] * 100) / 100) + '%');
+    }
+    else {
+        // If the puncher is disabled, the end time rises each second
+        var endTime = estimateEndTime(parseInt($('#ms-time-difference').text()));
+        $('#time-end').text(myDateFormat(endTime));
+        $('#ms-time-end').text(endTime);
+    }
 }
+
 
 /**
  * Inits the options container etc.

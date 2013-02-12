@@ -101,9 +101,8 @@ strong { font-weight: bold;}
 			#puncher-container #cookie-state p { margin-bottom: 10px;}
 		
             #puncher-container #indicators dd, 
-            #puncher-container #indicators dt {display: block; float: left; padding: 4px; margin: 5px 0; color: $ui-button-text;}
+            #puncher-container #indicators dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
             #puncher-container #indicators dt {clear: both; width: 40px; margin-right: 5px; }
-            #puncher-container #indicators dt:first-child {margin-top: 0px;}
             #puncher-container #indicators dd {width: 122px;}
 			#puncher-container #indicators #time-difference { font-weight: bold; color:#26B3F7; }
 			#puncher-container.over-time #indicators #time-difference { color: #f00;}

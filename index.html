@@ -69,13 +69,22 @@
 						<div>
 							<dl>
 								<dt class="ui-widget-header ui-corner-all">Total</dt>
-								<dd id="total-time" title=""></dd>
+								<dd id="total-time" title="Temps passé pendant la journée"></dd>
 								<dt class="ui-widget-header ui-corner-all">Diff</dt>
-								<dd id="time-difference"></dd>
+								<dd id="time-difference" title="Temps restant"></dd>
 								<dt class="ui-widget-header ui-corner-all">Fin</dt>
-								<dd id="time-end"></dd>
+								<dd id="time-end" title="Heure de fin estimée"></dd>
 							</dl>
 						</div>
+                        <!-- 
+                            This hidden block is used to hold the last raw values of the indicators 
+                            and calculate new indicators faster 
+                        -->
+                        <div style="display: none; visibility: hidden;">
+                            <p id="ms-total-time"></p>
+                            <p id="ms-time-difference"></p>
+                            <p id="ms-time-end"></p>
+                        </div>
 					</div>
 					<a href="#indicators" id="indicators-button" class="box corner-right" title="Indicateurs" >&gt;</a>
 				</section>
