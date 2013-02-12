@@ -1,5 +1,5 @@
 function togglePuncherState() {
-    if (!$('#puncher-button').hasClass('box-active')) {
+    if (!isPowerOn()) {
         powerOn();
         // Save the state
         saveInCookie('I');
