@@ -25,18 +25,35 @@ function calculateIndicators(punches, parametres) {
 		indicators['totalTime'] = 0;
 		indicators['dayRatio'] = 0;
 		indicators['timeDifference'] = 0;
+		indicators['timeEnd'] = myDateFormat(new Date());
 		indicators['isOverTime'] = false;
 	} else {
 		var totalTime = todaysTotalTime(punches);
 		indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
 		indicators['dayRatio'] = timeRatio(indicators['totalTime'], parametres);
 		indicators['timeDifference'] = timeDifference(indicators['totalTime'], parametres);
+		indicators['timeEnd'] = estimateEndTime(punches, indicators['timeDifference']);
 		indicators['isOverTime'] = indicators['dayRatio'] > 100;
 		if (indicators['isOverTime']) {
 			indicators['dayRatio'] -= 100;
 		}
 	}
 	return indicators;
+}
+
+function estimateEndTime(punches, timeDifference) {
+    var date = new Date();
+    // Here we substract the time difference because it is supposed to be negative like 3 hours left = -3h
+    date.setTime(date.getTime() - timeDifference);
+    return myDateFormat(date);
+}
+
+function myDateFormat(date) {
+    return ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + ' ' + date.getHours() + ':' + date.getMinutes();
+}
+
+function averageBreakTime(punches) {
+    
 }
 
 function timeDifference(totalTime, parametres) {

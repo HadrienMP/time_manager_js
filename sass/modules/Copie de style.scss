@@ -8,14 +8,12 @@
     background: url('../images/micro_carbon.png');
 }
 
-$border-color: #111;
+$dark-gray: #111;
 $warning-color: #c00;
-$light-color: #26B3F7;
-$disabled : #999;
-$ui-button-text: #ddd;;
+$blue-light: #26B3F7;
 
 
-/*##################################################################################*/
+/*################################################################################## */
 
 body { 
 	@include back;
@@ -48,7 +46,7 @@ strong { font-weight: bold;}
 	#puncher-container .ui-widget { font-size: 0.8em;}
 	
 	#options-buttons-container { margin: 20px auto; text-align: center;}
-		#options-buttons-container .ui-button { @include box-shadow(0px 3px 0px $border-color); display: inline-block; margin: 0 5px;}
+		#options-buttons-container .ui-button { @include box-shadow(0px 3px 0px $dark-gray); display: inline-block; margin: 0 5px;}
 	
 	#modals-container { display: none;}
 		#total-time-options { margin-top: 10px;}
@@ -93,18 +91,14 @@ strong { font-weight: bold;}
 		position: relative;
 		color: white;
 	}
-		#puncher-container p.ui-widget-header { padding: 4px 0; margin: 10px 0 3px; color: $ui-button-text;}
-		#puncher-container #cookie-state > div { margin: 15px 60px 0 15px; width: 190px;}
-		#puncher-container #indicators > div { margin: 15px 15px 0 65px; width: 190px;}
+		#puncher-container p.ui-widget-header,
+		#puncher-container dt.ui-widget-header{ padding: 4px 0; margin: 10px 0 3px; color: #ddd;}
+		#puncher-container #cookie-state > div { margin: 15px 60px 0 15px; width: 170px;}
+		#puncher-container #indicators > div { margin: 15px 15px 0 60px; width: 170px;}
 			#puncher-container #cookie-state button,
 			#puncher-container #cookie-state #progressbar,
 			#puncher-container #cookie-state p { margin-bottom: 10px;}
 		
-            #puncher-container #indicators dd, 
-            #puncher-container #indicators dt {display: block; float: left; padding: 4px; margin: 5px 0; color: $ui-button-text;}
-            #puncher-container #indicators dt {clear: both; width: 40px; margin-right: 5px; }
-            #puncher-container #indicators dt:first-child {margin-top: 0px;}
-            #puncher-container #indicators dd {width: 122px;}
 			#puncher-container #indicators #time-difference { font-weight: bold; color:#26B3F7; }
 			#puncher-container.over-time #indicators #time-difference { color: #f00;}
 	/*
@@ -125,13 +119,13 @@ strong { font-weight: bold;}
 	z-index: 10;
 	position: relative;
 	border-radius: 100px; 
-	border: 2px solid $border-color; 
+	border: 2px solid $dark-gray; 
 	height: 97px; 
 	width: 97px; 
-	@include box-shadow( inset 0px 3px 0px $border-color);
+	@include box-shadow( inset 0px 3px 0px $dark-gray);
 }
-	#puncher-container.over-time  .box-active { @include box-shadow( 0px 0px 30px $warning-color);}
-	#puncher-container #puncher-button { 
+	#puncher-container.over-time  .box-active { box-shadow: 0px 0px 30px $warning-color;}
+	#puncher-container a#puncher-button { 
 		border-radius: 100px; 
 		height: 75px; 
 		width: 75px; 
@@ -142,7 +136,7 @@ strong { font-weight: bold;}
 		position: relative;
 		z-index: 1000;
 	}
-		#puncher-container #puncher-button span { margin-top: 12px; display: inline-block;}
+		#puncher-container a#puncher-button span { margin-top: 12px; display: inline-block;}
 		
 		
 /*####################################################################################
@@ -169,17 +163,17 @@ strong { font-weight: bold;}
 	
 .box {
 	display: inline-block; 
-	border: 1px solid $border-color;
+	border: 1px solid $dark-gray;
 	font-size: 65px;
 	text-decoration: none;
-	color: $disabled;
-	@include box-shadow(0px 5px 0px $border-color);
+	color: #999;
+	box-shadow: 0px 5px 0px $dark-gray;
 	@include background(linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%));
 }
-.box-active { color: #fff; text-shadow: 0px 0px 10px #fff; @include box-shadow(0px 0px 30px $light-color); }
+.box-active { color: #fff; text-shadow: 0px 0px 10px #fff; box-shadow: 0px 0px 30px $blue-light; }
 .corner-left { border-radius: 30px 0 0 30px; }
 .corner-right { border-radius: 0 30px 30px 0; }
-.progress-label { text-align: center; width: 100%; float: left; margin-top: 5px; text-shadow: 1px 1px 0 $border-color;}
+.progress-label { text-align: center; width: 100%; float: left; margin-top: 5px; text-shadow: 1px 1px 0 $dark-gray;}
 
 /*####################################################################################
 
@@ -195,8 +189,8 @@ strong { font-weight: bold;}
 ####################################################################################*/
 
 #puncher-container #cookie-button.cookie-active,
-#puncher-container #indicators-button.indicators-active { width: 50px; @include box-shadow(0px 0px 30px $light-color); }
+#puncher-container #indicators-button.indicators-active { width: 50px; box-shadow: 0px 0px 30px $blue-light; }
 #puncher-container #cookie-state.cookie-active,
-#puncher-container #indicators.indicators-active { width: 270px; }
+#puncher-container #indicators.indicators-active { width: 250px; }
 /* FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing */
 #puncher-container #cookie-button.indicators-active { z-index: 2;}

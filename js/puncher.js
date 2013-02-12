@@ -201,6 +201,7 @@ function updateIndicators(punches, parametres) {
 	
 	$('#total-time').text(ms2string(indicators['totalTime']));
 	$('#time-difference').text(timeDifference);
+	$('#time-end').text(indicators['timeEnd']);
 	$("#knob").val(Math.round(indicators['dayRatio'] * 100) / 100).trigger('change');
 	$('#puncher-button').attr('title', (Math.round(indicators['dayRatio'] * 100) / 100) + '%');
 }
@@ -212,6 +213,7 @@ function initOptions(parametres) {
 
 	$('#options-buttons-container #time-options-button').button({ icons: { primary: "ui-icon-clock" }, text: false });
 	$('#options-buttons-container #options-button').button({ icons: { primary: "ui-icon-gear" }, text: false });
+	$('#options-buttons-container #cookie-info-button').button({ icons: { primary: "ui-icon-gear" }, text: false });
 	
 	$('#tooltips-options').buttonset();
 	$('#button-tooltip-options').buttonset();
@@ -227,11 +229,11 @@ function initOptions(parametres) {
 		draggable: false,
 		autoOpen: false,
 		show: {
-			effect: "scale",
+			effect: 'fade',
 			duration: 300
 		},
 		hide: {
-			effect: "scale",
+			effect: 'fade',
 			duration: 300
 		},
 		close: saveParametres,
@@ -241,11 +243,11 @@ function initOptions(parametres) {
 		draggable: false,
 		autoOpen: false,
 		show: {
-			effect: "scale",
+			effect: 'fade',
 			duration: 300
 		},
 		hide: {
-			effect: "scale",
+			effect: 'fade',
 			duration: 300
 		}
 	});
