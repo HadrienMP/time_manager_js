@@ -42,6 +42,7 @@ $(document).ready(function(){
 	});
 	$('#time-options-button').click(showTimeParametres);
 	$('#options-button').click(showParametres);
+	$('#punches-options-button').click(showPunchesParametres);
     
     // Regular update of the progress bar and indicators
     $(document).everyTime('1s', 'puncherTimer', function() {
@@ -112,6 +113,7 @@ function saveInCookie(check) {
     $.cookie('punches', punches, {expires : 7});
 
     $( "#progressbar" ).progressbar( "option", "value", sizeRatio(punches) );
+    setPunchesRange(punches);
 }
 
 /**
@@ -143,6 +145,7 @@ function initPuncher() {
     initCookieInfos(punches);
     updateIndicators(punches, parametres);
 	initToolTip();
+    setPunchesRange(punches);
 }
 
 function initToolTip() {
@@ -253,11 +256,11 @@ function initOptions(parametres) {
 
 	$('#options-buttons-container #time-options-button').button({ icons: { primary: "ui-icon-clock" }, text: false });
 	$('#options-buttons-container #options-button').button({ icons: { primary: "ui-icon-gear" }, text: false });
-	$('#options-buttons-container #cookie-info-button').button({ icons: { primary: "ui-icon-gear" }, text: false });
+	$('#options-buttons-container #punches-options-button').button({ icons: { primary: "ui-icon-wrench" }, text: false });
 	
 	$('#tooltips-options').buttonset();
 	$('#button-tooltip-options').buttonset();
-	
+    
 	if (parametres != undefined) {
 		$('#days').val(parametres['days']);
 		$('#hours').val(parametres['hours']);
@@ -291,6 +294,45 @@ function initOptions(parametres) {
 			duration: 300
 		}
 	});
+    
+    	$('#punches-options').dialog({
+		draggable: false,
+		autoOpen: false,
+		show: {
+			effect: 'fade',
+			duration: 300
+		},
+		hide: {
+			effect: 'fade',
+			duration: 300
+		}
+	});
+}
+
+function setPunchesRange(punches) {
+    
+    var punchesDates = [];
+    if (punches !== undefined) {
+        var todaysPunches = getTodaysPunches(punches);
+        for (var index in todaysPunches) {
+            punchesDates.push(todaysPunches[index]['date']);
+        }
+    }
+    
+    var dayStart = new Date().setHours(0,0,0,0);
+    var dayEnd = new Date().setHours(23,59,59,999);
+    
+    $( "#punches-range" ).slider({
+        range: true,
+        min: dayStart,
+        max: dayEnd,
+        values: punchesDates,
+        slide: function( event, ui ) {
+            printPunchesValues(ui.values);
+        }
+    });
+	printPunchesValues($( "#punches-range" ).slider( "values"));
+
 }
 
 function saveParametres() {

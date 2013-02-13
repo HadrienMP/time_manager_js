@@ -67,3 +67,15 @@ function showTimeParametres() {
 function showParametres() {
 	$('#options').dialog("open");
 }
+function showPunchesParametres() {
+	$('#punches-options').dialog("open");
+}
+
+function printPunchesValues(values) {
+    var printedText = "";
+    for (var index in values) {
+        printedText += hmsDateFormat(values[index]) + ' - ';
+    }
+    printedText = printedText.slice(0, printedText.length - 3);
+    $( "#punches-range-values" ).text( printedText );
+}

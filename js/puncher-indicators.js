@@ -26,12 +26,7 @@ function calculateIndicators(punches, parametres, firstCalculation) {
 	// S�curisation si le contenu du cookie est vide
 	if (punches !== undefined && parametresLocal !== undefined) {
         totalTime = todaysTotalTime(punches);
-/*		indicators['totalTime'] = 0;
- 		indicators['dayRatio'] = 0;
-		indicators['timeDifference'] = 0;
-		indicators['timeEnd'] = 0;
-		indicators['isOverTime'] = false; */
-	} // else {
+	}
     
     // var totalTime = todaysTotalTime(punches);
     indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
