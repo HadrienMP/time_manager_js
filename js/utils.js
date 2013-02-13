@@ -93,3 +93,11 @@ function myDateFormat(time) {
             + ('0' + date.getMinutes()).slice(-2) + ':'
             + ('0' + date.getSeconds()).slice(-2);
 }
+
+function hmsDateFormat(time) {
+    var date = new Date(time);
+    // The slice -2 insures us that we'll get only 2 decimals, so 13 or 02 not 013.
+    return ('0' + date.getHours()).slice(-2) + ':' 
+            + ('0' + date.getMinutes()).slice(-2) + ':'
+            + ('0' + date.getSeconds()).slice(-2);
+}
