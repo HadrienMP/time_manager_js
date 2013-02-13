@@ -57,6 +57,8 @@ function eraseCookie() {
     initCookieInfos();
     powerOff();
     updateIndicators();
+    // Forces a reset of the estimated end time by setting the date to '' which will force the calculation of the date
+    $('#time-end').text('');
 }
 
 /**
@@ -187,11 +189,15 @@ function initCookieInfos(punches) {
  */
 function updateIndicators(punches, parametres) {
 
-    if (isPowerOn() || $('#total-time').text() === '') {
+    // This boolean is to determine wether or not we should calculate
+    // all the indicators (they don't have any value yet)
+    var firstCalculation = $('#time-end').text() === '';
+
+    if (isPowerOn() || firstCalculation) {
         var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
         var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
         
-        var indicators = calculateIndicators(punches, parametres);
+        var indicators = calculateIndicators(punches, parametres, firstCalculation);
         var timeDifference = ms2string(indicators['timeDifference']);
         // Si on a dépassé le temps alloué
         if (indicators['isOverTime']) {
@@ -207,7 +213,9 @@ function updateIndicators(punches, parametres) {
         }
         else if ($('#puncher-container').hasClass('over-time')) {
             $('#puncher-container').removeClass('over-time');
-            powerOn();
+            if ($('#puncher-container').hasClass('on')) {
+                powerOn();
+            }
         }
         
         // For each indicator we store its raw value in order to be able 
@@ -220,8 +228,11 @@ function updateIndicators(punches, parametres) {
         $('#time-difference').text(timeDifference);
         $('#ms-time-difference').text(indicators['timeDifference']);
         
-        $('#time-end').text(myDateFormat(indicators['timeEnd']));
-        $('#ms-time-end').text(indicators['timeEnd']);
+        // The estimated end time is only calculated on the first calculation
+        if (firstCalculation && indicators['timeEnd'] !== -1) {
+            $('#time-end').text(myDateFormat(indicators['timeEnd']));
+            $('#ms-time-end').text(indicators['timeEnd']);
+        }
         
         $("#knob").val(Math.round(indicators['dayRatio'] * 100) / 100).trigger('change');
         $('#puncher-button').attr('title', (Math.round(indicators['dayRatio'] * 100) / 100) + '%');
@@ -290,4 +301,7 @@ function saveParametres() {
         'seconds' : $('#total-time-options #seconds').val()
     };
     $.cookie('parametres',parametres, {expires: 7});
+    
+    // Forces a reset of the estimated end time by setting the date to '' which will force the calculation of the date
+    $('#time-end').text('');
 }

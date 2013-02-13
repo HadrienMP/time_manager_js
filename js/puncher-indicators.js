@@ -1,43 +1,55 @@
-function calculateIndicators(punches, parametres) {
+function calculateIndicators(punches, parametres, firstCalculation) {
 	var indicators = [];
 	
+    var parametresLocal = parametres;
 	// Récupération des paramètres de l'application
-	if (parametres === undefined) {
+	if (parametresLocal === undefined) {
 		noTimeParametres();
+        parametresLocal = [];
 	}
 	else {
-		if (parametres['days'] === undefined) {
-			parametres['days'] = 0;
+		if (parametresLocal['days'] === undefined) {
+			parametresLocal['days'] = 0;
 		}
-		if (parametres['hours'] === undefined) {
-			parametres['hours'] = 0;
+		if (parametresLocal['hours'] === undefined) {
+			parametresLocal['hours'] = 0;
 		}
-		if (parametres['minutes'] === undefined) {
-			parametres['minutes'] = 0;
+		if (parametresLocal['minutes'] === undefined) {
+			parametresLocal['minutes'] = 0;
 		}
-		if (parametres['seconds'] === undefined) {
-			parametres['seconds'] = 0;
+		if (parametresLocal['seconds'] === undefined) {
+			parametresLocal['seconds'] = 0;
 		}
 	}
 	
+    var totalTime = 0;
 	// S�curisation si le contenu du cookie est vide
-	if (punches === undefined || parametres === undefined) {
-		indicators['totalTime'] = 0;
-		indicators['dayRatio'] = 0;
+	if (punches !== undefined && parametresLocal !== undefined) {
+        totalTime = todaysTotalTime(punches);
+/*		indicators['totalTime'] = 0;
+ 		indicators['dayRatio'] = 0;
 		indicators['timeDifference'] = 0;
-		indicators['timeEnd'] = new Date().getTime();
-		indicators['isOverTime'] = false;
-	} else {
-		var totalTime = todaysTotalTime(punches);
-		indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
-		indicators['dayRatio'] = timeRatio(indicators['totalTime'], parametres);
-		indicators['timeDifference'] = timeDifference(indicators['totalTime'], parametres);
-		indicators['timeEnd'] = estimateEndTime(indicators['timeDifference'], punches);
-		indicators['isOverTime'] = indicators['dayRatio'] > 100;
-		if (indicators['isOverTime']) {
-			indicators['dayRatio'] -= 100;
-		}
-	}
+		indicators['timeEnd'] = 0;
+		indicators['isOverTime'] = false; */
+	} // else {
+    
+    // var totalTime = todaysTotalTime(punches);
+    indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
+    indicators['dayRatio'] = timeRatio(indicators['totalTime'], parametresLocal);
+    indicators['timeDifference'] = timeDifference(indicators['totalTime'], parametresLocal);
+    
+    // The estimate end time is calculated in this method only on first calculation
+    if (firstCalculation) {
+        indicators['timeEnd'] = estimateEndTime(indicators['timeDifference'], punches);
+    } else {
+        indicators['timeEnd'] = -1;
+    }
+    
+    indicators['isOverTime'] = indicators['dayRatio'] > 100;
+    if (indicators['isOverTime']) {
+        indicators['dayRatio'] -= 100;
+    }
+	//}
 	return indicators;
 }
 
