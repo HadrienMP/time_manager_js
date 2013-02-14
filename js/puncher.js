@@ -27,6 +27,7 @@ $(document).ready(function(){
 	$('#delete-cookie').click(function(){
 		$( "#delete-warning" ).dialog({
 			resizable: false,
+            movable: true,
 			height:140,
 			modal: false,
 			buttons: {
@@ -84,7 +85,7 @@ function isPowerOn() {
  * Turns the puncher's power off
  */
 function powerOff() {
-    $('#puncher-container').remove('on');
+    $('#puncher-container').removeClass('on');
     $('#puncher-button').removeClass('box-active');
     // Changes the color of the progress bar
     $("#knob").trigger('configure', {"fgColor":"#aaa", "shadow" : false});

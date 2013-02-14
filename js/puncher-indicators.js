@@ -1,5 +1,5 @@
 function calculateIndicators(punches, parametres, firstCalculation) {
-	var indicators = [];
+	var indicators = $.cookie('indicators');
 	
     var parametresLocal = parametres;
 	// Récupération des paramètres de l'application
@@ -28,23 +28,41 @@ function calculateIndicators(punches, parametres, firstCalculation) {
         totalTime = todaysTotalTime(punches);
 	}
     
-    // var totalTime = todaysTotalTime(punches);
-    indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
-    indicators['dayRatio'] = timeRatio(indicators['totalTime'], parametresLocal);
-    indicators['timeDifference'] = timeDifference(indicators['totalTime'], parametresLocal);
+    var totalTime = isNaN(totalTime) ? 0 : totalTime;
+    var dayRatio = timeRatio(totalTime, parametresLocal);
+    var timeDifference = timeDifferenceFromTotalTime(totalTime, parametresLocal);
+    var date = new Date().getTime();
+    var isOverTime = dayRatio > 100;
+    if (isOverTime) {
+        dayRatio -= 100;
+    }
+    
+    if (indicators === undefined || indicators.length === 0) {
+        indicators = {
+            'totalTime' : totalTime,
+            'dayRatio' : dayRatio,
+            'timeDifference' : timeDifference,
+            'date' : date,
+            'isOverTime' : isOverTime,
+            'timeEnd' : estimateEndTime(indicators['timeDifference'], punches)
+        }
+    }
+    else {
+        indicators['totalTime'] = totalTime;
+        indicators['dayRatio'] = dayRatio;
+        indicators['timeDifference'] = timeDifference;
+        indicators['date'] = date;
+        indicators['isOverTime'] = isOverTime;
+    }
+    
     
     // The estimate end time is calculated in this method only on first calculation
     if (firstCalculation) {
         indicators['timeEnd'] = estimateEndTime(indicators['timeDifference'], punches);
-    } else {
-        indicators['timeEnd'] = -1;
     }
     
-    indicators['isOverTime'] = indicators['dayRatio'] > 100;
-    if (indicators['isOverTime']) {
-        indicators['dayRatio'] -= 100;
-    }
-	//}
+    $.cookie('indicators',indicators);
+    
 	return indicators;
 }
 
@@ -86,9 +104,13 @@ function averageBreakTime(punches) {
     
 }
 
-function timeDifference(totalTime, parametres) {
+function timeDifferenceFromTotalTime(totalTime, parametres) {
 	var totalTimeMax = parametres2Ms(parametres);
 	return totalTime - totalTimeMax;
+}
+
+function timeDifferenceTotal(punches, parametres) {
+
 }
 
 function parametres2Ms(parametres) {
