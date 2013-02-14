@@ -22,9 +22,15 @@ test( "todaysTotalTime", function() {
 
 test( "getTodaysPunches", function() {
     deepEqual(getTodaysPunches(punchesOk), punchesOk.slice(6));
+    deepEqual(getTodaysPunches(punchesBroken), punchesBroken.slice(6));
 });
 
 test( "getFirstCheckIn", function() {
-    equal(getFirstCheckIn(punchesOk), punchesOk[5]);
-    equal(getFirstCheckIn(punchesBroken), undefined);
+    deepEqual(getFirstCheckIn(getTodaysPunches(punchesOk)), punchesOk[6]);
+    deepEqual(getFirstCheckIn(getTodaysPunches(punchesBroken)), punchesBroken[7]);
+});
+
+test( "getLastCheckIn", function() {
+    deepEqual(getLastCheckIn(getTodaysPunches(punchesOk)), punchesOk[10]);
+    deepEqual(getLastCheckIn(getTodaysPunches(punchesBroken)), punchesBroken[9]);
 });

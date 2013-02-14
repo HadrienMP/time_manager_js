@@ -33,6 +33,8 @@ function calculateIndicators(punches, parametres, firstCalculation) {
 	return indicators;
 }
 
+// FIXME broken function
+// TODO transform me into a unit add a test for me
 function estimateEndTime(punches) {
     var indicators = $.cookie('indicators');
     var timeDifference = indicators['timeDifference'];
@@ -176,6 +178,11 @@ function todaysTotalTime(punches) {
     }
 }
 
+/**
+ * Finds the first check in of punches
+ * @param todaysPunches the punches of the day
+ * @return an associative array representing the first check in of the day
+ */
 function getFirstCheckIn(todaysPunches) {
     // R�cup�ration du premier check in de la journ�e
     var firstCheckIn;
@@ -190,11 +197,21 @@ function getFirstCheckIn(todaysPunches) {
     return firstCheckIn;
 }
 
+/**
+ * Gets the last check in of the punches
+ * @param todaysPunches the punches of the day
+ * @return an associative array representing the last check in of the day
+ */
 function getLastCheckIn(todaysPunches) {
     todaysPunches = todaysPunches.reverse();
     return getFirstCheckIn(todaysPunches);
 }
 
+/**
+ * Finds the punches that were maid today
+ * @param punches the list of all the punches
+ * @return the fraction of punches that contains the punches maid today
+ */
 function getTodaysPunches(punches) {
 
     // Cr�ation de la date du jour � minuit (d�but de la journ�e)
