@@ -109,6 +109,11 @@ function timeDifferenceTotal(totalTime, punches, parametres) {
     // TODO complete me
 }
 
+/**
+ * Transforms the parametres associative array into ms time
+ * @param parametres the parametres to transform
+ * @return the time in ms
+ */
 function parametres2Ms(parametres) {
 	var ms = parametres['days'] * 24 * 60 * 60 * 1000;
 	ms += parametres['hours'] * 60 * 60 * 1000;
@@ -117,6 +122,12 @@ function parametres2Ms(parametres) {
 	return ms;
 }
 
+/**
+ * Calculates the ratio between the time spent and time to spend
+ * @param totalTime the time spent
+ * @param parametres the associative array that represents the time to spend
+ * @return the ratio in %
+ */
 function timeRatio(totalTime,parametres) {
 	var divider = parametres2Ms(parametres);
 	if (divider != 0) {
@@ -125,11 +136,15 @@ function timeRatio(totalTime,parametres) {
 	return 0;
 }
 
+/**
+ * Calulates the total time spent on the task in the day
+ * @param punches the list of punches
+ * @return the time spent in ms or -1 if the model is corrupted
+ */
 function todaysTotalTime(punches) {
 
     var now = new Date();
     var todaysPunches = getTodaysPunches(punches);
-    todaysPunches = todaysPunches.reverse();
     var modelCorrupted = false;
     var workdayLength = 0;
 
@@ -142,9 +157,9 @@ function todaysTotalTime(punches) {
             workdayLength += now.getTime() - previousPunch['date'];
         } else {
             for (var index in todaysPunches) {
-                punch = todaysPunches[index];
-                if (previousPunch['check'] === punch['check']) {
-                    modelCorrupted = true;
+                var punch = todaysPunches[index];
+                if (previousPunch['check'] === punch['check'] || previousPunch['date'] > punch['date'] ) {
+                    workdayLength = -1;
                     break;
                 }
                 if (punch['check'] === 'O' && previousPunch['check'] === 'I') {
@@ -196,11 +211,11 @@ function getTodaysPunches(punches) {
     while (i < punches.length) {
         i++;
         tempPunch = punches[punches.length-i];
-        punchDate = new Date(tempPunch['date']);
+        var punchDate = new Date(tempPunch['date']);
         if (punchDate < dayStart) {
             break;
         }
         todaysPunches.push(tempPunch);
     }
-    return todaysPunches;
+    return todaysPunches.reverse();
 }
