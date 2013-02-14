@@ -1,26 +1,10 @@
 function calculateIndicators(punches, parametres, firstCalculation) {
-	var indicators = $.cookie('indicators');
 	
     var parametresLocal = parametres;
 	// Récupération des paramètres de l'application
 	if (parametresLocal === undefined) {
-		noTimeParametres();
-        parametresLocal = [];
-	}
-	else {
-		if (parametresLocal['days'] === undefined) {
-			parametresLocal['days'] = 0;
-		}
-		if (parametresLocal['hours'] === undefined) {
-			parametresLocal['hours'] = 0;
-		}
-		if (parametresLocal['minutes'] === undefined) {
-			parametresLocal['minutes'] = 0;
-		}
-		if (parametresLocal['seconds'] === undefined) {
-			parametresLocal['seconds'] = 0;
-		}
-	}
+        parametresLocal = getParametresAndRaiseAlert();
+    }
 	
     var totalTime = 0;
 	// S�curisation si le contenu du cookie est vide
@@ -28,33 +12,16 @@ function calculateIndicators(punches, parametres, firstCalculation) {
         totalTime = todaysTotalTime(punches);
 	}
     
-    var totalTime = isNaN(totalTime) ? 0 : totalTime;
-    var dayRatio = timeRatio(totalTime, parametresLocal);
-    var timeDifference = timeDifferenceFromTotalTime(totalTime, parametresLocal);
-    var date = new Date().getTime();
-    var isOverTime = dayRatio > 100;
-    if (isOverTime) {
-        dayRatio -= 100;
-    }
+	var indicators = getIndicators();
     
-    if (indicators === undefined || indicators.length === 0) {
-        indicators = {
-            'totalTime' : totalTime,
-            'dayRatio' : dayRatio,
-            'timeDifference' : timeDifference,
-            'date' : date,
-            'isOverTime' : isOverTime,
-            'timeEnd' : estimateEndTime(indicators['timeDifference'], punches)
-        }
+    indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
+    indicators['dayRatio'] = timeRatio(totalTime, parametresLocal);
+    indicators['timeDifference'] = timeDifferenceFromTotalTime(totalTime, parametresLocal);
+    indicators['date'] = new Date().getTime();
+    indicators['isOverTime'] = indicators['dayRatio'] > 100;
+    if (indicators['isOverTime']) {
+        indicators['dayRatio'] -= 100;
     }
-    else {
-        indicators['totalTime'] = totalTime;
-        indicators['dayRatio'] = dayRatio;
-        indicators['timeDifference'] = timeDifference;
-        indicators['date'] = date;
-        indicators['isOverTime'] = isOverTime;
-    }
-    
     
     // The estimate end time is calculated in this method only on first calculation
     if (firstCalculation) {
@@ -66,11 +33,26 @@ function calculateIndicators(punches, parametres, firstCalculation) {
 	return indicators;
 }
 
-function estimateEndTime(timeDifference, punches) {
+function estimateEndTime(punches) {
+    var indicators = $.cookie('indicators');
+    var timeDifference = indicators['timeDifference'];
+    if (timeDifference === undefined) {
+        timeDifference = parametres2Ms($.cookie('parametres'));
+    }
     // Here we substract the time difference because it is supposed to be negative like 3 hours left = -3h
-    return new Date().getTime() - timeDifference;
+    
+    indicators['timeEnd'] = new Date().getTime() - timeDifference;
+    return indicators['timeEnd'];
 }
 
+// TODO complete this function 
+/**
+ * This method calculates the number of breaks and their length the personn does a day.
+ * With these informations, the time difference could be calculated more accurately than
+ * just the time to spend minus the time spent
+ * @param punches the list of punches
+ * @return an associative array containing the average number of breaks a day and their length
+ */
 function averageBreakTime(punches) {
     var localPunches = punches.slice();
     var breakTimes = [];
@@ -104,13 +86,27 @@ function averageBreakTime(punches) {
     
 }
 
+/**
+ * Calculates the time to spend on the task by comparing time to spend and time spent
+ * @param totalTime the time spent in milleseconds
+ * @param parametres the time to spend encapsulated in the parametres associative array
+ * @return the number of milliseconds left to spend on the task
+ */
 function timeDifferenceFromTotalTime(totalTime, parametres) {
 	var totalTimeMax = parametres2Ms(parametres);
 	return totalTime - totalTimeMax;
 }
 
-function timeDifferenceTotal(punches, parametres) {
-
+/**
+ * Calculates the time left to spend on the task by comparing time to spend, 
+ * time spent, and integrating the predicted time of break for the day
+ * @param totalTime the time spent in milliseconds
+ * @param punches the list of all the punches to calculate the predicted time of break
+ * @param parametres the time to spend encapsulated in the parametres associative array
+ * @return the number of milliseconds left to spend on the task
+ */
+function timeDifferenceTotal(totalTime, punches, parametres) {
+    // TODO complete me
 }
 
 function parametres2Ms(parametres) {

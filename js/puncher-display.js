@@ -2,11 +2,11 @@ function togglePuncherState() {
     if (!isPowerOn()) {
         powerOn();
         // Save the state
-        saveInCookie('I');
+        saveCheck('I');
     } else {
         powerOff();
         // Save the state
-        saveInCookie('O');
+        saveCheck('O');
     }
 }
 

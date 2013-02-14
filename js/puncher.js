@@ -92,32 +92,6 @@ function powerOff() {
 }
 
 /**
- * Saves the state and time of the punch
- * @param string check either I or O
- */
-function saveInCookie(check) {
-    // Préparation de l'enregistrement en cookie
-    var punch = {
-            'check' : check,
-            'date' : new Date().getTime()
-        };
-
-    var punches = $.cookie('punches');
-    if (punches === undefined) {
-        punches = [punch];
-    }
-    else {
-        punches.push(punch);
-    }
-
-    // Enregistrement du cookie
-    $.cookie('punches', punches, {expires : 7});
-
-    $( "#progressbar" ).progressbar( "option", "value", sizeRatio(punches) );
-    setPunchesRange(punches);
-}
-
-/**
  * Inits the application's data and displays everything at it's right place
  */
 function initPuncher() {
@@ -222,20 +196,12 @@ function updateIndicators(punches, parametres) {
             }
         }
         
-        // For each indicator we store its raw value in order to be able 
-        // to get it fast and calculate new indicators without having to 
-        // parses the punches everytime
-        
         $('#total-time').text(ms2string(indicators['totalTime']));
-        $('#ms-total-time').text(indicators['totalTime']);
-        
         $('#time-difference').text(timeDifference);
-        $('#ms-time-difference').text(indicators['timeDifference']);
         
         // The estimated end time is only calculated on the first calculation
         if (firstCalculation && indicators['timeEnd'] !== -1) {
             $('#time-end').text(myDateFormat(indicators['timeEnd']));
-            $('#ms-time-end').text(indicators['timeEnd']);
         }
         
         $("#knob").val(Math.round(indicators['dayRatio'] * 100) / 100).trigger('change');
@@ -243,15 +209,16 @@ function updateIndicators(punches, parametres) {
     }
     else if (!isPowerOn() && !$('#puncher-container').hasClass('over-time')) {
         // If the puncher is disabled, the end time rises each second
-        var endTime = estimateEndTime(parseInt($('#ms-time-difference').text()));
+        var endTime = estimateEndTime();
         $('#time-end').text(myDateFormat(endTime));
-        $('#ms-time-end').text(endTime);
     }
 }
 
 
 /**
  * Inits the options container etc.
+ * @param parametres the associative array representing the parametres, 
+ * used to init the parametres options
  */
 function initOptions(parametres) {
 
@@ -296,7 +263,7 @@ function initOptions(parametres) {
 		}
 	});
     
-    	$('#punches-options').dialog({
+    $('#punches-options').dialog({
 		draggable: false,
 		autoOpen: false,
 		show: {
@@ -310,6 +277,7 @@ function initOptions(parametres) {
 	});
 }
 
+// TODO change me to use a working slider or another interface
 function setPunchesRange(punches) {
     
     var punchesDates = [];
@@ -334,17 +302,4 @@ function setPunchesRange(punches) {
     });
 	printPunchesValues($( "#punches-range" ).slider( "values"));
 
-}
-
-function saveParametres() {
-    var parametres = {
-        'days' : $('#total-time-options #days').val(),
-        'hours' : $('#total-time-options #hours').val(),
-        'minutes' : $('#total-time-options #minutes').val(),
-        'seconds' : $('#total-time-options #seconds').val()
-    };
-    $.cookie('parametres',parametres, {expires: 7});
-    
-    // Forces a reset of the estimated end time by setting the date to '' which will force the calculation of the date
-    $('#time-end').text('');
 }
