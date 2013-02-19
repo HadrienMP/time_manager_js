@@ -175,7 +175,7 @@ function updateIndicators(punches, parametres) {
         var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
         var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
         
-        var indicators = calculateIndicators(punches, parametres, firstCalculation);
+        var indicators = calculateIndicators(new Date(), punches, parametres, firstCalculation);
         var timeDifference = ms2string(indicators['timeDifference']);
         // Si on a dépassé le temps alloué
         if (indicators['isOverTime']) {

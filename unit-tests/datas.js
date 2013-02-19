@@ -22,8 +22,7 @@ var punchesOk = [
     { 'check' : 'O',  'date' : todayMidnight.setHours(10) },
     { 'check' : 'I', 'date' : todayMidnight.setHours(10,10) },
     { 'check' : 'O', 'date' : todayMidnight.setHours(12) },
-    { 'check' : 'I', 'date' : todayMidnight.setHours(13,15) },
-    { 'check' : 'O', 'date' : todayMidnight.setHours(17) },
+    { 'check' : 'I', 'date' : todayMidnight.setHours(13,15) }
 ];
 
 var punchesBroken = [
@@ -49,9 +48,10 @@ var punchesBroken = [
 
 ####################################################################*/
 
+// TODO Faire les tests avec plusieurs jours
 var parametres = {
-    'days' : 1,
-    'hours' : 22,
+    'days' : 0,
+    'hours' : 12,
     'minutes' : 13,
     'seconds' : 48
 };
@@ -62,16 +62,13 @@ var parametres = {
 
 ####################################################################*/
 
-var timeAlmostDone = {
-    'days' : 1,
-    'hours' : 22,
-    'minutes' : 13,
-    'seconds' : 0
-};
+var today12 = new Date();
+today12.setHours(12,15,0,0);
+var today13 = new Date();
+today13.setHours(13,0,0,0);
+var today23 = new Date();
+today23.setHours(23,0,0,0);
 
-var timeOverTime = {
-    'days' : 1,
-    'hours' : 22,
-    'minutes' : 14,
-    'seconds' : 0
-};
+var totalTime12 = todaysTotalTime(today12, punchesOk);
+var totalTime13 = todaysTotalTime(today13, punchesOk);
+var totalTime23 = todaysTotalTime(today23, punchesOk);

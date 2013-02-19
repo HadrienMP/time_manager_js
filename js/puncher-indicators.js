@@ -1,4 +1,13 @@
-function calculateIndicators(punches, parametres, firstCalculation) {
+/**
+ * Calcule tous les indicateurs
+ * @param date la date courante
+ * @param punches les données à partir desquelles calculer
+ * @param parametres les paramètres de l'application
+ * @param firstCalculation booléen, est-on dans le cas d'un premier calcul? 
+ * Si oui on force le calcul du temps restant
+ * @return an array containing the calculated indicators
+ */
+function calculateIndicators(date, punches, parametres, firstCalculation) {
 	
     var parametresLocal = parametres;
 	// Récupération des paramètres de l'application
@@ -6,18 +15,20 @@ function calculateIndicators(punches, parametres, firstCalculation) {
         parametresLocal = getParametresAndRaiseAlert();
     }
 	
+	var indicators = getIndicators();
+    
     var totalTime = 0;
 	// S�curisation si le contenu du cookie est vide
 	if (punches !== undefined && parametresLocal !== undefined) {
-        totalTime = todaysTotalTime(punches);
+        totalTime = todaysTotalTime(date, punches);
 	}
-    
-	var indicators = getIndicators();
+    var dayRatio = timeRatio(totalTime, parametresLocal);
+    var timeDifference = timeDifferenceFromTotalTime(totalTime, parametresLocal);
     
     indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
-    indicators['dayRatio'] = timeRatio(totalTime, parametresLocal);
-    indicators['timeDifference'] = timeDifferenceFromTotalTime(totalTime, parametresLocal);
-    indicators['date'] = new Date().getTime();
+    indicators['dayRatio'] = isNaN(dayRatio) ? 0 : dayRatio;
+    indicators['timeDifference'] = isNaN(timeDifference) ? 0 : timeDifference;
+    indicators['date'] = date.getTime();
     indicators['isOverTime'] = indicators['dayRatio'] > 100;
     if (indicators['isOverTime']) {
         indicators['dayRatio'] -= 100;
@@ -25,7 +36,15 @@ function calculateIndicators(punches, parametres, firstCalculation) {
     
     // The estimate end time is calculated in this method only on first calculation
     if (firstCalculation) {
-        indicators['timeEnd'] = estimateEndTime(indicators['timeDifference'], punches);
+        var timeEnd = estimateEndTime(date, punches, parametres, indicators);
+        indicators['timeEnd'] = isNaN(timeEnd) ? 0 : timeEnd;
+    }
+    
+    // If any of those indicators are undefined it meens the model is having a problem$
+    if (totalTime === undefined || dayRatio === undefined || timeDifference === undefined) {
+        indicators['corruptedModel'] = true;
+    } else {
+        indicators['corruptedModel'] = false;
     }
     
     $.cookie('indicators',indicators);
@@ -33,17 +52,28 @@ function calculateIndicators(punches, parametres, firstCalculation) {
 	return indicators;
 }
 
-// FIXME broken function
-// TODO transform me into a unit add a test for me
-function estimateEndTime(punches) {
-    var indicators = $.cookie('indicators');
-    var timeDifference = indicators['timeDifference'];
-    if (timeDifference === undefined) {
-        timeDifference = parametres2Ms($.cookie('parametres'));
+/**
+ * Calculate the estimated time of end
+ * @param date the current time
+ * @param punches the application's data
+ * @param parametres the application's parametres
+ * @param indicators the indicators
+ * @return the estimated time of End or undefined if a problem occured
+ */
+function estimateEndTime(date, punches, parametres, indicators) {
+    // Condition de sortir
+    if (date === undefined || punches === undefined || parametres === undefined || indicators === undefined) {
+        return undefined;
+    }
+    var timeDifference;
+    if (indicators === undefined || timeDifference === undefined) {
+        timeDifference = parametres2Ms(parametres);
+    } else {
+        timeDifference = indicators['timeDifference']
     }
     // Here we substract the time difference because it is supposed to be negative like 3 hours left = -3h
     
-    indicators['timeEnd'] = new Date().getTime() - timeDifference;
+    indicators['timeEnd'] = date.getTime() - timeDifference;
     return indicators['timeEnd'];
 }
 
@@ -140,35 +170,51 @@ function timeRatio(totalTime,parametres) {
 
 /**
  * Calulates the total time spent on the task in the day
+ * @param date now
  * @param punches the list of punches
- * @return the time spent in ms or -1 if the model is corrupted
+ * @return the time spent in ms or undefined if the model is corrupted
  */
-function todaysTotalTime(punches) {
+function todaysTotalTime(date, punches) {
 
-    var now = new Date();
+    if (date === undefined) {
+        date = new Date();
+    }
+    if (punches === undefined) {
+        return undefined;
+    }
+
+    var now = date;
     var todaysPunches = getTodaysPunches(punches);
-    var modelCorrupted = false;
     var workdayLength = 0;
-
-    // Calcul du temps pass� au travail dans la journ�e
+    
     var previousPunch = getFirstCheckIn(todaysPunches);
     if (previousPunch !== undefined) {
 
         var j = 1;
+        // TODO This case shouldn't be happening
         if (todaysPunches.length === 0) {
             workdayLength += now.getTime() - previousPunch['date'];
         } else {
             for (var index in todaysPunches) {
+            
                 var punch = todaysPunches[index];
+                
+                // If those conditions are met then the data model is corrupted
                 if (previousPunch['check'] === punch['check'] || previousPunch['date'] > punch['date'] ) {
-                    workdayLength = -1;
+                    // TODO transform -1 into a constant
+                    workdayLength = undefined;
                     break;
                 }
-                if (punch['check'] === 'O' && previousPunch['check'] === 'I') {
-                    workdayLength += punch['date'] - previousPunch['date'];
-                }
-                else if (todaysPunches.length === j && punch['check'] === 'I') {
-                    workdayLength += now.getTime() - punch['date'];
+                // If the date is inferior to the punch date something is not right
+                if (punch['date'] <= now.getTime()) {
+                    // Check out after a check in
+                    if (punch['check'] === 'O' && previousPunch['check'] === 'I') {
+                        workdayLength += punch['date'] - previousPunch['date'];
+                    }
+                    
+                    else if (todaysPunches.length === j && punch['check'] === 'I') {
+                        workdayLength += now.getTime() - punch['date'];
+                    }
                 }
                 j++;
                 previousPunch = punch;
@@ -184,6 +230,11 @@ function todaysTotalTime(punches) {
  * @return an associative array representing the first check in of the day
  */
 function getFirstCheckIn(todaysPunches) {
+
+    if (todaysPunches === undefined) {
+        return undefined;
+    }
+    
     // R�cup�ration du premier check in de la journ�e
     var firstCheckIn;
     do {
@@ -203,6 +254,10 @@ function getFirstCheckIn(todaysPunches) {
  * @return an associative array representing the last check in of the day
  */
 function getLastCheckIn(todaysPunches) {
+
+    if (todaysPunches === undefined) {
+        return undefined;
+    }
     todaysPunches = todaysPunches.reverse();
     return getFirstCheckIn(todaysPunches);
 }
@@ -213,6 +268,10 @@ function getLastCheckIn(todaysPunches) {
  * @return the fraction of punches that contains the punches maid today
  */
 function getTodaysPunches(punches) {
+
+    if (punches === undefined) {
+        return undefined;
+    }
 
     // Cr�ation de la date du jour � minuit (d�but de la journ�e)
     var dayStart = new Date();

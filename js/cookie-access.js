@@ -41,8 +41,9 @@ function getIndicators() {
             'timeDifference' : 0,
             'date' : date,
             'isOverTime' : false,
-            'timeEnd' : date
-        }
+            'timeEnd' : date,
+            'corruptedModel' : false
+        };
     }
     return indicators;
 }
