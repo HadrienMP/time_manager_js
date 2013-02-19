@@ -31,17 +31,16 @@ function __getParametres(raiseAlert) {
     return parametresLocal;
 }
 
-function getIndicators() {
+function getIndicators(date) {
     var indicators = $.cookie('indicators');
     if (indicators === undefined || indicators.length === 0) {
-        var date = new Date().getTime();
         indicators = {
             'totalTime' : 0,
             'dayRatio' : 0,
             'timeDifference' : 0,
-            'date' : date,
+            'date' : date.getTime(),
             'isOverTime' : false,
-            'timeEnd' : date,
+            'timeEnd' : date.getTime(),
             'corruptedModel' : false
         };
     }

@@ -43,57 +43,32 @@ test( "getLastCheckIn", function() {
     equal(getLastCheckIn(undefined), undefined);
 });
 
+test( "estimateEndTime", function() {
+    equal(estimateEndTime(today12, punchesOk, parametres), today12.getTime() - parametres2Ms(parametres));
+    equal(estimateEndTime(today12, punchesOk, parametres, indicators), today12.getTime() - indicators['timeDifference']);
+});
+
 test( "calculateIndicators", function() {
 
-    var expectedResult12 = {
-      "date": today12.getTime(),
-      "dayRatio": 24.529844644317254,
-      "isOverTime": false,
-      "timeDifference": -33228000,
-      "timeEnd": 1361228472000,
-      "totalTime": 10800000,
-      "corruptedModel" : false
-    };
-    var expectedResult13 = {
-      "date": today13.getTime(),
-      "dayRatio": 24.529844644317254,
-      "isOverTime": false,
-      "timeDifference": -33228000,
-      "timeEnd": 1361231172000,
-      "totalTime": 10800000,
-      "corruptedModel" : false
-    };
-    var expectedResult23 = {
-      "date": today23.getTime(),
-      "dayRatio": timeRatio(totalTime23 , parametres) - 100,
-      "isOverTime": true,
-      "timeDifference": 1872000,
-      "timeEnd": 1361267172000,
-      "totalTime": 45900000,
-      "corruptedModel" : false
-    };
-    var expectedBrokenResult = {
-      "date": 1361272500000,
-      "dayRatio": 0,
-      "isOverTime": false,
-      "timeDifference": 0,
-      "timeEnd": 1361228472000,
-      "totalTime": 0,
-      "corruptedModel" : true
-    }
-
+    // Nominal cases
     deepEqual(calculateIndicators(today12, punchesOk, parametres, true), expectedResult12);
     $.removeCookie('indicators');
     deepEqual(calculateIndicators(today13, punchesOk, parametres, true), expectedResult13);
     $.removeCookie('indicators');
     deepEqual(calculateIndicators(today23, punchesOk, parametres, true), expectedResult23);
     $.removeCookie('indicators');
-    expectedResult12['timeEnd'] = new Date().getTime();
+    expectedResult12['timeEnd'] = today12.getTime();
     deepEqual(calculateIndicators(today12, punchesOk, parametres, false), expectedResult12);
     $.removeCookie('indicators');
+    
+    // Broken punches
     deepEqual(calculateIndicators(today12, punchesBroken, parametres, true), expectedBrokenResult);
     $.removeCookie('indicators');
-    expectedBrokenResult['timeEnd'] = new Date().getTime();
+    expectedBrokenResult['timeEnd'] = today12.getTime();
     deepEqual(calculateIndicators(today12, punchesBroken, parametres, false), expectedBrokenResult);
     $.removeCookie('indicators');
+    deepEqual(calculateIndicators(today12, punchesBroken, undefined, false), expectedBrokenResult);
+    
+    // Broken parametres
+    deepEqual(calculateIndicators(today12, punchesOk, undefined, false), expectedBrokenParametres);    
 });

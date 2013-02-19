@@ -15,13 +15,9 @@ function calculateIndicators(date, punches, parametres, firstCalculation) {
         parametresLocal = getParametresAndRaiseAlert();
     }
 	
-	var indicators = getIndicators();
+	var indicators = getIndicators(date);
     
-    var totalTime = 0;
-	// S�curisation si le contenu du cookie est vide
-	if (punches !== undefined && parametresLocal !== undefined) {
-        totalTime = todaysTotalTime(date, punches);
-	}
+    var totalTime = totalTime = todaysTotalTime(date, punches);
     var dayRatio = timeRatio(totalTime, parametresLocal);
     var timeDifference = timeDifferenceFromTotalTime(totalTime, parametresLocal);
     
@@ -61,20 +57,18 @@ function calculateIndicators(date, punches, parametres, firstCalculation) {
  * @return the estimated time of End or undefined if a problem occured
  */
 function estimateEndTime(date, punches, parametres, indicators) {
-    // Condition de sortir
-    if (date === undefined || punches === undefined || parametres === undefined || indicators === undefined) {
+    // Condition de sortie
+    if (date === undefined || punches === undefined || parametres === undefined) {
         return undefined;
     }
     var timeDifference;
-    if (indicators === undefined || timeDifference === undefined) {
+    if (indicators === undefined) {
         timeDifference = parametres2Ms(parametres);
     } else {
         timeDifference = indicators['timeDifference']
     }
     // Here we substract the time difference because it is supposed to be negative like 3 hours left = -3h
-    
-    indicators['timeEnd'] = date.getTime() - timeDifference;
-    return indicators['timeEnd'];
+    return date.getTime() - timeDifference;
 }
 
 // TODO complete this function 
