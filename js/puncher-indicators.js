@@ -71,7 +71,7 @@ function estimateEndTime(date, punches, parametres, indicators) {
     return date.getTime() - timeDifference;
 }
 
-// TODO complete this function 
+// TODO: complete this function 
 /**
  * This method calculates the number of breaks and their length the personn does a day.
  * With these informations, the time difference could be calculated more accurately than
@@ -132,7 +132,7 @@ function timeDifferenceFromTotalTime(totalTime, parametres) {
  * @return the number of milliseconds left to spend on the task
  */
 function timeDifferenceTotal(totalTime, punches, parametres) {
-    // TODO complete me
+    // TODO: complete me
 }
 
 /**
@@ -185,7 +185,7 @@ function todaysTotalTime(date, punches) {
     if (previousPunch !== undefined) {
 
         var j = 1;
-        // TODO This case shouldn't be happening
+        // TODO: This case shouldn't be happening
         if (todaysPunches.length === 0) {
             workdayLength += now.getTime() - previousPunch['date'];
         } else {
@@ -195,7 +195,7 @@ function todaysTotalTime(date, punches) {
                 
                 // If those conditions are met then the data model is corrupted
                 if (previousPunch['check'] === punch['check'] || previousPunch['date'] > punch['date'] ) {
-                    // TODO transform -1 into a constant
+                    // TODO: transform -1 into a constant
                     workdayLength = undefined;
                     break;
                 }
@@ -290,7 +290,7 @@ function getTodaysPunches(punches) {
     return todaysPunches.reverse();
 }
 
-// TODO Add a test and documentation for me
+// TODO: Add a test and documentation for me
 function findPunchByDate(date) {
     var punches = $.cookie('punches');
     if (punches !== undefined) {

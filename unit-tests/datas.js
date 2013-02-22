@@ -48,7 +48,7 @@ var punchesBroken = [
 
 ####################################################################*/
 
-// TODO Faire les tests avec plusieurs jours
+// TODO: Faire les tests avec plusieurs jours
 var parametres = {
     'days' : 0,
     'hours' : 12,

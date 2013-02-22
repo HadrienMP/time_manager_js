@@ -292,7 +292,7 @@ function initOptions(parametres) {
 	});
 }
 
-// TODO change me to use a working slider or another interface
+// TODO: change me to use a working slider or another interface
 function setPunchesRange(punches) {
 
     $('#punches-form #punches-inputs').empty();
@@ -321,7 +321,7 @@ function $deletePunch() {
     $(this).closest(".punch-modifier").remove();
 }
 
-// TODO add documentation and tests for me
+// TODO: add documentation and tests for me
 function changeTodaysPunches(punches) {
 
     if (punches === undefined) return undefined;
