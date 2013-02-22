@@ -47,7 +47,8 @@ function centerPuncher() {
     $('#cookie-section').css('right', $('#puncher-container').width() / 2);
     $('#indicators-section').css('left', $('#puncher-container').width() / 2);
 
-    $('#puncher-section').css('left', Math.floor($('#puncher-container').width() / 2 - $('#puncher-section').width() / 2));
+		// FIXME shouldn't have to substract 2px to center the puncher section
+    $('#puncher-section').css('left', Math.floor($('#puncher-container').width() / 2 - $('#puncher-section').width() / 2) - 2);
 }
 
 function noTimeParametres() {
