@@ -27,7 +27,7 @@ function ms2string(ms) {
     var minutes = Math.floor(ms / msecPerMinute );
     ms = ms - (minutes * msecPerMinute );
 
-    var seconds = Math.floor(ms / 1000 );
+    var seconds = Math.round(ms / 1000 );
 
     if (days > 0) {
         diff += days + ' days ';

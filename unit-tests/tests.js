@@ -46,6 +46,9 @@ test( "getLastCheckIn", function() {
 test( "estimateEndTime", function() {
     equal(estimateEndTime(today12, punchesOk, parametres), today12.getTime() - parametres2Ms(parametres));
     equal(estimateEndTime(today12, punchesOk, parametres, indicators), today12.getTime() - indicators['timeDifference']);
+    equal(estimateEndTime(today12, punchesOk, undefined, indicators), undefined);
+    equal(estimateEndTime(today12, punchesOk, undefined), undefined);
+    equal(estimateEndTime(today12, undefined, undefined), undefined);
 });
 
 test( "calculateIndicators", function() {
@@ -57,14 +60,14 @@ test( "calculateIndicators", function() {
     $.removeCookie('indicators');
     deepEqual(calculateIndicators(today23, punchesOk, parametres, true), expectedResult23);
     $.removeCookie('indicators');
-    expectedResult12['timeEnd'] = today12.getTime();
+    expectedResult12['timeEnd'] = 0;
     deepEqual(calculateIndicators(today12, punchesOk, parametres, false), expectedResult12);
     $.removeCookie('indicators');
     
     // Broken punches
     deepEqual(calculateIndicators(today12, punchesBroken, parametres, true), expectedBrokenResult);
     $.removeCookie('indicators');
-    expectedBrokenResult['timeEnd'] = today12.getTime();
+    expectedBrokenResult['timeEnd'] = 0;
     deepEqual(calculateIndicators(today12, punchesBroken, parametres, false), expectedBrokenResult);
     $.removeCookie('indicators');
     deepEqual(calculateIndicators(today12, punchesBroken, undefined, false), expectedBrokenResult);

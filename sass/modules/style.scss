@@ -9,6 +9,8 @@
 }
 
 $border-color: #111;
+$box-bottom-color:rgb(33,33,33);
+$box-top-color:rgb(64,64,64);
 $warning-color: #c00;
 $light-color: #26B3F7;
 $disabled : #999;
@@ -67,7 +69,9 @@ strong { font-weight: bold;}
 			#options div { margin-left: 30px;}
             
         #punches-options {}
-            #punches-options p {margin-bottom: 10px;}
+            #punches-options p {margin-bottom: 10px; display: inline-block;}
+            #punches-options p:first-child {width: 80px;}
+            #punches-options button {clear: both; float: right;}
 
 /*####################################################################################
 
@@ -176,12 +180,14 @@ strong { font-weight: bold;}
 	text-decoration: none;
 	color: $disabled;
 	@include box-shadow(0px 5px 0px $border-color);
-	@include background(linear-gradient(bottom, rgb(33,33,33) 12%, rgb(64,64,64) 65%));
+	@include background(linear-gradient(bottom, $box-bottom-color 12%, $box-top-color 65%));
 }
 .box-active { color: #fff; text-shadow: 0px 0px 10px #fff; @include box-shadow(0px 0px 30px $light-color); }
 .corner-left { border-radius: 30px 0 0 30px; }
 .corner-right { border-radius: 0 30px 30px 0; }
 .progress-label { text-align: center; width: 100%; float: left; margin-top: 5px; text-shadow: 1px 1px 0 $border-color;}
+
+.hidden {display: none;}
 
 /*####################################################################################
 

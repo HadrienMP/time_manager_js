@@ -56,10 +56,12 @@ function getPunches() {
  * @param string check either I or O
  */
 function saveCheck(check) {
+    var now = new Date().getTime();
+
     // Préparation de l'enregistrement en cookie
     var punch = {
             'check' : check,
-            'date' : new Date().getTime()
+            'date' : now
         };
 
     var punches = $.cookie('punches');
@@ -70,9 +72,12 @@ function saveCheck(check) {
         punches.push(punch);
     }
 
-    // Enregistrement du cookie
-    $.cookie('punches', punches, {expires : 7});
+    savePunchesInCookie(punches);
+}
 
+function savePunchesInCookie(punches) {
+    // Enregistrement du cookie
+    $.cookie('punches', punches, {expires : 30});
     $( "#progressbar" ).progressbar( "option", "value", sizeRatio(punches) );
     setPunchesRange(punches);
 }
@@ -87,7 +92,7 @@ function saveParametres() {
         'minutes' : $('#total-time-options #minutes').val(),
         'seconds' : $('#total-time-options #seconds').val()
     };
-    $.cookie('parametres',parametres, {expires: 7});
+    $.cookie('parametres',parametres, {expires: 30});
     
     // Forces a reset of the estimated end time by setting the date to '' which will force the calculation of the date
     $('#time-end').text('');

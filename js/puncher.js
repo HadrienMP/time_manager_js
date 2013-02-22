@@ -59,6 +59,7 @@ function eraseCookie() {
     initCookieInfos();
     powerOff();
     updateIndicators();
+    setPunchesRange();
     // Forces a reset of the estimated end time by setting the date to '' which will force the calculation of the date
     $('#time-end').text('');
 }
@@ -209,7 +210,8 @@ function updateIndicators(punches, parametres) {
     }
     else if (!isPowerOn() && !$('#puncher-container').hasClass('over-time')) {
         // If the puncher is disabled, the end time rises each second
-        var endTime = estimateEndTime();
+        var endTime = estimateEndTime(new Date(), punches, parametres, getIndicators(new Date()));
+        endTime = endTime === undefined ? new Date().getTime() : enTime;
         $('#time-end').text(myDateFormat(endTime));
     }
 }
@@ -226,6 +228,8 @@ function initOptions(parametres) {
 	$('#options-buttons-container #options-button').button({ icons: { primary: "ui-icon-gear" }, text: false });
 	$('#options-buttons-container #punches-options-button').button({ icons: { primary: "ui-icon-wrench" }, text: false });
 	
+    $('#punches-options .delete-punch').button({ icons: { primary: "ui-icon-trash" }, text: false });
+	
 	$('#tooltips-options').buttonset();
 	$('#button-tooltip-options').buttonset();
     
@@ -237,7 +241,7 @@ function initOptions(parametres) {
 	}
 	
 	$('#total-time-options').dialog({
-		draggable: false,
+		draggable: true,
 		autoOpen: false,
 		show: {
 			effect: 'fade',
@@ -251,7 +255,7 @@ function initOptions(parametres) {
 	});
 	
 	$('#options').dialog({
-		draggable: false,
+		draggable: true,
 		autoOpen: false,
 		show: {
 			effect: 'fade',
@@ -264,7 +268,7 @@ function initOptions(parametres) {
 	});
     
     $('#punches-options').dialog({
-		draggable: false,
+		draggable: true,
 		autoOpen: false,
 		show: {
 			effect: 'fade',
@@ -273,33 +277,111 @@ function initOptions(parametres) {
 		hide: {
 			effect: 'fade',
 			duration: 300
-		}
+		},
+        close: function() {
+            setPunchesRange($.cookie('punches'))
+        },
+        buttons: [{
+            text: "Changer les pointages", 
+            icons: { primary: "ui-icon-check" }, 
+            click: function() {
+                changeTodaysPunches($.cookie('punches'));
+                $( this ).dialog( "close" ); 
+            }
+        }]
 	});
 }
 
 // TODO change me to use a working slider or another interface
 function setPunchesRange(punches) {
+
+    $('#punches-form #punches-inputs').empty();
+
+    punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
     
-    var punchesDates = [];
     if (punches !== undefined) {
         var todaysPunches = getTodaysPunches(punches);
         for (var index in todaysPunches) {
-            punchesDates.push(todaysPunches[index]['date']);
+            var $punchModifier = $('#punches-form .hidden .punch-modifier').clone();
+            $punchModifier.find(".punch-type").text(punchToTypeString(todaysPunches[index]));
+            $punchModifier.find("input.hour").val(new Date(todaysPunches[index]['date']).getHours());
+            $punchModifier.find("input.minute").val(new Date(todaysPunches[index]['date']).getMinutes());
+            $punchModifier.find("input.original-time").val(todaysPunches[index]['date']);
+            $('#punches-form #punches-inputs').append($punchModifier);
+        }
+    
+        $('#punches-options .delete-punch').click($deletePunch);
+    }
+    else {
+        return undefined;
+    }
+}
+
+function $deletePunch() {
+    $(this).closest(".punch-modifier").remove();
+}
+
+// TODO add documentation and tests for me
+function changeTodaysPunches(punches) {
+
+    if (punches === undefined) return undefined;
+    
+    var today = new Date().setHours(0,0,0,0);
+    
+    // Gets all the new values from the form and puts them into an associative array
+    // the keys are the original date and the values, the new dates
+    var newValues = {};
+    var $punchModifiers = $('#punches-form #punches-inputs .punch-modifier');
+    for (var index = 0; index < $punchModifiers.length ; index++) {
+        var minute = $punchModifiers.eq(index).find("input.minute").val();
+        minute = parseInt(minute);
+        var hour = $punchModifiers.eq(index).find("input.hour").val();
+        hour = parseInt(hour);
+        var dateTime = $punchModifiers.eq(index).find("input.original-time").val();
+        dateTime = parseInt(dateTime);
+        var date = new Date(dateTime);
+        newValues[dateTime] = date.setHours(hour,minute);
+    }
+    
+    var toDelete = [];
+    for (var index in punches) {
+        // If the punch was done before today midnight continue parsing
+        if (punches[index]['date'] < today) {
+            continue;
+        }
+        else {
+            if (isNaN(newValues[punches[index]['date']])) {
+                toDelete.push(index);
+            }
+            else {
+                punches[index]['date'] = newValues[punches[index]['date']];
+            }
         }
     }
     
-    var dayStart = new Date().setHours(0,0,0,0);
-    var dayEnd = new Date().setHours(23,59,59,999);
-    
-    $( "#punches-range" ).slider({
-        range: true,
-        min: dayStart,
-        max: dayEnd,
-        values: punchesDates,
-        slide: function( event, ui ) {
-            printPunchesValues(ui.values);
-        }
-    });
-	printPunchesValues($( "#punches-range" ).slider( "values"));
+    // Delete the entries that must be deleted
+    var i = 0;
+    for (var index in toDelete) {
+        // We delete elements one by one, so each time the punches array's length is one item shorter
+        punches.splice(toDelete[index - i],1);
+        i++;
+    }
+    savePunchesInCookie(punches);
+    updateIndicators();
+    // Forces a reset of the estimated end time by setting the date to '' which will force the calculation of the date
+    $('#time-end').text('');
+}
 
+function punchToTypeString(punch) {
+    var returnString = "";
+    if (punch['check'] === 'I') {
+        returnString = "Check In";
+    }
+    else if (punch['check'] === 'O') {
+        returnString = "Check Out";
+    }
+    else {
+        returnString = undefined;
+    }
+    return returnString;
 }

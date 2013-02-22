@@ -95,12 +95,19 @@ var indicators = {
                         
 ####################################################################*/
 
+var timeEnd12 = new Date(today12.getTime());
+timeEnd12.setHours(21,28,48,0);
+var timeEnd13 = new Date(today13.getTime());
+timeEnd13.setHours(22,13,48,0);
+var timeEnd23 = new Date(today23.getTime());
+timeEnd23.setHours(22,28,48,0);
+
 var expectedResult12 = {
   "date": today12.getTime(),
   "dayRatio": 24.529844644317254,
   "isOverTime": false,
   "timeDifference": -33228000,
-  "timeEnd": 1361305728000,
+  "timeEnd": timeEnd12.getTime(),
   "totalTime": 10800000,
   "corruptedModel" : false
 };
@@ -109,7 +116,7 @@ var expectedResult13 = {
   "dayRatio": 24.529844644317254,
   "isOverTime": false,
   "timeDifference": -33228000,
-  "timeEnd": 1361308428000,
+  "timeEnd": timeEnd13.getTime(),
   "totalTime": 10800000,
   "corruptedModel" : false
 };
@@ -118,7 +125,7 @@ var expectedResult23 = {
   "dayRatio": timeRatio(totalTime23 , parametres) - 100,
   "isOverTime": true,
   "timeDifference": 1872000,
-  "timeEnd": 1361309328000,
+  "timeEnd": timeEnd23.getTime(),
   "totalTime": 45900000,
   "corruptedModel" : false
 };
@@ -127,16 +134,16 @@ var expectedBrokenResult = {
   "dayRatio": 0,
   "isOverTime": false,
   "timeDifference": 0,
-  "timeEnd": 1361272500000,
+  "timeEnd": today12.getTime(),
   "totalTime": 0,
   "corruptedModel" : true
 }
 var expectedBrokenParametres = {
   "corruptedModel": false,
-  "date": 1361272500000,
+  "date": today12.getTime(),
   "dayRatio": 107900,
   "isOverTime": true,
   "timeDifference": 10790000,
-  "timeEnd": today12.getTime(),
+  "timeEnd": 0,
   "totalTime": 10800000
 }

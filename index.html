@@ -10,23 +10,23 @@
     <link href="css/custom-theme/jquery-ui-1.10.0.custom.css" rel="stylesheet">
 	
 	<!-- JS Libraries -->
-	<script type="text/javascript" src="js/lib/jquery-1.9.0.js"></script>
-	<script type="text/javascript" src="js/lib/jquery-ui-1.10.0.custom.js"></script>
-	<script type="text/javascript" src="js/lib/jquery.cookie.js"></script>
-	<script type="text/javascript" src="js/lib/jquery.reject.js"></script>
-	<script type="text/javascript" src="js/lib/jquery.timers.js"></script>
+	<script src="js/lib/jquery-1.9.0.js"></script>
+	<script src="js/lib/jquery-ui-1.10.0.custom.js"></script>
+	<script src="js/lib/jquery.cookie.js"></script>
+	<script src="js/lib/jquery.reject.js"></script>
+	<script src="js/lib/jquery.timers.js"></script>
 	<![if !IE]>
-	<script type="text/javascript" src="js/lib/jquery.knob.js"></script>
+	<script src="js/lib/jquery.knob.js"></script>
 	<![endif]>
 	
 	<!-- Specific JS files -->
 	<![if !IE]>
-	<script type="text/javascript" src="js/utils.js"></script>
-	<script type="text/javascript" src="js/knob-init.js"></script>
-	<script type="text/javascript" src="js/cookie-access.js"></script>
-	<script type="text/javascript" src="js/puncher-display.js"></script>
-	<script type="text/javascript" src="js/puncher-indicators.js"></script>
-	<script type="text/javascript" src="js/puncher.js"></script>
+	<script src="js/utils.js"></script>
+	<script src="js/knob-init.js"></script>
+	<script src="js/cookie-access.js"></script>
+	<script src="js/puncher-display.js"></script>
+	<script src="js/puncher-indicators.js"></script>
+	<script src="js/puncher.js"></script>
 	<![endif]>
 	<script type="text/javascript">
 		$(function() {
@@ -90,7 +90,7 @@
 			</div>
 			
 			<!-- Hidden Modal boxes -->
-			<div id="modals-container">
+			<div id="modals-container" class="hidden">
 				
 				<div id="options-container">
 					<div id="total-time-options" title="Durée totale">
@@ -132,8 +132,25 @@
 					</div>
                     
                     <div id="punches-options" title="Pointages">
-                        <p id="punches-range-values"></p>
-                        <div id="punches-range"></div>
+                        <form id="punches-form">
+                            
+                            <div id="punches-inputs"></div>
+                            
+                            <!-- Example of punch modifying inputs -->
+                            <div class="hidden">
+                                <div class="punch-modifier">
+                                    <p><span class="punch-type"></span>&nbsp;:</p>
+                                    <p>
+                                        <input type="text" class="hour" name="hour" size="2" maxlength="2"/>
+                                        <label for="hours">h</label>
+                                        <input type="text" class="minute" name="minute" size="2" maxlength="2"/>
+                                        <label for="minutes">min</label>
+                                        <input type="hidden" class="original-time" name="original-time" />
+                                    </p>
+                                    <button class="delete-punch">Supprimer le pointage</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 				</div>
 				
