@@ -69,9 +69,9 @@ strong { font-weight: bold;}
 			#options div { margin-left: 30px;}
             
         #punches-options {}
-            #punches-options p {margin-bottom: 10px; display: inline-block;}
-            #punches-options p:first-child {width: 80px;}
-            #punches-options button {clear: both; float: right;}
+          #punches-options p {margin-bottom: 10px; display: inline-block;}
+          #punches-options p:first-child {width: 80px;}
+          #punches-options button {clear: both; float: right;}
 
 /*####################################################################################
 
@@ -107,10 +107,10 @@ strong { font-weight: bold;}
 			#puncher-container #cookie-state #progressbar,
 			#puncher-container #cookie-state p { margin-bottom: 10px;}
 		
-            #puncher-container #indicators dd, 
-            #puncher-container #indicators dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
-            #puncher-container #indicators dt {clear: both; width: 40px; margin-right: 5px; }
-            #puncher-container #indicators dd {width: 122px;}
+        #puncher-container #indicators dd, 
+        #puncher-container #indicators dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
+        #puncher-container #indicators dt {clear: both; width: 40px; margin-right: 5px; }
+        #puncher-container #indicators dd {width: 122px;}
 			#puncher-container #indicators #time-difference { font-weight: bold; color:#26B3F7; }
 			#puncher-container.over-time #indicators #time-difference { color: #f00;}
 	/*
@@ -131,19 +131,20 @@ strong { font-weight: bold;}
 	z-index: 10;
 	position: relative;
 	border-radius: 100px; 
-	border: 2px solid $border-color; 
-	height: 97px; 
-	width: 97px; 
+	border: 1px solid $border-color; 
+	height: 100px; 
+	width: 100px; 
 	@include box-shadow( inset 0px 3px 0px $border-color);
 }
-	#puncher-container.over-time  .box-active { @include box-shadow( 0px 0px 30px $warning-color);}
+  #puncher-container section#puncher-section canvas {margin: 2px 0 0 1px;}
+	#puncher-container.over-time .box-active { @include box-shadow( 0px 0px 30px $warning-color);}
 	#puncher-container #puncher-button { 
 		border-radius: 100px; 
 		height: 75px; 
 		width: 75px; 
 		margin: auto; 
 		border: none; 
-		margin-top: 10px; 
+		margin-top: 12px; 
 		font-family: "FontAwesome";
 		position: relative;
 		z-index: 1000;

@@ -120,6 +120,7 @@ function averageBreakTime(punches) {
  */
 function timeDifferenceFromTotalTime(totalTime, parametres) {
 	var totalTimeMax = parametres2Ms(parametres);
+	totalTime = isNaN(totalTime) ? 0 : totalTime;
 	return totalTime - totalTimeMax;
 }
 

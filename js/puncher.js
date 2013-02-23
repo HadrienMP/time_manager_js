@@ -112,7 +112,7 @@ function initPuncher() {
     $.cookie.json = true;
     var parametres = $.cookie('parametres');
     var punches = $.cookie('punches');
-    if (punches !== undefined && punches[punches.length -1]['check'] === 'I') {
+    if (punches !== undefined && punches.length > 0 && punches[punches.length -1]['check'] === 'I') {
         powerOn();
     }
 
