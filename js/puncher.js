@@ -211,7 +211,7 @@ function updateIndicators(punches, parametres) {
     else if (!isPowerOn() && !$('#puncher-container').hasClass('over-time')) {
         // If the puncher is disabled, the end time rises each second
         var endTime = estimateEndTime(new Date(), punches, parametres, getIndicators(new Date()));
-        endTime = endTime === undefined ? new Date().getTime() : enTime;
+        endTime = endTime === undefined ? new Date().getTime() : endTime;
         $('#time-end').text(myDateFormat(endTime));
     }
 }
