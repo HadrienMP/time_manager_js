@@ -44,6 +44,10 @@ $(document).ready(function(){
 	$('#time-options-button').click(showTimeParametres);
 	$('#options-button').click(showParametres);
 	$('#punches-options-button').click(showPunchesParametres);
+	$('#punches-options .add-punch').click(function() {
+        addPunchModifier();
+        return false;
+    });
     
     // Regular update of the progress bar and indicators
     $(document).everyTime('1s', 'puncherTimer', function() {
@@ -108,12 +112,22 @@ function initPuncher() {
         centerPuncher();
     });
 
-    // Loads the initial data of the puncher
     $.cookie.json = true;
+    resetPuncher();
+}
+
+function resetPuncher() {
+    // Loads the initial data of the puncher
     var parametres = $.cookie('parametres');
     var punches = $.cookie('punches');
-    if (punches !== undefined && punches.length > 0 && punches[punches.length -1]['check'] === 'I') {
+    // If the last punch recorded was in the current day and was a check in : power on the puncher
+    if (punches !== undefined && punches.length > 0 
+        && punches[punches.length -1]['check'] === 'I' 
+        && punches[punches.length -1]['date'] >= new Date().setHours(0,0,0,0)) {
         powerOn();
+    }
+    else {
+        powerOff();
     }
 
     // Loads all the other initial datas
@@ -229,7 +243,8 @@ function initOptions(parametres) {
 	$('#options-buttons-container #punches-options-button').button({ icons: { primary: "ui-icon-wrench" }, text: false });
 	
     $('#punches-options .delete-punch').button({ icons: { primary: "ui-icon-trash" }, text: false });
-	
+    $('#punches-options .add-punch').button({ icons: { primary: "ui-icon-plus" }, text: false });
+    
 	$('#tooltips-options').buttonset();
 	$('#button-tooltip-options').buttonset();
     
@@ -292,7 +307,6 @@ function initOptions(parametres) {
 	});
 }
 
-// TODO: change me to use a working slider or another interface
 function setPunchesRange(punches) {
 
     $('#punches-form #punches-inputs').empty();
@@ -302,26 +316,48 @@ function setPunchesRange(punches) {
     if (punches !== undefined) {
         var todaysPunches = getTodaysPunches(punches);
         for (var index in todaysPunches) {
-            var $punchModifier = $('#punches-form .hidden .punch-modifier').clone();
-            $punchModifier.find(".punch-type").text(punchToTypeString(todaysPunches[index]));
-            $punchModifier.find("input.hour").val(new Date(todaysPunches[index]['date']).getHours());
-            $punchModifier.find("input.minute").val(new Date(todaysPunches[index]['date']).getMinutes());
-            $punchModifier.find("input.original-time").val(todaysPunches[index]['date']);
-            $('#punches-form #punches-inputs').append($punchModifier);
+            addPunchModifier(todaysPunches[index]);
         }
-    
-        $('#punches-options .delete-punch').click($deletePunch);
     }
     else {
         return undefined;
     }
 }
 
+// TODO: Add doc and test
+function addPunchModifier(punch) {
+    
+    var punchType;
+    var punchDate;
+    
+    if (punch !== undefined) {
+        punchType = punch['check'];
+        punchDate = new Date(punch['date']);
+    }
+    else {
+        // Get the last punch value (the one we create has the opposite value)
+        var lastPunchType = $('#punches-inputs .punch-modifier:last-child input.type').val();
+        punchType = lastPunchType === 'I' ? 'O' : 'I';
+        punchDate = new Date();
+    }
+    
+    var $punchModifier = $('#punches-form .hidden .punch-modifier').clone();
+    $punchModifier.find(".punch-type").text(punchTypeToString(punchType));
+    $punchModifier.find("input.hour").val(punchDate.getHours());
+    $punchModifier.find("input.minute").val(punchDate.getMinutes());
+    $punchModifier.find("input.original-time").val(punchDate.getTime());
+    $punchModifier.find("input.type").val(punchType);
+    $('#punches-form #punches-inputs').append($punchModifier);
+    $punchModifier.find('.delete-punch').click($deletePunch);
+}
+
 function $deletePunch() {
     $(this).closest(".punch-modifier").remove();
+    return false;
 }
 
 // TODO: add documentation and tests for me
+// TODO: handle the punch creation in the punch modifier modal view
 function changeTodaysPunches(punches) {
 
     if (punches === undefined) return undefined;
@@ -340,7 +376,10 @@ function changeTodaysPunches(punches) {
         var dateTime = $punchModifiers.eq(index).find("input.original-time").val();
         dateTime = parseInt(dateTime);
         var date = new Date(dateTime);
-        newValues[dateTime] = date.setHours(hour,minute);
+        newValues[dateTime] = {
+            'check' : $punchModifiers.eq(index).find("input.type").val(),
+            'date' : date.setHours(hour,minute)
+        };
     }
     
     var toDelete = [];
@@ -350,12 +389,23 @@ function changeTodaysPunches(punches) {
             continue;
         }
         else {
-            if (isNaN(newValues[punches[index]['date']])) {
+            // The form doesn't contains the punch it meens it has to be deleted
+            if (newValues[punches[index]['date']] === undefined) {
                 toDelete.push(index);
             }
             else {
-                punches[index]['date'] = newValues[punches[index]['date']];
+                // Otherwise if meens it changed
+                punches[index]['date'] = newValues[punches[index]['date']]['date'];
+                // Delete the punch
+                delete newValues[punches[index]['date']];
             }
+        }
+    }
+    
+    // If newValues is not empty it meeens we have punches to add manualy
+    if ( !$.isEmptyObject(newValues)) {
+        for (var dateKey in newValues) {
+            punches.push(newValues[dateKey]);
         }
     }
     
@@ -367,21 +417,10 @@ function changeTodaysPunches(punches) {
         i++;
     }
     savePunchesInCookie(punches);
-    updateIndicators();
-    // Forces a reset of the estimated end time by setting the date to '' which will force the calculation of the date
-    $('#time-end').text('');
+    resetPuncher();
 }
 
-function punchToTypeString(punch) {
-    var returnString = "";
-    if (punch['check'] === 'I') {
-        returnString = "Check In";
-    }
-    else if (punch['check'] === 'O') {
-        returnString = "Check Out";
-    }
-    else {
-        returnString = undefined;
-    }
-    return returnString;
+// TODO: ajouter un test et de la doc
+function punchTypeToString(punchType) {
+    return punchType === 'I' ? 'Check In' : 'Check Out';
 }

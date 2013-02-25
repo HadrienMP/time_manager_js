@@ -54,9 +54,13 @@ function getPunches() {
 /**
  * Saves the state and time of the punch
  * @param string check either I or O
+ * @param string date the date in ms of the punch
  */
-function saveCheck(check) {
+function saveCheck(check, date) {
     var now = new Date().getTime();
+    if (date !== undefined) {
+        now = new Date(date);
+    }
 
     // Préparation de l'enregistrement en cookie
     var punch = {

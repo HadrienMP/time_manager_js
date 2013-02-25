@@ -295,14 +295,3 @@ function getTodaysPunches(punches) {
 	}
 	return todaysPunches.reverse();
 }
-
-// TODO: Add a test and documentation for me
-function findPunchByDate(date) {
-	var punches = $.cookie('punches');
-	if (punches !== undefined) {
-		for (var index in punches) {
-
-		}
-	}
-	return undefined;
-}

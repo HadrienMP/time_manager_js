@@ -133,9 +133,8 @@
                     
                     <div id="punches-options" title="Pointages">
                         <form id="punches-form">
-                            
                             <div id="punches-inputs"></div>
-                            
+                            <button class="add-punch">Ajouter un pointage</button>
                             <!-- Example of punch modifying inputs -->
                             <div class="hidden">
                                 <div class="punch-modifier">
@@ -146,6 +145,7 @@
                                         <input type="text" class="minute" name="minute" size="2" maxlength="2"/>
                                         <label for="minutes">min</label>
                                         <input type="hidden" class="original-time" name="original-time" />
+                                        <input type="hidden" class="type" name="type" />
                                     </p>
                                     <button class="delete-punch">Supprimer le pointage</button>
                                 </div>
