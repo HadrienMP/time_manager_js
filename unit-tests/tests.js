@@ -1,4 +1,7 @@
 $.cookie.json = true;
+$.removeCookie('parametres');
+$.removeCookie('indicators');
+$.removeCookie('punches');
 
 test( "parametres2Ms", function() {
     // Checks against date in GMT
@@ -46,7 +49,8 @@ test( "getLastCheckIn", function() {
 test( "estimateEndTime", function() {
     equal(estimateEndTime(today12, punchesOk, parametres), today12.getTime() - parametres2Ms(parametres));
     equal(estimateEndTime(today12, punchesOk, parametres, indicators), today12.getTime() - indicators['timeDifference']);
-    equal(estimateEndTime(today12, punchesOk, undefined, indicators), undefined);
+    equal(estimateEndTime(today12, punchesOk, undefined, indicators), today12.getTime() - indicators['timeDifference']);
+    $.removeCookie('parametres');
     equal(estimateEndTime(today12, punchesOk, undefined), undefined);
     equal(estimateEndTime(today12, undefined, undefined), undefined);
 });

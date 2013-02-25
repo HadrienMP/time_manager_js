@@ -77,7 +77,8 @@ function estimateEndTime(date, punches, parametres, indicators) {
 		timeDifference = indicators['timeDifference']
 	}
 	// Here we substract the time difference because it is supposed to be negative like 3 hours left = -3h
-	return date.getTime() - timeDifference;
+    var endTime = date.getTime() - timeDifference
+	return isNaN(endTime) ? undefined : endTime;
 }
 
 // TODO: complete this function
