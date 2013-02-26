@@ -311,6 +311,9 @@ function initOptions(parametres) {
 	});
 }
 
+/**
+ * Responds to the call to display older punches in the punches management view
+ */
 function displayOlderPunches() {
     var currentDate = $('#punches-options-date').text();
     currentDate = new XDate(currentDate);
@@ -318,6 +321,9 @@ function displayOlderPunches() {
     setPunchesRange($.cookie('punches'),currentDate);
 }
 
+/**
+ * Responds to the call to display newer punches in the punches management view
+ */
 function displayNewerPunches() {
     var currentDate = $('#punches-options-date').text();
     currentDate = new XDate(currentDate);

@@ -85,21 +85,11 @@ function sizeRatio(object) {
 }
 
 function myDateFormat(time) {
-    var date = new Date(time);
-    // The slice -2 insures us that we'll get only 2 decimals, so 13 or 02 not 013.
-    return ('0' + date.getDate()).slice(-2) + '/' 
-            + ('0' + (date.getMonth() + 1)).slice(-2) + ' ' 
-            + ('0' + date.getHours()).slice(-2) + ':' 
-            + ('0' + date.getMinutes()).slice(-2) + ':'
-            + ('0' + date.getSeconds()).slice(-2);
+    return new XDate(time).toString('dd/MM hh:mm:ss');
 }
 
 function hmsDateFormat(time) {
-    var date = new Date(time);
-    // The slice -2 insures us that we'll get only 2 decimals, so 13 or 02 not 013.
-    return ('0' + date.getHours()).slice(-2) + ':' 
-            + ('0' + date.getMinutes()).slice(-2) + ':'
-            + ('0' + date.getSeconds()).slice(-2);
+    return new XDate(time).toString('hh:mm:ss');
 }
 
 /**
