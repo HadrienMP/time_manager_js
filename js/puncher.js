@@ -242,6 +242,8 @@ function initOptions(parametres) {
 	$('#options-buttons-container #options-button').button({ icons: { primary: "ui-icon-gear" }, text: false });
 	$('#options-buttons-container #punches-options-button').button({ icons: { primary: "ui-icon-wrench" }, text: false });
 	
+    $('#punches-options #newer-punches').button();
+    $('#punches-options #older-punches').button();
     $('#punches-options .delete-punch').button({ icons: { primary: "ui-icon-trash" }, text: false });
     $('#punches-options .add-punch').button({ icons: { primary: "ui-icon-plus" }, text: false });
     
