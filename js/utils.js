@@ -101,3 +101,22 @@ function hmsDateFormat(time) {
             + ('0' + date.getMinutes()).slice(-2) + ':'
             + ('0' + date.getSeconds()).slice(-2);
 }
+
+/**
+ * New Parsing function for XDate
+ * @param str the date must be in the following format dd/mm/yyyy
+ * @return XDate generated xdate
+ */
+function parseDMY(str) {
+	// this example parses dates like "date/month/year"
+	var parts = str.split('/');
+	if (parts.length === 3) {
+		return new XDate(
+			parseInt(parts[2]), // year
+            parseInt(parts[1] ? parts[1]-1 : 0), // month
+			parseInt(parts[0]) // date
+		);
+	}
+}
+ 
+XDate.parsers.push(parseDMY);

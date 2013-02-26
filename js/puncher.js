@@ -48,6 +48,8 @@ $(document).ready(function(){
         addPunchModifier();
         return false;
     });
+    $('#older-punches').click(displayOlderPunches);
+    $('#newer-punches').click(displayNewerPunches);
     
     // Regular update of the progress bar and indicators
     $(document).everyTime('1s', 'puncherTimer', function() {
@@ -309,9 +311,42 @@ function initOptions(parametres) {
 	});
 }
 
-function setPunchesRange(punches) {
+function displayOlderPunches() {
+    var currentDate = $('#punches-options-date').text();
+    currentDate = new XDate(currentDate);
+    currentDate.addDays(-1);
+    setPunchesRange($.cookie('punches'),currentDate);
+}
+
+function displayNewerPunches() {
+    var currentDate = $('#punches-options-date').text();
+    currentDate = new XDate(currentDate);
+    
+    // Security to prevent viewing dates in the future
+    var now = new XDate();
+    if (currentDate.getFullYear() === now.getFullYear()
+        && currentDate.getMonth() === now.getMonth()
+        && currentDate.getDate() === now.getDate()) {
+        return;
+    }
+    currentDate.addDays(1);
+    setPunchesRange($.cookie('punches'),currentDate);
+}
+
+/**
+ * setPunchesRange
+ * @param punches the punches
+ * @param date the XDate date to display the punches
+ */
+function setPunchesRange(punches,date) {
 
     $('#punches-form #punches-inputs').empty();
+    var dateLocal = date;
+    if (date === undefined) {
+        dateLocal = new XDate();
+    }
+    
+    $('#punches-options-date').text(dateLocal.toString('dd/MM/yyyy'));
 
     punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
     
@@ -371,6 +406,7 @@ function changeTodaysPunches(punches) {
     var newValues = {};
     var $punchModifiers = $('#punches-form #punches-inputs .punch-modifier');
     for (var index = 0; index < $punchModifiers.length ; index++) {
+    
         var minute = $punchModifiers.eq(index).find("input.minute").val();
         minute = parseInt(minute);
         var hour = $punchModifiers.eq(index).find("input.hour").val();

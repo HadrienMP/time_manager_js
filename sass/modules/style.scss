@@ -73,7 +73,8 @@ strong { font-weight: bold;}
         #punches-options p {margin-bottom: 10px;}
             #punches-options button#older-punches {float: left;}
             #punches-options button#newer-punches {float: right;}
-        #punches-options form {clear: both; padding-top: 15px;}
+            #punches-options #punches-options-date {text-align: center;}
+        #punches-options form {clear: both; padding-top: 10px; margin-top: 20px; border-top: 2px solid $box-top-color;}
             #punches-options form p {margin-bottom: 10px; display: inline-block;}
             #punches-options form p:first-child {width: 80px;}
             #punches-options button.delete-punch {clear: both; float: right;}
