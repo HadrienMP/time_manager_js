@@ -122,6 +122,14 @@ function resetPuncher() {
     // Loads the initial data of the puncher
     var parametres = $.cookie('parametres');
     var punches = $.cookie('punches');
+
+    // Loads all the other initial datas
+    initOptions(parametres);
+    initCookieInfos(punches);
+    updateIndicators(punches, parametres);
+	initToolTip();
+    setPunchesRange(punches);
+    
     // If the last punch recorded was in the current day and was a check in : power on the puncher
     if (punches !== undefined && punches.length > 0 
         && punches[punches.length -1]['check'] === 'I' 
@@ -131,13 +139,6 @@ function resetPuncher() {
     else {
         powerOff();
     }
-
-    // Loads all the other initial datas
-    initOptions(parametres);
-    initCookieInfos(punches);
-    updateIndicators(punches, parametres);
-	initToolTip();
-    setPunchesRange(punches);
 }
 
 function initToolTip() {
