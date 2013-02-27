@@ -305,7 +305,7 @@ function initOptions(parametres) {
             text: "Changer les pointages", 
             icons: { primary: "ui-icon-check" }, 
             click: function() {
-                changeTodaysPunches($.cookie('punches'));
+                changePunches($.cookie('punches'));
                 $( this ).dialog( "close" ); 
             }
         }]
@@ -358,7 +358,7 @@ function setPunchesRange(punches,date) {
     punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
     
     if (punches !== undefined) {
-        var todaysPunches = getTodaysPunches(punches);
+        var todaysPunches = getDaysPunches(punches, date);
         for (var index in todaysPunches) {
             addPunchModifier(todaysPunches[index]);
         }
@@ -402,11 +402,16 @@ function $deletePunch() {
 
 // TODO: add documentation and tests for me
 // TODO: handle the punch creation in the punch modifier modal view
-function changeTodaysPunches(punches) {
+function changePunches(punches) {
 
     if (punches === undefined) return undefined;
     
-    var today = new Date().setHours(0,0,0,0);
+    // var day = new Date().setHours(0,0,0,0);
+    // Récupération de la date
+    var dayStart = new XDate($('#punches-options-date').text());
+    dayStart = dayStart.setHours(0,0,0,0);
+    var dayEnd = new XDate(dayStart);
+    dayEnd.setHours(23,59,59,999);
     
     // Gets all the new values from the form and puts them into an associative array
     // the keys are the original date and the values, the new dates
@@ -429,8 +434,8 @@ function changeTodaysPunches(punches) {
     
     var toDelete = [];
     for (var index in punches) {
-        // If the punch was done before today midnight continue parsing
-        if (punches[index]['date'] < today) {
+        // If the punch was done before the day midnight continue parsing
+        if (punches[index]['date'] < dayStart || punches[index]['date'] > dayEnd) {
             continue;
         }
         else {
@@ -440,9 +445,10 @@ function changeTodaysPunches(punches) {
             }
             else {
                 // Otherwise if meens it changed
+                var originalDate = punches[index]['date'];
                 punches[index]['date'] = newValues[punches[index]['date']]['date'];
                 // Delete the punch
-                delete newValues[punches[index]['date']];
+                delete newValues[originalDate];
             }
         }
     }

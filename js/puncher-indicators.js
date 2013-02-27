@@ -187,7 +187,7 @@ function todaysTotalTime(date, punches) {
 	}
 
 	var now = date;
-	var todaysPunches = getTodaysPunches(punches);
+	var todaysPunches = getDaysPunches(punches);
 	var workdayLength = 0;
 
 	var previousPunch = getFirstCheckIn(todaysPunches);
@@ -261,6 +261,45 @@ function getLastCheckIn(todaysPunches) {
 	}
 	todaysPunches = todaysPunches.reverse();
 	return getFirstCheckIn(todaysPunches);
+}
+
+/**
+ * Finds the punches that were maid on a specific date
+ * @param punches the list of all the punches
+ * @param date date to get the punches
+ * @return the fraction of punches that contains the punches maid today
+ */
+function getDaysPunches(punches, date) {
+    if (punches === undefined) {
+		return undefined;
+	}
+
+	// Cr�ation de la date du jour � minuit (d�but de la journ�e)
+	var dayStart = new Date();
+    if (date !== undefined) {
+        dayStart = date;
+    }
+	dayStart.setHours(0,0,0,0);
+    var dayEnd = new Date(dayStart);
+    dayEnd.setHours(23,59,59,999);
+
+	// R�cup�ration dans le cookie des punches du jour
+	var i = 0;
+	var tempPunch;
+	var todaysPunches = [];
+	while (i < punches.length) {
+		i++;
+		tempPunch = punches[punches.length - i];
+		var punchDate = new Date(tempPunch['date']);
+        if (punchDate > dayEnd) {
+            continue;
+        }
+		if (punchDate < dayStart ) {
+			break;
+		}
+		todaysPunches.push(tempPunch);
+	}
+	return todaysPunches.reverse();
 }
 
 /**
