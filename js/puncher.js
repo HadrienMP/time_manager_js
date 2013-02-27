@@ -459,13 +459,6 @@ function changePunches(punches) {
         }
     }
     
-    // If newValues is not empty it meeens we have punches to add manualy
-    if ( !$.isEmptyObject(newValues)) {
-        for (var dateKey in newValues) {
-            punches.push(newValues[dateKey]);
-        }
-    }
-    
     // Delete the entries that must be deleted
     var i = 0;
     for (var index in toDelete) {
@@ -473,6 +466,26 @@ function changePunches(punches) {
         punches.splice(toDelete[index - i],1);
         i++;
     }
+        
+    // Get the index to add punches
+    var lastIndexOfDay = 0;
+    for (var index in punches) {
+        // If the punch was done before the day midnight continue parsing
+        if (punches[index]['date'] < dayStart || punches[index]['date'] > dayEnd) {
+            continue;
+        }
+        lastIndexOfDay = index;
+    }
+        
+    // If newValues is not empty it meeens we have punches to add manualy
+    if ( !$.isEmptyObject(newValues)) {
+        var j = 1;
+        for (var dateKey in newValues) {
+            punches.splice(lastIndexOfDay + j, 0, newValues[dateKey]);
+            j++;
+        }
+    }
+    
     savePunchesInCookie(punches);
     resetPuncher();
 }
