@@ -410,15 +410,8 @@ function $deletePunch() {
 // TODO: handle the punch creation in the punch modifier modal view
 function changePunches(punches) {
 
-    if (punches === undefined) return undefined;
-    
-    // var day = new Date().setHours(0,0,0,0);
-    // Récupération de la date
-    var dayStart = new XDate($('#punches-options-date').text());
-    dayStart = dayStart.setHours(0,0,0,0);
-    var dayEnd = new XDate(dayStart);
-    dayEnd.setHours(23,59,59,999);
-    
+    var punchesLocal = punches;
+        
     // Gets all the new values from the form and puts them into an associative array
     // the keys are the original date and the values, the new dates
     var newValues = {};
@@ -438,55 +431,73 @@ function changePunches(punches) {
         };
     }
     
-    var toDelete = [];
-    for (var index in punches) {
-        // If the punch was done before the day midnight continue parsing
-        if (punches[index]['date'] < dayStart || punches[index]['date'] > dayEnd) {
-            continue;
-        }
-        else {
-            // The form doesn't contains the punch it meens it has to be deleted
-            if (newValues[punches[index]['date']] === undefined) {
-                toDelete.push(index);
+    if (punchesLocal !== undefined) {
+        
+        // var day = new Date().setHours(0,0,0,0);
+        // Récupération de la date
+        var dayStart = new XDate($('#punches-options-date').text());
+        dayStart = dayStart.setHours(0,0,0,0);
+        var dayEnd = new XDate(dayStart);
+        dayEnd.setHours(23,59,59,999);
+        
+        var toDelete = [];
+        for (var index in punchesLocal) {
+            // If the punch was done before the day midnight continue parsing
+            if (punchesLocal[index]['date'] < dayStart || punchesLocal[index]['date'] > dayEnd) {
+                continue;
             }
             else {
-                // Otherwise if meens it changed
-                var originalDate = punches[index]['date'];
-                punches[index]['date'] = newValues[punches[index]['date']]['date'];
-                // Delete the punch
-                delete newValues[originalDate];
+                // The form doesn't contains the punch it meens it has to be deleted
+                if (newValues[punchesLocal[index]['date']] === undefined) {
+                    toDelete.push(index);
+                }
+                else {
+                    // Otherwise if meens it changed
+                    var originalDate = punchesLocal[index]['date'];
+                    punchesLocal[index]['date'] = newValues[punchesLocal[index]['date']]['date'];
+                    // Delete the punch
+                    delete newValues[originalDate];
+                }
+            }
+        }
+        
+        // Delete the entries that must be deleted
+        var lastIndexOfDay = 0;
+        var i = 0;
+        for (var index in toDelete) {
+            // We delete elements one by one, so each time the punches array's length is one item shorter
+            punchesLocal.splice(toDelete[index - i],1);
+            i++;
+        }
+            
+        // Get the index to add punches
+        for (var index in punchesLocal) {
+            // If the punch was done before the day midnight continue parsing
+            if (punchesLocal[index]['date'] < dayStart || punchesLocal[index]['date'] > dayEnd) {
+                continue;
+            }
+            lastIndexOfDay = index;
+        }
+        
+        // If newValues is not empty it meeens we have punches to add manualy
+        if ( !$.isEmptyObject(newValues)) {
+            var j = 1;
+            for (var dateKey in newValues) {
+                punchesLocal.splice(lastIndexOfDay + j, 0, newValues[dateKey]);
+                j++;
+            }
+        }
+    }
+    else {
+        punchesLocal = [];
+        if ( !$.isEmptyObject(newValues)) {
+            for (var dateKey in newValues) {
+                punchesLocal.push(newValues[dateKey]);
             }
         }
     }
     
-    // Delete the entries that must be deleted
-    var i = 0;
-    for (var index in toDelete) {
-        // We delete elements one by one, so each time the punches array's length is one item shorter
-        punches.splice(toDelete[index - i],1);
-        i++;
-    }
-        
-    // Get the index to add punches
-    var lastIndexOfDay = 0;
-    for (var index in punches) {
-        // If the punch was done before the day midnight continue parsing
-        if (punches[index]['date'] < dayStart || punches[index]['date'] > dayEnd) {
-            continue;
-        }
-        lastIndexOfDay = index;
-    }
-        
-    // If newValues is not empty it meeens we have punches to add manualy
-    if ( !$.isEmptyObject(newValues)) {
-        var j = 1;
-        for (var dateKey in newValues) {
-            punches.splice(lastIndexOfDay + j, 0, newValues[dateKey]);
-            j++;
-        }
-    }
-    
-    savePunchesInCookie(punches);
+    savePunchesInCookie(punchesLocal);
     resetPuncher();
 }
 
