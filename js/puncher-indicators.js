@@ -133,6 +133,11 @@ function timeDifferenceFromTotalTime(totalTime, parametres) {
 }
 
 function timeDifferenceMultipleDays(parametres, punches) {
+
+    if (punches === undefined || parametres === undefined) {
+        return undefined;
+    }
+
     // For each day between the start and the end of the punches we 
     // calculate the time spent and match it with the time to spend
     // so that we get the time left to spend for all the days combined
