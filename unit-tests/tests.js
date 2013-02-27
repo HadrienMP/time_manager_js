@@ -29,21 +29,21 @@ $(function() {
         equal(timeRatio(totalTime23 , parametres), 104.25183973834832);
     });
 
-    test( "getTodaysPunches", function() {
-        deepEqual(getTodaysPunches(punchesOk), punchesOk.slice(6));
-        deepEqual(getTodaysPunches(punchesBroken), punchesBroken.slice(6));
-        deepEqual(getTodaysPunches(undefined), undefined);
+    test( "getDaysPunches", function() {
+        deepEqual(getDaysPunches(punchesOk), punchesOk.slice(6));
+        deepEqual(getDaysPunches(punchesBroken), punchesBroken.slice(6));
+        deepEqual(getDaysPunches(undefined), undefined);
     });
 
     test( "getFirstCheckIn", function() {
-        deepEqual(getFirstCheckIn(getTodaysPunches(punchesOk)), punchesOk[6]);
-        deepEqual(getFirstCheckIn(getTodaysPunches(punchesBroken)), punchesBroken[7]);
+        deepEqual(getFirstCheckIn(getDaysPunches(punchesOk)), punchesOk[6]);
+        deepEqual(getFirstCheckIn(getDaysPunches(punchesBroken)), punchesBroken[7]);
         equal(getFirstCheckIn(undefined), undefined);
     });
 
     test( "getLastCheckIn", function() {
-        deepEqual(getLastCheckIn(getTodaysPunches(punchesOk)), punchesOk[10]);
-        deepEqual(getLastCheckIn(getTodaysPunches(punchesBroken)), punchesBroken[9]);
+        deepEqual(getLastCheckIn(getDaysPunches(punchesOk)), punchesOk[10]);
+        deepEqual(getLastCheckIn(getDaysPunches(punchesBroken)), punchesBroken[9]);
         equal(getLastCheckIn(undefined), undefined);
     });
 
