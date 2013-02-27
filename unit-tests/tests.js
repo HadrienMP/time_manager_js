@@ -16,6 +16,15 @@ $(function() {
         equal(todaysTotalTime(today12, punchesBroken), undefined);
         equal(todaysTotalTime(today12, undefined), undefined);
     });
+    
+    test( "totalTime", function() {
+        equal(totalTimeTwoDaysBefore12, 14400000);
+        equal(totalTimeTwoDaysBefore12, totalTimeTwoDaysBefore13);
+        equal(totalTimeTwoDaysBefore23, 32400000);
+        equal(totalTimeYesterday12, 0);
+        equal(totalTime(today12, punchesBroken), undefined);
+        equal(totalTime(today12, undefined), undefined);
+    });
 
     test( "timeDifferenceFromTotalTime", function() {
         equal(timeDifferenceFromTotalTime(totalTime12 , parametres), -33228000);

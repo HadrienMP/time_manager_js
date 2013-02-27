@@ -4,42 +4,42 @@
 
 ####################################################################*/
 
-var yesterdayMidnight = new Date();
-yesterdayMidnight.setDate(yesterdayMidnight.getDate() -1)
-yesterdayMidnight.setHours(0,0,0,0);
-var todayMidnight = new Date();
+var twoDaysBeforeMidnight = new XDate();
+twoDaysBeforeMidnight.addDays(-2);
+twoDaysBeforeMidnight.setHours(0,0,0,0);
+var todayMidnight = new XDate();
 todayMidnight.setHours(0,0,0,0);
 var punchesOk = [
     // Yesterday
-    { 'check' : 'I', 'date' : yesterdayMidnight.setHours(8)},
-    { 'check' : 'O',  'date' : yesterdayMidnight.setHours(10) },
-    { 'check' : 'I', 'date' : yesterdayMidnight.setHours(10,10) },
-    { 'check' : 'O', 'date' : yesterdayMidnight.setHours(12) },
-    { 'check' : 'I', 'date' : yesterdayMidnight.setHours(13,15) },
-    { 'check' : 'O', 'date' : yesterdayMidnight.setHours(18) },
+    { 'check' : 'I', 'date' : twoDaysBeforeMidnight.setHours(8).getTime()},
+    { 'check' : 'O',  'date' : twoDaysBeforeMidnight.setHours(10).getTime() },
+    { 'check' : 'I', 'date' : twoDaysBeforeMidnight.setHours(10,10).getTime() },
+    { 'check' : 'O', 'date' : twoDaysBeforeMidnight.setHours(12).getTime() },
+    { 'check' : 'I', 'date' : twoDaysBeforeMidnight.setHours(13,15).getTime() },
+    { 'check' : 'O', 'date' : twoDaysBeforeMidnight.setHours(18).getTime() },
     // Today
-    { 'check' : 'I', 'date' : todayMidnight.setHours(9)},
-    { 'check' : 'O',  'date' : todayMidnight.setHours(10) },
-    { 'check' : 'I', 'date' : todayMidnight.setHours(10,10) },
-    { 'check' : 'O', 'date' : todayMidnight.setHours(12) },
-    { 'check' : 'I', 'date' : todayMidnight.setHours(13,15) }
+    { 'check' : 'I', 'date' : todayMidnight.setHours(9).getTime()},
+    { 'check' : 'O',  'date' : todayMidnight.setHours(10).getTime() },
+    { 'check' : 'I', 'date' : todayMidnight.setHours(10,10).getTime() },
+    { 'check' : 'O', 'date' : todayMidnight.setHours(12).getTime() },
+    { 'check' : 'I', 'date' : todayMidnight.setHours(13,15).getTime() }
 ];
 
 var punchesBroken = [
     // Yesterday
-    { 'check' : 'I', 'date' : yesterdayMidnight.setHours(8)},
-    { 'check' : 'O',  'date' : yesterdayMidnight.setHours(10) },
-    { 'check' : 'I', 'date' : yesterdayMidnight.setHours(10,10) },
-    { 'check' : 'I', 'date' : yesterdayMidnight.setHours(12) },
-    { 'check' : 'I', 'date' : yesterdayMidnight.setHours(13,15) },
-    { 'check' : 'O', 'date' : yesterdayMidnight.setHours(18) },
+    { 'check' : 'I', 'date' : twoDaysBeforeMidnight.setHours(8).getTime()},
+    { 'check' : 'O',  'date' : twoDaysBeforeMidnight.setHours(10).getTime() },
+    { 'check' : 'I', 'date' : twoDaysBeforeMidnight.setHours(10,10).getTime() },
+    { 'check' : 'I', 'date' : twoDaysBeforeMidnight.setHours(12).getTime() },
+    { 'check' : 'I', 'date' : twoDaysBeforeMidnight.setHours(13,15).getTime() },
+    { 'check' : 'O', 'date' : twoDaysBeforeMidnight.setHours(18).getTime() },
     // Today
-    { 'check' : 'O',  'date' : todayMidnight.setHours(10) },
-    { 'check' : 'I', 'date' : todayMidnight.setHours(9)},
-    { 'check' : 'O', 'date' : todayMidnight.setHours(13,15) },
-    { 'check' : 'I', 'date' : todayMidnight.setHours(10,10) },
-    { 'check' : 'O', 'date' : todayMidnight.setHours(12) },
-    { 'check' : 'O', 'date' : todayMidnight.setHours(17) },
+    { 'check' : 'O',  'date' : todayMidnight.setHours(10).getTime() },
+    { 'check' : 'I', 'date' : todayMidnight.setHours(9).getTime()},
+    { 'check' : 'O', 'date' : todayMidnight.setHours(13,15).getTime() },
+    { 'check' : 'I', 'date' : todayMidnight.setHours(10,10).getTime() },
+    { 'check' : 'O', 'date' : todayMidnight.setHours(12).getTime() },
+    { 'check' : 'O', 'date' : todayMidnight.setHours(17).getTime() },
 ];
 
 /*####################################################################
@@ -72,6 +72,21 @@ today23.setHours(23,0,0,0);
 var totalTime12 = todaysTotalTime(today12, punchesOk);
 var totalTime13 = todaysTotalTime(today13, punchesOk);
 var totalTime23 = todaysTotalTime(today23, punchesOk);
+
+var twoDaysBefore12 = new XDate(today12);
+twoDaysBefore12.addDays(-2);
+var twoDaysBefore13 = new XDate(today13);
+twoDaysBefore13.addDays(-2);
+var twoDaysBefore23 = new XDate(today23);
+twoDaysBefore23.addDays(-2);
+
+var totalTimeTwoDaysBefore12 = totalTime(twoDaysBefore12, punchesOk);
+var totalTimeTwoDaysBefore13 = totalTime(twoDaysBefore13, punchesOk);
+var totalTimeTwoDaysBefore23 = totalTime(twoDaysBefore23, punchesOk);
+
+var yesterday12 = new XDate(today12);
+yesterday12.addDays(-1);
+var totalTimeYesterday12 = totalTime(yesterday12, punchesOk);
 
 /*####################################################################
 

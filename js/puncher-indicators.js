@@ -19,11 +19,11 @@ function calculateIndicators(date, punches, parametres, firstCalculation) {
 
 	var totalTime = totalTime = todaysTotalTime(date, punches);
 	var dayRatio = timeRatio(totalTime, parametresLocal);
-	var timeDifference = timeDifferenceFromTotalTime(totalTime, parametresLocal);
+	var timeDiff = timeDifference(totalTime, parametresLocal, punches, true);
 
 	indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
 	indicators['dayRatio'] = isNaN(dayRatio) ? 0 : dayRatio;
-	indicators['timeDifference'] = isNaN(timeDifference) ? 0 : timeDifference;
+	indicators['timeDifference'] = isNaN(timeDiff) ? 0 : timeDiff;
 	indicators['date'] = date.getTime();
 	indicators['isOverTime'] = indicators['dayRatio'] > 100;
 	if (indicators['isOverTime']) {
@@ -37,7 +37,7 @@ function calculateIndicators(date, punches, parametres, firstCalculation) {
 	}
 
 	// If any of those indicators are undefined it meens the model is having a problem$
-	if (totalTime === undefined || dayRatio === undefined || timeDifference === undefined) {
+	if (totalTime === undefined || dayRatio === undefined || timeDiff === undefined) {
 		indicators['corruptedModel'] = true;
 	} else {
 		indicators['corruptedModel'] = false;
@@ -132,6 +132,49 @@ function timeDifferenceFromTotalTime(totalTime, parametres) {
 	return totalTime - totalTimeMax;
 }
 
+function timeDifferenceMultipleDays(parametres, punches) {
+    // For each day between the start and the end of the punches we 
+    // calculate the time spent and match it with the time to spend
+    // so that we get the time left to spend for all the days combined
+    var firstPunchDate = new XDate(punches[0]['date']);
+    var now = new XDate();
+    var totalTimeDifference = 0;
+    
+    for ( var i = 0 ; i < Math.ceil(firstPunchDate.diffDays(now)) ; i++) {
+        
+        // Get the date to get the time spent
+        var date = firstPunchDate.clone();
+        date.addDays(i);
+        
+        // If the date is not today we set the time to before midnight
+        // because if the personn forgot to punch out we have to count 
+        // the time spent between the punch in and the end of the day
+        // TODO: Handle the bug when the person didn't punch in
+        // Should it calculate until midnight or until check out the next day?
+        if (date.getDate() !== now.getDate()) {
+            date.setHours(23,59,59,999);
+        }
+        else {
+            date = now.clone();
+        }
+        
+        var daysTotalTime = totalTime(date, punches);
+        totalTimeDifference += timeDifferenceFromTotalTime(daysTotalTime, parametres);
+    }
+    
+	return totalTimeDifference;
+}
+
+// TODO: add doc and test 4 me
+function timeDifference(totalTime, parametres, punches, multipleDays) {
+    if (multipleDays !== undefined && multipleDays) {
+        return timeDifferenceMultipleDays(parametres, punches);
+    }
+    else {
+        return timeDifferenceFromTotalTime(totalTime, parametres);
+    }
+}
+
 /**
  * Calculates the time left to spend on the task by comparing time to spend,
  * time spent, and integrating the predicted time of break for the day
@@ -169,6 +212,58 @@ function timeRatio(totalTime, parametres) {
 		return totalTime * 100 / divider
 	}
 	return 0;
+}
+
+/**
+ * Calculates the total time spent on a given day
+ * @param date the day
+ * @param punches the punches
+ * @return the total time spent that day
+ */
+function totalTime(date, punches) {
+
+	if (date === undefined) {
+		date = new Date();
+	}
+	if (punches === undefined) {
+		return undefined;
+	}
+
+	var now = date;
+	var daysPunches = getDaysPunches(punches, date);
+	var workdayLength = 0;
+
+	var previousPunch = getFirstCheckIn(daysPunches);
+	if (previousPunch !== undefined) {
+
+		var j = 1;
+		// TODO: This case shouldn't be happening
+		if (daysPunches.length === 0) {
+			workdayLength += now.getTime() - previousPunch['date'];
+		} else {
+			for (var index in daysPunches) {
+
+				var punch = daysPunches[index];
+
+				// If those conditions are met then the data model is corrupted
+				if (previousPunch['check'] === punch['check'] || previousPunch['date'] > punch['date']) {
+					// TODO: transform -1 into a constant
+					workdayLength = undefined;
+					break;
+				}
+                // Check out after a check in
+                if (punch['check'] === 'O' && previousPunch['check'] === 'I') {
+                    workdayLength += punch['date'] - previousPunch['date'];
+                } else if (daysPunches.length === j && punch['check'] === 'I') {
+                    workdayLength += now.getTime() - punch['date'];
+                }
+				j++;
+				previousPunch = punch;
+			}
+		}
+	}
+    
+    return workdayLength;
 }
 
 /**
@@ -227,20 +322,20 @@ function todaysTotalTime(date, punches) {
 
 /**
  * Finds the first check in of punches
- * @param todaysPunches the punches of the day
+ * @param daysPunches the punches of the day
  * @return an associative array representing the first check in of the day
  */
-function getFirstCheckIn(todaysPunches) {
+function getFirstCheckIn(daysPunches) {
 
-	if (todaysPunches === undefined) {
+	if (daysPunches === undefined) {
 		return undefined;
 	}
 
 	// R�cup�ration du premier check in de la journ�e
 	var firstCheckIn;
 	do {
-		firstCheckIn = todaysPunches.shift();
-	} while (todaysPunches.length > 0 && firstCheckIn['check'] !== 'I');
+		firstCheckIn = daysPunches.shift();
+	} while (daysPunches.length > 0 && firstCheckIn['check'] !== 'I');
 
 	if (firstCheckIn !== undefined && firstCheckIn['check'] !== 'I') {
 		firstCheckIn = undefined;
@@ -277,7 +372,7 @@ function getDaysPunches(punches, date) {
 	// Cr�ation de la date du jour � minuit (d�but de la journ�e)
 	var dayStart = new Date();
     if (date !== undefined) {
-        dayStart = date;
+        dayStart = new XDate(date);
     }
 	dayStart.setHours(0,0,0,0);
     var dayEnd = new Date(dayStart);

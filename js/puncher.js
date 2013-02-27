@@ -376,13 +376,19 @@ function addPunchModifier(punch) {
     
     if (punch !== undefined) {
         punchType = punch['check'];
-        punchDate = new Date(punch['date']);
+        punchDate = new XDate(punch['date']);
     }
     else {
         // Get the last punch value (the one we create has the opposite value)
-        var lastPunchType = $('#punches-inputs .punch-modifier:last-child input.type').val();
+        var $lastPunch = $('#punches-inputs .punch-modifier:last-child');
+        var lastPunchType = $lastPunch .find('input.type').val();
         punchType = lastPunchType === 'I' ? 'O' : 'I';
-        punchDate = new Date();
+        // If the punch isn't defined it meens it's a new one
+        // in that case the date must be coherent with the date displayed in the popin
+        punchDate = new XDate($('#punches-options-date').text());
+        var lastPunchHour = $lastPunch .find('input.hour').val();
+        var lastPunchMinute = $lastPunch .find('input.minute').val();
+        punchDate.setHours(lastPunchHour,lastPunchMinute);
     }
     
     var $punchModifier = $('#punches-form .hidden .punch-modifier').clone();
