@@ -7,7 +7,7 @@
  * Si oui on force le calcul du temps restant
  * @return an array containing the calculated indicators
  */
-function calculateIndicators(date, punches, parametres, firstCalculation) {
+function calculateIndicators(date, punches, parametres, firstCalculation, multipleDays) {
 
 	var parametresLocal = parametres;
 	// Récupération des paramètres de l'application
@@ -18,8 +18,8 @@ function calculateIndicators(date, punches, parametres, firstCalculation) {
 	var indicators = getIndicators(date);
 
 	var totalTime = totalTime = todaysTotalTime(date, punches);
-	var dayRatio = timeRatio(totalTime, parametresLocal);
-	var timeDiff = timeDifference(totalTime, parametresLocal, punches, true);
+	var dayRatio = timeRatio(totalTime, parametresLocal, multipleDays);
+	var timeDiff = timeDifference(totalTime, parametresLocal, punches, multipleDays);
 
 	indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
 	indicators['dayRatio'] = isNaN(dayRatio) ? 0 : dayRatio;
@@ -132,6 +132,7 @@ function timeDifferenceFromTotalTime(totalTime, parametres) {
 	return totalTime - totalTimeMax;
 }
 
+// TODO: Add doc and tests 4 me
 function timeDifferenceMultipleDays(parametres, punches) {
 
     var totalTimeDifference = 0;
@@ -143,37 +144,55 @@ function timeDifferenceMultipleDays(parametres, punches) {
         return undefined;
     }
     else {
-
-        // For each day between the start and the end of the punches we 
-        // calculate the time spent and match it with the time to spend
-        // so that we get the time left to spend for all the days combined
-        var firstPunchDate = new XDate(punches[0]['date']);
-        var now = new XDate();
-        
-        for ( var i = 0 ; i < Math.ceil(firstPunchDate.diffDays(now)) ; i++) {
-            
-            // Get the date to get the time spent
-            var date = firstPunchDate.clone();
-            date.addDays(i);
-            
-            // If the date is not today we set the time to before midnight
-            // because if the personn forgot to punch out we have to count 
-            // the time spent between the punch in and the end of the day
-            // TODO: Handle the bug when the person didn't punch in
-            // Should it calculate until midnight or until check out the next day?
-            if (date.getDate() !== now.getDate()) {
-                date.setHours(23,59,59,999);
-            }
-            else {
-                date = now.clone();
-            }
-            
-            var daysTotalTime = totalTime(date, punches);
-            totalTimeDifference += timeDifferenceFromTotalTime(daysTotalTime, parametres);
-        }
+        // TODO: Handle the case when there is no punch in a day (considered not worked)
+        var totalTimeInformations = totalTimeMultipleDays(punches);
+        var totalTimeMax = parametres2Ms(parametres);
+        totalTimeMax = totalTimeMax * totalTimeInformations['numberOfDays'];
+        totalTimeDifference = totalTimeInformations['totalTime'] - totalTimeMax;
     }
     
 	return totalTimeDifference === 0 ? timeDifferenceFromTotalTime(0, parametres) : totalTimeDifference;
+}
+
+// TODO: add doc and tests 4 me
+function totalTimeMultipleDays(punches) {
+    
+    if (punches === undefined) {
+        return undefined;
+    }
+
+    // For each day between the start and the end of the punches we 
+    // calculate the time spent and match it with the time to spend
+    // so that we get the time left to spend for all the days combined
+    var firstPunchDate = new XDate(punches[0]['date']);
+    var now = new XDate();
+    var numberOfDays = Math.ceil(firstPunchDate.diffDays(now));
+    var totalTimeLocal = 0;
+    for ( var i = 0 ; i <  numberOfDays ; i++) {
+        
+        // Get the date to get the time spent
+        var date = firstPunchDate.clone();
+        date.addDays(i);
+        
+        // If the date is not today we set the time to before midnight
+        // because if the personn forgot to punch out we have to count 
+        // the time spent between the punch in and the end of the day
+        // TODO: Handle the bug when the person didn't punch in
+        // Should it calculate until midnight or until check out the next day?
+        if (date.getDate() !== now.getDate()) {
+            date.setHours(23,59,59,999);
+        }
+        else {
+            date = now.clone();
+        }
+        
+        totalTimeLocal += totalTime(date, punches);
+    }
+    var informations = {
+        'totalTime' : totalTimeLocal,
+        'numberOfDays' : numberOfDays,
+    };
+    return informations;
 }
 
 // TODO: add doc and test 4 me

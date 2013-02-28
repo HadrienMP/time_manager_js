@@ -192,7 +192,7 @@ function updateIndicators(punches, parametres) {
         var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
         var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
         
-        var indicators = calculateIndicators(new Date(), punches, parametres, firstCalculation);
+        var indicators = calculateIndicators(new Date(), punches, parametres, firstCalculation, true);
         var timeDifference = ms2string(indicators['timeDifference']);
         // Si on a dépassé le temps alloué
         if (indicators['isOverTime']) {
@@ -475,19 +475,23 @@ function changePunches(punches) {
         }
             
         // Get the index to add punches
+        // The last index of day is set by default to 0 so that it inserts values at the first place
         var lastIndexOfDay = 0;
         for (var index in punchesLocal) {
             // If the punch was done before the day midnight continue parsing
             if (punchesLocal[index]['date'] < dayStart || punchesLocal[index]['date'] > dayEnd) {
                 continue;
             }
+            // Here we add one in order to insert the punches after the last day found
             lastIndexOfDay = parseInt(index) + 1;
         }
         
         // If newValues is not empty it meeens we have punches to add manualy
         if ( !$.isEmptyObject(newValues)) {
             var j = 0;
+            // TODO: check if it is possible to add all values together instead of one by one
             for (var dateKey in newValues) {
+                // Add j because we insert the values one by one
                 punchesLocal.splice(lastIndexOfDay + j, 0, newValues[dateKey]);
                 j++;
             }
