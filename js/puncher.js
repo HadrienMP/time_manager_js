@@ -389,8 +389,10 @@ function addPunchModifier(punch) {
         // It there is a last punch change the values
         if ($lastPunch.length > 0) {
             var lastPunchHour = $lastPunch .find('input.hour').val();
+            lastPunchHour = parseInt(lastPunchHour);
             var lastPunchMinute = $lastPunch .find('input.minute').val();
-            punchDate.setHours(lastPunchHour,lastPunchMinute);
+            lastPunchMinute = parseInt(lastPunchMinute);
+            punchDate.setHours(lastPunchHour,lastPunchMinute + 1);
         }
     }
     
@@ -465,7 +467,6 @@ function changePunches(punches) {
         }
         
         // Delete the entries that must be deleted
-        var lastIndexOfDay = 0;
         var i = 0;
         for (var index in toDelete) {
             // We delete elements one by one, so each time the punches array's length is one item shorter
@@ -474,17 +475,18 @@ function changePunches(punches) {
         }
             
         // Get the index to add punches
+        var lastIndexOfDay = 0;
         for (var index in punchesLocal) {
             // If the punch was done before the day midnight continue parsing
             if (punchesLocal[index]['date'] < dayStart || punchesLocal[index]['date'] > dayEnd) {
                 continue;
             }
-            lastIndexOfDay = index;
+            lastIndexOfDay = parseInt(index) + 1;
         }
         
         // If newValues is not empty it meeens we have punches to add manualy
         if ( !$.isEmptyObject(newValues)) {
-            var j = 1;
+            var j = 0;
             for (var dateKey in newValues) {
                 punchesLocal.splice(lastIndexOfDay + j, 0, newValues[dateKey]);
                 j++;
