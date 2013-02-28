@@ -90,7 +90,8 @@ strong { font-weight: bold;}
 #puncher-container #indicators-section { text-align: left;}
 	#puncher-container #cookie-button, 
 	#puncher-container #indicators-button { height: 130px; width: 100px; text-indent: -70000px; position: relative;}
-	#puncher-container #cookie-button { text-align: left;}
+    #puncher-container #cookie-button {border-right-width: 2px; text-align: left;}
+    #puncher-container #indicators-button {border-left-width: 2px;}
 	#puncher-container #cookie-state, 
 	#puncher-container #indicators {
 		z-index: 2; 
