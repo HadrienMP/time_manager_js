@@ -85,11 +85,11 @@ function sizeRatio(object) {
 }
 
 function myDateFormat(time) {
-    return new XDate(time).toString('dd/MM hh:mm:ss');
+    return new XDate(time).toString('dd/MM HH:mm');
 }
 
 function hmsDateFormat(time) {
-    return new XDate(time).toString('hh:mm:ss');
+    return new XDate(time).toString('HH:mm:ss');
 }
 
 /**
