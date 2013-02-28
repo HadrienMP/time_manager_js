@@ -62,12 +62,7 @@ $(document).ready(function(){
  */
 function eraseCookie() {
     $.removeCookie('punches');
-    initCookieInfos();
-    powerOff();
-    updateIndicators();
-    setPunchesRange();
-    // Forces a reset of the estimated end time by setting the date to '' which will force the calculation of the date
-    $('#time-end').text('');
+    resetPuncher();
 }
 
 /**
@@ -119,6 +114,10 @@ function initPuncher() {
 }
 
 function resetPuncher() {
+    
+    // Forces a reset of the estimated end time by setting the date to '' which will force the calculation of the date
+    $('#time-end').text('');
+
     // Loads the initial data of the puncher
     var parametres = $.cookie('parametres');
     var punches = $.cookie('punches');
