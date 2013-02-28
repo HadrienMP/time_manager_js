@@ -385,9 +385,13 @@ function addPunchModifier(punch) {
         // If the punch isn't defined it meens it's a new one
         // in that case the date must be coherent with the date displayed in the popin
         punchDate = new XDate($('#punches-options-date').text());
-        var lastPunchHour = $lastPunch .find('input.hour').val();
-        var lastPunchMinute = $lastPunch .find('input.minute').val();
-        punchDate.setHours(lastPunchHour,lastPunchMinute);
+        
+        // It there is a last punch change the values
+        if ($lastPunch.length > 0) {
+            var lastPunchHour = $lastPunch .find('input.hour').val();
+            var lastPunchMinute = $lastPunch .find('input.minute').val();
+            punchDate.setHours(lastPunchHour,lastPunchMinute);
+        }
     }
     
     var $punchModifier = $('#punches-form .hidden .punch-modifier').clone();
