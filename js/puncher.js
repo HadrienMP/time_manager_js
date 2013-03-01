@@ -477,13 +477,21 @@ function changePunches(punches) {
         // Get the index to add punches
         // The last index of day is set by default to 0 so that it inserts values at the first place
         var lastIndexOfDay = 0;
-        for (var index in punchesLocal) {
-            // If the punch was done before the day midnight continue parsing
-            if (punchesLocal[index]['date'] < dayStart || punchesLocal[index]['date'] > dayEnd) {
-                continue;
+        // If we're trying to add punches after the last punches of the day, directly add them at the end
+        if (dayStart > punchesLocal[punchesLocal.length - 1]['date']) {
+            lastIndexOfDay = punchesLocal.length;
+        }
+        else if (dayEnd > punchesLocal[0]['date']) {
+            // If we're not trying to add punches before the first ones and after the last ones, look for the
+            // place to add them
+            for (var index in punchesLocal) {
+                // If the punch was done before the day midnight continue parsing
+                if (punchesLocal[index]['date'] < dayStart || punchesLocal[index]['date'] > dayEnd) {
+                    continue;
+                }
+                // Here we add one in order to insert the punches after the last day found
+                lastIndexOfDay = parseInt(index) + 1;
             }
-            // Here we add one in order to insert the punches after the last day found
-            lastIndexOfDay = parseInt(index) + 1;
         }
         
         // If newValues is not empty it meeens we have punches to add manualy
