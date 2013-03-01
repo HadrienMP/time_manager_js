@@ -367,7 +367,11 @@ function setPunchesRange(punches,date) {
     }
 }
 
-// TODO: Add doc and test
+// TODO: Add test 4 me
+/**
+ * Adds a punch to the punch modify popin view
+ * @param an optionnal punch
+ */
 function addPunchModifier(punch) {
     
     var punchType;
@@ -406,13 +410,22 @@ function addPunchModifier(punch) {
     $punchModifier.find('.delete-punch').click($deletePunch);
 }
 
+/**
+ * Deletes a punch from the punch modify popin view
+ * Doesn't take any parameters, supposed to be called from
+ * a javascript event
+ */
 function $deletePunch() {
     $(this).closest(".punch-modifier").remove();
     return false;
 }
 
-// TODO: add documentation and tests for me
-// TODO: handle the punch creation in the punch modifier modal view
+// TODO: add tests for me
+/**
+ * Adds, modifies and/or delete punches from the punch list with the punches
+ * modified manually in the popin view
+ * @param the list of original punches
+ */
 function changePunches(punches) {
 
     var punchesLocal = punches;
@@ -497,7 +510,6 @@ function changePunches(punches) {
         // If newValues is not empty it meeens we have punches to add manualy
         if ( !$.isEmptyObject(newValues)) {
             var j = 0;
-            // TODO: check if it is possible to add all values together instead of one by one
             for (var dateKey in newValues) {
                 // Add j because we insert the values one by one
                 punchesLocal.splice(lastIndexOfDay + j, 0, newValues[dateKey]);
@@ -518,7 +530,11 @@ function changePunches(punches) {
     resetPuncher();
 }
 
-// TODO: ajouter un test et de la doc
+/**
+ * Transforms the check type into a human readable String
+ * @param punchType the type of check in to transform
+ * @return a human readable string
+ */
 function punchTypeToString(punchType) {
     return punchType === 'I' ? 'Check In' : 'Check Out';
 }
