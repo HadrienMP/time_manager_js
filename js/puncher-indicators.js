@@ -18,8 +18,8 @@ function calculateIndicators(date, punches, parametres, firstCalculation, multip
 	var indicators = getIndicators(date);
 
 	var totalTime = totalTime = todaysTotalTime(date, punches);
-	var dayRatio = timeRatio(totalTime, parametresLocal, multipleDays);
 	var timeDiff = timeDifference(totalTime, parametresLocal, punches, multipleDays);
+	var dayRatio = timeRatio(totalTime, timeDiff);
 
 	indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
 	indicators['dayRatio'] = isNaN(dayRatio) ? 0 : dayRatio;
@@ -233,15 +233,16 @@ function parametres2Ms(parametres) {
 /**
  * Calculates the ratio between the time spent and time to spend
  * @param totalTime the time spent
- * @param parametres the associative array that represents the time to spend
+ * @param timeDiff the time left
  * @return the ratio in %
  */
-function timeRatio(totalTime, parametres) {
-	var divider = parametres2Ms(parametres);
+function timeRatio(totalTime, timeDiff) {
+    // Substraction of timeDiff because timeDiff should be negative
+	var divider = totalTime - timeDiff;
 	if (divider != 0) {
 		return totalTime * 100 / divider
 	}
-	return 0;
+	return 100;
 }
 
 /**
