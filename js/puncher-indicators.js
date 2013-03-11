@@ -144,7 +144,6 @@ function timeDifferenceMultipleDays(parametres, punches) {
         return undefined;
     }
     else {
-        // TODO: Handle the case when there is no punch in a day (considered not worked)
         var totalTimeInformations = totalTimeMultipleDays(punches);
         var totalTimeMax = parametres2Ms(parametres);
         totalTimeMax = totalTimeMax * totalTimeInformations['numberOfDays'];
@@ -167,6 +166,7 @@ function totalTimeMultipleDays(punches) {
     var firstPunchDate = new XDate(punches[0]['date']);
     var now = new XDate();
     var numberOfDays = Math.ceil(firstPunchDate.diffDays(now));
+    var numberOfDaysWorked = numberOfDays;
     var totalTimeLocal = 0;
     for ( var i = 0 ; i <  numberOfDays ; i++) {
         
@@ -186,11 +186,18 @@ function totalTimeMultipleDays(punches) {
             date = now.clone();
         }
         
-        totalTimeLocal += totalTime(date, punches);
+        // Handles the case when a personn didn't check in a day (considered not worked)
+        var totalTimeTemp = totalTime(date, punches);
+        if (totalTimeTemp === undefined) {
+            numberOfDaysWorked--;
+        }
+        else {
+            totalTimeLocal += totalTimeTemp;
+        }
     }
     var informations = {
         'totalTime' : totalTimeLocal,
-        'numberOfDays' : numberOfDays,
+        'numberOfDays' : numberOfDaysWorked,
     };
     return informations;
 }
@@ -293,6 +300,9 @@ function totalTime(date, punches) {
 			}
 		}
 	}
+    else {
+        workdayLength = undefined;
+    }
     
     return workdayLength;
 }
