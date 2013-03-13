@@ -110,8 +110,8 @@ strong { font-weight: bold;}
 		color: white;
 	}
 		#puncher-container p.ui-widget-header { padding: 4px 0; margin: 10px 0 3px; color: $ui-button-text;}
-		#puncher-container #cookie-state > div { margin: 15px 60px 0 15px; width: 190px;}
-		#puncher-container #indicators > div { margin: 15px 15px 0 65px; width: 190px;}
+		#puncher-container #cookie-state > div { margin: 15px 60px 0 15px; width: 210px;}
+		#puncher-container #indicators > div { margin: 15px 15px 0 65px; width: 210px;}
 			#puncher-container #cookie-state button,
 			#puncher-container #cookie-state #progressbar,
 			#puncher-container #cookie-state p { margin-bottom: 10px;}
@@ -119,7 +119,7 @@ strong { font-weight: bold;}
         #puncher-container #indicators dd, 
         #puncher-container #indicators dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
         #puncher-container #indicators dt {clear: both; width: 40px; margin-right: 5px; }
-        #puncher-container #indicators dd {width: 122px;}
+        #puncher-container #indicators dd {width: 142px;}
 			#puncher-container #indicators #time-difference { font-weight: bold; color:#26B3F7; }
 			#puncher-container.over-time #indicators #time-difference { color: #f00;}
 	/*
@@ -208,6 +208,6 @@ strong { font-weight: bold;}
 #puncher-container #cookie-button.cookie-active,
 #puncher-container #indicators-button.indicators-active { width: 50px; @include box-shadow(0px 0px 30px $light-color); }
 #puncher-container #cookie-state.cookie-active,
-#puncher-container #indicators.indicators-active { width: 270px; }
+#puncher-container #indicators.indicators-active { width: 280px; }
 /* FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing */
 #puncher-container #cookie-button.indicators-active { z-index: 2;}
