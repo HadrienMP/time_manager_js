@@ -118,16 +118,25 @@
 					</div>
 					
 					<div id="options" title="Options">
+                        <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+							<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+							Ces options ne sont prises en compte qu'au rafraichissement de la page</p>
+						</div>
 						<form>
 							<p>Infos bulles&nbsp;:</p>
 							<div id="tooltips-options">
-								<input id="tooltips-on" name="tooltips" type="radio" checked="checked" /><label for="tooltips-on">On</label>
+								<input id="tooltips-on" name="tooltips" type="radio" /><label for="tooltips-on">On</label>
 								<input id="tooltips-off" name="tooltips" type="radio" /><label for="tooltips-off">Off</label>
 							</div>
 							<p>Info bulle Bouton&nbsp;:</p>
 							<div id="button-tooltip-options">
-								<input id="button-tooltip-on" name="button-tooltip" type="radio" checked="checked" /><label for="button-tooltip-on">On</label>
+								<input id="button-tooltip-on" name="button-tooltip" type="radio" /><label for="button-tooltip-on">On</label>
 								<input id="button-tooltip-off" name="button-tooltip" type="radio" /><label for="button-tooltip-off">Off</label>
+							</div>
+							<p>Indicateurs sur plusieurs jours&nbsp;:</p>
+							<div id="indicators-mode-options">
+								<input id="mutliple-days-indicators" name="indicators-mode" type="radio" /><label for="mutliple-days-indicators">On</label>
+								<input id="single-day-indicators" name="indicators-mode" type="radio" /><label for="single-day-indicators">Off</label>
 							</div>
 						</form>
 					</div>

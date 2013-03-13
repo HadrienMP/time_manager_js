@@ -53,9 +53,12 @@ strong { font-weight: bold;}
     #options-buttons-container .ui-button { @include box-shadow(0px 3px 0px $border-color); display: inline-block; margin: 0 5px;}
 
 #modals-container { display: none;}
+
+    /* Gestion des messages d'erreur et de warning */
+    .ui-state-error { margin: 0 0 10px;}
+        .ui-state-error p { margin: 10px 0; text-align: justify !important; width: 100% !important;}
+        
     #total-time-options { margin-top: 10px;}
-        #total-time-options  .ui-state-error { margin: 0 0 10px;}
-            #total-time-options  .ui-state-error  p { margin: 10px 0; text-align: justify;}
             #total-time-options p span { float: left; margin: -2px 5px 0 0;}
         #total-time-options p.two-a-row { padding: 0 2%; margin-bottom: 10px; width: 45%; display: inline-block; text-align: center;}
             #total-time-options label,
@@ -64,9 +67,8 @@ strong { font-weight: bold;}
             #total-time-options input  { text-align: center;}
             
     #options { text-align: center;}
-        #options p , #options div { display: inline-block; vertical-align: middle; margin-bottom: 10px;}
-        #options p { width: 120px; text-align: left;}
-        #options div { margin-left: 30px;}
+        #options p , #options div { display: inline-block; vertical-align: middle; margin-bottom: 10px; }
+        #options p { text-align: left; width: 70%;}
         
     #punches-options {}
         #punches-options button.add-punch {margin-top: 10px;}

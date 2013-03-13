@@ -141,16 +141,35 @@ function resetPuncher() {
 }
 
 function initToolTip() {
-	$('#options-buttons-container').tooltip();
-	$('#puncher-button').tooltip({
-		position: { my: "left top+15", at: "left+3 bottom" }
-    });
-	$('#cookie-button').tooltip({
-		position: { my: "right center", at: "left-15 center" }
-	});
-	$('#indicators-button').tooltip({
-		position: { my: "left+15 center", at: "right center" }
-	});
+
+    var generalParametres = $.cookie('general-parametres');
+    
+    // Check if the tooltips for the puncher button are on or not
+    if (generalParametres === undefined || generalParametres['button-tooltip-on']) {
+        $('#puncher-button').tooltip({
+            position: { my: "left top+15", at: "left+3 bottom" }
+        });
+    }
+    else {
+        $('#puncher-button').removeAttr('title');
+    }
+    
+    // Check if the tooltips are supposed to be on
+    // If no parametres are set, we suppose the default value is on
+    // TODO: Move the getter of parametres to cookie-access and provide default values
+    if (generalParametres === undefined || generalParametres['tooltips-on']) {
+        $('#cookie-button').tooltip({
+            position: { my: "right center", at: "left-15 center" }
+        });
+        $('#indicators-button').tooltip({
+            position: { my: "left+15 center", at: "right center" }
+        });
+        $('#options-buttons-container').tooltip();
+    }
+    else {
+        $('#cookie-button').removeAttr('title');
+        $('#indicators-button').removeAttr('title');
+    }
 }
 
 /**
@@ -192,7 +211,15 @@ function updateIndicators(punches, parametres) {
         var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
         var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
         
-        var indicators = calculateIndicators(new Date(), punches, parametres, firstCalculation, true);
+        // Gets the general parameters to determine if the calulation must include the previous days
+        var generalParametres = $.cookie('general-parametres');
+        var indicatorsModeMultiple = true;
+        if (generalParametres !== undefined && !generalParametres['indicators-mode-multiple']) {
+            indicatorsModeMultiple = false;
+        }
+        
+        var indicators = calculateIndicators(new Date(), punches, parametres, firstCalculation, indicatorsModeMultiple);
+        
         var timeDifference = ms2string(indicators['timeDifference']);
         // Si on a dépassé le temps alloué
         if (indicators['isOverTime']) {
@@ -249,8 +276,7 @@ function initOptions(parametres) {
     $('#punches-options .delete-punch').button({ icons: { primary: "ui-icon-trash" }, text: false });
     $('#punches-options .add-punch').button({ icons: { primary: "ui-icon-plus" }, text: false });
     
-	$('#tooltips-options').buttonset();
-	$('#button-tooltip-options').buttonset();
+    initGeneralParametres();
     
 	if (parametres != undefined) {
 		$('#days').val(parametres['days']);
@@ -276,6 +302,8 @@ function initOptions(parametres) {
 	$('#options').dialog({
 		draggable: true,
 		autoOpen: false,
+        width: 400,
+        resizable: false,
 		show: {
 			effect: 'fade',
 			duration: 300
@@ -309,6 +337,53 @@ function initOptions(parametres) {
             }
         }]
 	});
+}
+
+function initGeneralParametres() {
+    
+    var generalParametres = $.cookie('general-parametres');
+    
+    // First we select the first option (on) so that even if generalParametres 
+    // is empty, the options are preselected
+    $('#tooltips-options input').eq(0).attr('checked','checked');
+    $('#button-tooltip-options input').eq(0).attr('checked','checked');
+    $('#indicators-mode-options input').eq(0).attr('checked','checked');
+    
+    if (generalParametres !== undefined) {
+        // If the option is not on we change its value (is on by default)
+        if (!generalParametres['tooltips-on']) {
+            $('#tooltips-options input').eq(0).removeAttr('checked');
+            $('#tooltips-options input').eq(1).attr('checked','checked');
+        }
+        if (!generalParametres['button-tooltip-on']) {
+            $('#button-tooltip-options input').eq(0).removeAttr('checked');
+            $('#button-tooltip-options input').eq(1).attr('checked','checked');
+        }
+        if (!generalParametres['indicators-mode-multiple']) {
+            $('#indicators-mode-options input').eq(0).removeAttr('checked');
+            $('#indicators-mode-options input').eq(1).attr('checked','checked');
+        }
+    }
+    
+	$('#tooltips-options').buttonset().change($changeGeneralParametres);
+	$('#button-tooltip-options').buttonset().change($changeGeneralParametres);
+	$('#indicators-mode-options').buttonset().change($changeGeneralParametres);
+}
+
+function $changeGeneralParametres() {
+    // $(this) represents the general option that changed
+    $options = $("#options");
+    var tooltipsOn = $options.find("#tooltips-on:checked").length === 1;
+    var buttonTooltipOn = $options.find("#button-tooltip-on:checked").length === 1;
+    var indicatorsModeMultiple = $options.find("#mutliple-days-indicators:checked").length === 1;
+    
+    var params = {
+        'tooltips-on' : tooltipsOn,
+        'button-tooltip-on' : buttonTooltipOn,
+        'indicators-mode-multiple' : indicatorsModeMultiple
+    };
+    
+    $.cookie('general-parametres',params);
 }
 
 /**
