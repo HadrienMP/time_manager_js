@@ -45,13 +45,13 @@
 					
 				<!-- Cookie informations -->
 				<section id="left-panel-section">
-					<a href="#left-panel" id="left-panel-button" class="box corner-left" title="Cookie" >&lt;</a>
+					<a href="#left-panel" id="left-panel-button" class="box corner-left" title="Indicateurs Globaux" >&lt;</a>
 					<div id="left-panel" class="box" >
 						<div>
-							<p class="ui-widget-header ui-corner-all">Remplissage du cookie</p>
-							<div id="progressbar"><div class="progress-label">0%</div></div>
-							<button id="delete-cookie" title="Vider le cookie">&nbsp;</button>
-							<button id="delete-cookies" title="Supprimer tous les cookies">&nbsp;</button>
+							<dl>
+								<dt class="ui-widget-header ui-corner-all" title="Heures supplémentaires totales">H.Sup</dt>
+								<dd id="over-time-amount"></dd>
+                            </dl>
 						</div>
 					</div>
 				</section>
@@ -79,7 +79,7 @@
 							</dl>
 						</div>
 					</div>
-					<a href="#" id="right-panel-button" class="box corner-right" title="Indicateurs" >&gt;</a>
+					<a href="#" id="right-panel-button" class="box corner-right" title="Indicateurs Journée" >&gt;</a>
 				</section>
 			</div>
 			
@@ -88,6 +88,7 @@
 				<a href="#" id="time-options-button" class="button" >Options de temps</a>
 				<a href="#" id="options-button" class="button" >Options Générales</a>
 				<a href="#" id="punches-options-button" class="button" >Modification des pointages de la journée</a>
+				<a href="#" id="cookies-button" class="button" >Etat des cookies</a>
 			</div>
 			
 			<!-- Hidden Modal boxes -->
@@ -166,6 +167,13 @@
                                 </div>
                             </div>
                         </form>
+                    </div>
+                    
+                    
+                    <div id="cookie-state" title="Remplissage du cookie">
+                        <div id="progressbar"><div class="progress-label">0%</div></div>
+                        <button id="delete-cookie" title="Vider le cookie">&nbsp;</button>
+                        <button id="delete-cookies" title="Supprimer tous les cookies">&nbsp;</button>
                     </div>
 				</div>
 				

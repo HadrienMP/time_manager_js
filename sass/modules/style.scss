@@ -7,6 +7,9 @@
 @mixin back {
     background: url('../images/micro_carbon.png');
 }
+@mixin back-content {
+    background: url('../images/escheresque_ste.png') !important;
+}
 
 $border-color: #111;
 $box-bottom-color:rgb(33,33,33);
@@ -36,13 +39,16 @@ body {
   font-style: normal;
 }
 
-strong { font-weight: bold;}
-
 /*####################################################################################
 
 									Divers
 
 ####################################################################################*/
+
+strong { font-weight: bold;}
+/* Hack jquery ui css */
+.ui-dialog.ui-widget-content {@include back-content;}
+
 #content { height: 172px; width: 100%;}
 #puncher-container { height: 132px; width: 100%; position: relative;}
 #puncher-container section { vertical-align: middle;}
@@ -57,6 +63,12 @@ strong { font-weight: bold;}
     /* Gestion des messages d'erreur et de warning */
     .ui-state-error { margin: 0 0 10px;}
         .ui-state-error p { margin: 10px 0; text-align: justify !important; width: 100% !important;}
+        
+/*####################################################################################
+
+								Options
+
+####################################################################################*/
         
     #total-time-options { margin-top: 10px;}
             #total-time-options p span { float: left; margin: -2px 5px 0 0;}
@@ -80,6 +92,10 @@ strong { font-weight: bold;}
             #punches-options form p {margin-bottom: 10px; display: inline-block;}
             #punches-options form p:first-child {width: 80px;}
             #punches-options button.delete-punch {clear: both; float: right;}
+            
+    #cookie-state { padding-top: 15px; text-align: center;}
+        #cookie-state button,
+        #cookie-state #progressbar { margin-bottom: 10px;}
 
 /*####################################################################################
 
@@ -101,7 +117,7 @@ strong { font-weight: bold;}
 		overflow: hidden; 
 		height: 130px; 
 		width: 0px;
-		background: url('../images/escheresque_ste.png');
+		@include back-content;
 		box-shadow: none;
 		vertical-align: bottom;
 		border: none;
@@ -109,19 +125,15 @@ strong { font-weight: bold;}
 		position: relative;
 		color: white;
 	}
-		#puncher-container p.ui-widget-header { padding: 4px 0; margin: 10px 0 3px; color: $ui-button-text;}
 		#puncher-container #left-panel > div { margin: 15px 60px 0 15px; width: 210px;}
 		#puncher-container #right-panel > div { margin: 15px 15px 0 65px; width: 210px;}
-			#puncher-container #left-panel button,
-			#puncher-container #left-panel #progressbar,
-			#puncher-container #left-panel p { margin-bottom: 10px;}
 		
-        #puncher-container #right-panel dd, 
-        #puncher-container #right-panel dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
-        #puncher-container #right-panel dt {clear: both; width: 40px; margin-right: 5px; }
-        #puncher-container #right-panel dd {width: 142px;}
-			#puncher-container #right-panel #time-difference { font-weight: bold; color:#26B3F7; }
-			#puncher-container.over-time #right-panel #time-difference { color: #f00;}
+        #puncher-container dd, 
+        #puncher-container  dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
+        #puncher-container dt {clear: both; width: 40px; margin-right: 5px; }
+        #puncher-container dd {width: 142px;}
+			#puncher-container #time-difference { font-weight: bold; color:#26B3F7; }
+			#puncher-container.over-time #time-difference { color: #f00;}
 	/*
 	 * FIXME
 	 * Hack To delete some space between the buttons...
@@ -183,6 +195,8 @@ strong { font-weight: bold;}
 
 ####################################################################################*/
 	
+p.ui-widget-header { padding: 4px 0; margin: 10px 0 3px; color: $ui-button-text;}
+
 .box {
 	display: inline-block; 
 	border: 1px solid $border-color;

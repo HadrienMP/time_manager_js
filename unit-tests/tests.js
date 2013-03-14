@@ -17,7 +17,7 @@ $(function() {
         equal(todaysTotalTime(today12, undefined), undefined);
     });
     
-    test( "totalTime", function() {
+    test( 'totalTimeToday', function() {
         equal(totalTimeTwoDaysBefore12, 14400000);
         equal(totalTimeTwoDaysBefore12, totalTimeTwoDaysBefore13);
         equal(totalTimeTwoDaysBefore23, 32400000);

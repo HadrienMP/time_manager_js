@@ -70,6 +70,9 @@ function showParametres() {
 function showPunchesParametres() {
 	$('#punches-options').dialog("open");
 }
+function showCookieState() {
+	$('#cookie-state').dialog("open");
+}
 
 function printPunchesValues(values) {
     var printedText = "";

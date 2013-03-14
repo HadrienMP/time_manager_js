@@ -35,13 +35,16 @@ function getIndicators(date) {
     var indicators = $.cookie('indicators');
     if (indicators === undefined || indicators.length === 0) {
         indicators = {
-            'totalTime' : 0,
+            'totalTimeToday' : 0,
+            'totalTimeEver' : 0,
             'dayRatio' : 0,
             'timeDifference' : 0,
             'date' : date.getTime(),
             'isOverTime' : false,
+            'overTimeAmount' : 0,
             'timeEnd' : date.getTime(),
-            'corruptedModel' : false
+            'corruptedModel' : false,
+            'numberOfDays' : 1,
         };
     }
     return indicators;

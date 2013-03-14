@@ -100,7 +100,7 @@ var indicators = {
   "isOverTime": false,
   "timeDifference": -33228000,
   "timeEnd": 1361228472000,
-  "totalTime": 10800000,
+  'totalTimeToday': 10800000,
   "corruptedModel" : false
 };
 
@@ -123,7 +123,7 @@ var expectedResult12 = {
   "isOverTime": false,
   "timeDifference": -33228000,
   "timeEnd": timeEnd12.getTime(),
-  "totalTime": 10800000,
+  'totalTimeToday': 10800000,
   "corruptedModel" : false
 };
 var expectedResult13 = {
@@ -132,7 +132,7 @@ var expectedResult13 = {
   "isOverTime": false,
   "timeDifference": -33228000,
   "timeEnd": timeEnd13.getTime(),
-  "totalTime": 10800000,
+  'totalTimeToday': 10800000,
   "corruptedModel" : false
 };
 var expectedResult23 = {
@@ -141,7 +141,7 @@ var expectedResult23 = {
   "isOverTime": true,
   "timeDifference": 1872000,
   "timeEnd": timeEnd23.getTime(),
-  "totalTime": 45900000,
+  'totalTimeToday': 45900000,
   "corruptedModel" : false
 };
 var expectedBrokenResult = {
@@ -150,7 +150,7 @@ var expectedBrokenResult = {
   "isOverTime": false,
   "timeDifference": 0,
   "timeEnd": today12.getTime(),
-  "totalTime": 0,
+  'totalTimeToday': 0,
   "corruptedModel" : true
 }
 var expectedBrokenParametres = {
@@ -160,5 +160,5 @@ var expectedBrokenParametres = {
   "isOverTime": true,
   "timeDifference": 10790000,
   "timeEnd": 0,
-  "totalTime": 10800000
+  'totalTimeToday': 10800000
 }

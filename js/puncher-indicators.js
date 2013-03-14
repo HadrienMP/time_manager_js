@@ -16,14 +16,43 @@ function calculateIndicators(date, punches, parametres, firstCalculation, multip
 	}
 
 	var indicators = getIndicators(date);
+    
+    // Here we create a associative array that will hold all the parameters needed
+    // by all the calculation functions in order to simplify the functions signatures
+    var calculationParameters = {
+        'punches' : punches,
+        'parametres' : parametres,
+        'indicators' : indicators,
+        'currentDate' : date,
+        'multipleDays' : multipleDays
+    };
+    
+    // Fill the number of days worked and time spent since the beginning of punches
+    totalTimeMultipleDays(calculationParameters);
 
-	var totalTime = totalTime = todaysTotalTime(date, punches);
-	var timeDiff = timeDifference(totalTime, parametresLocal, punches, multipleDays);
-	var dayRatio = timeRatio(totalTime, timeDiff);
-
-	indicators['totalTime'] = isNaN(totalTime) ? 0 : totalTime;
-	indicators['dayRatio'] = isNaN(dayRatio) ? 0 : dayRatio;
+    // Fill the time spent
+	var totalTimeLocal = totalTime(calculationParameters, date);
+	indicators['totalTimeToday'] = isNaN(totalTimeLocal) ? 0 : totalTimeLocal;
+    
+    // The number of days are based on the number of days present in the punches
+    // so if there's no punches today we must increment numberOfDays to reflect the
+    // user's reality
+    if (indicators['totalTimeToday'] === 0) {
+        indicators['numberOfDays']++;
+    }
+    
+    // Fill the time to spend
+	var timeDiff = timeDifference(calculationParameters);
 	indicators['timeDifference'] = isNaN(timeDiff) ? 0 : timeDiff;
+    
+    // Fill the ratio of the day spent
+	var dayRatio = timeRatio(calculationParameters);
+	indicators['dayRatio'] = isNaN(dayRatio) ? 0 : dayRatio;
+    
+    // Fill the amount of over time
+    var overTimeAmount = getOverTimeAmount(calculationParameters);
+    indicators['overTimeAmount'] = isNaN(overTimeAmount) ? 0 : overTimeAmount,
+
 	indicators['date'] = date.getTime();
 	indicators['isOverTime'] = indicators['dayRatio'] > 100;
 	if (indicators['isOverTime']) {
@@ -49,6 +78,33 @@ function calculateIndicators(date, punches, parametres, firstCalculation, multip
 }
 
 /**
+ * Calculates the amount of over time since the beginning of punches using the time spent, 
+ * the time left to spend and the time supposed to be spent in the day
+ * @param parametres the application's parametres
+ * @param totalTime the time spent in milleseconds
+ * @param timeDiff time left to spend for the day
+ * @returns the over time amount or undefined if parametres are undefined
+ */
+function getOverTimeAmount(calculationParameters) {
+    
+    var parametres = calculationParameters['parametres'];
+    
+    if (parametres === undefined) {
+        return undefined;
+    }
+    
+    var totalTimeToday = calculationParameters['indicators']['totalTimeToday'];
+    var totalTimeEver = calculationParameters['indicators']['totalTimeEver'];
+    var numberOfDays = calculationParameters['indicators']['numberOfDays'];
+
+    var timeToSpendNormally = parametres2Ms(parametres);
+    
+    var overTime = (totalTimeEver - totalTimeToday) - timeToSpendNormally * (numberOfDays - 1);
+    
+    return overTime < 0 ? 0 : overTime;
+}
+
+/**
  * Calculate the estimated time of end
  * @param date the current time
  * @param punches the application's data
@@ -57,6 +113,7 @@ function calculateIndicators(date, punches, parametres, firstCalculation, multip
  * @return the estimated time of End or undefined if a problem occured
  */
 function estimateEndTime(date, punches, parametres, indicators) {
+
 	// Condition de sortie
 	if (date === undefined) {
 		return undefined;
@@ -81,147 +138,107 @@ function estimateEndTime(date, punches, parametres, indicators) {
 	return isNaN(endTime) ? undefined : endTime;
 }
 
-// TODO: complete this function
-/**
- * This method calculates the number of breaks and their length the personn does a day.
- * With these informations, the time difference could be calculated more accurately than
- * just the time to spend minus the time spent
- * @param punches the list of punches
- * @return an associative array containing the average number of breaks a day and their length
- */
-function averageBreakTime(punches) {
-	var localPunches = punches.slice();
-	var breakTimes = [];
-	var lastPunch = localPunches.shift();
-
-	// Calcul des temps de pause et du nombre de pauses par jour
-	for (var index in localPunches) {
-
-		// On ne fait des statistiques que sur les jours passés
-		if (new Date(localPunches[index]['date']).getDate() === new Date().getDate()) {
-			break;
-		}
-
-		var day = new Date(localPunches[index]['date']).getDate();
-
-		// Si le dernier check est un check out que le check courant est un check in alors on est dans une pause
-		// Mais on est dans une pause uniquement si le check in et le check out sont dans la même journée.
-		if (lastPunch['check'] === 'O' && localPunches[index]['check'] === 'I' && new Date(lastPunch['date']).getDate() === day) {
-			breakTimes[day]['totalBreakTime'] += localPunches[index]['date'] - lastPunch['date'];
-			breakTimes[day]['totalBreaks'] += 1;
-		}
-	}
-
-	var averageBreaksPerDay = 0;
-	var averageBreakTimePerDay = 0;
-	for (var key in breakTimes) {
-
-	}
-
-}
-
 /**
  * Calculates the time to spend on the task by comparing time to spend and time spent
  * @param totalTime the time spent in milleseconds
  * @param parametres the time to spend encapsulated in the parametres associative array
  * @return the number of milliseconds left to spend on the task
  */
-function timeDifferenceFromTotalTime(totalTime, parametres) {
+function timeDifferenceFromTotalTime(calculationParameters) {
+    
+    var parametres = calculationParameters['parametres'];
+    var totalTime = calculationParameters['indicators']['totalTimeToday'];
+    
 	var totalTimeMax = parametres2Ms(parametres);
-	totalTime = isNaN(totalTime) ? 0 : totalTime;
 	return totalTime - totalTimeMax;
 }
 
 // TODO: Add doc and tests 4 me
-function timeDifferenceMultipleDays(parametres, punches) {
+function timeDifferenceMultipleDays(calculationParameters) {
+
+    var parametres = calculationParameters['parametres'];
+    var punches = calculationParameters['punches'];
 
     var totalTimeDifference = 0;
     
-    if (punches === undefined && parametres !== undefined) {
-        totalTimeDifference = timeDifferenceFromTotalTime(0, parametres);
-    }
-    else if ( parametres === undefined) {
+    if ( parametres === undefined) {
         return undefined;
     }
-    else {
-        var totalTimeInformations = totalTimeMultipleDays(punches);
+    else if (punches !== undefined) {
+        var totalTime = calculationParameters['indicators']['totalTimeEver'];
         var totalTimeMax = parametres2Ms(parametres);
-        totalTimeMax = totalTimeMax * totalTimeInformations['numberOfDays'];
-        totalTimeDifference = totalTimeInformations['totalTime'] - totalTimeMax;
+        totalTimeMax = totalTimeMax * calculationParameters['indicators']['numberOfDays'];
+        totalTimeDifference = totalTime - totalTimeMax;
     }
     
-	return totalTimeDifference === 0 ? timeDifferenceFromTotalTime(0, parametres) : totalTimeDifference;
+	return totalTimeDifference === 0 ? timeDifferenceFromTotalTime(calculationParameters) : totalTimeDifference;
 }
 
-// TODO: add doc and tests 4 me
-function totalTimeMultipleDays(punches) {
-    
-    if (punches === undefined) {
-        return undefined;
-    }
+// TODO: add tests 4 me
+/**
+ * Calculates the time spent and the number of days worked since the beginning of punches. 
+ * It Sets the results of its calculation directly in the indicators.
+ * @param calculationParameters the global parameters (see calculateIndicators)
+ */
+function totalTimeMultipleDays(calculationParameters) {
 
-    // For each day between the start and the end of the punches we 
-    // calculate the time spent and match it with the time to spend
-    // so that we get the time left to spend for all the days combined
-    var firstPunchDate = new XDate(punches[0]['date']);
-    var now = new XDate();
-    var numberOfDays = Math.ceil(firstPunchDate.diffDays(now));
-    var numberOfDaysWorked = numberOfDays;
-    var totalTimeLocal = 0;
-    for ( var i = 0 ; i <  numberOfDays ; i++) {
-        
-        // Get the date to get the time spent
-        var date = firstPunchDate.clone();
-        date.addDays(i);
-        
-        // If the date is not today we set the time to before midnight
-        // because if the personn forgot to punch out we have to count 
-        // the time spent between the punch in and the end of the day
-        // TODO: Handle the bug when the person didn't punch in
-        // Should it calculate until midnight or until check out the next day?
-        if (date.getDate() !== now.getDate()) {
-            date.setHours(23,59,59,999);
-        }
-        else {
-            date = now.clone();
-        }
-        
-        // Handles the case when a personn didn't check in a day (considered not worked)
-        var totalTimeTemp = totalTime(date, punches);
-        if (totalTimeTemp === undefined) {
-            numberOfDaysWorked--;
-        }
-        else {
-            totalTimeLocal += totalTimeTemp;
+    var punches = calculationParameters['punches'];
+    
+    var numberOfDaysWorked = 0;
+    var totalTimeEver = 0;
+    if (punches !== undefined) {
+        // For each day between the start and the end of the punches we 
+        // calculate the time spent and match it with the time to spend
+        // so that we get the time left to spend for all the days combined
+        var firstPunchDate = new XDate(punches[0]['date']);
+        var now = new XDate();
+        var numberOfDays = Math.ceil(firstPunchDate.diffDays(now));
+        var numberOfDaysWorked = numberOfDays;
+        var totalTimeEver = 0;
+        for ( var i = 0 ; i <  numberOfDays ; i++) {
+            
+            // Get the date to get the time spent
+            var date = firstPunchDate.clone();
+            date.addDays(i);
+            
+            // If the date is not today we set the time to before midnight
+            // because if the personn forgot to punch out we have to count 
+            // the time spent between the punch in and the end of the day
+            // TODO: Handle the bug when the person didn't punch in
+            // Should it calculate until midnight or until check out the next day?
+            if (date.getDate() !== now.getDate()) {
+                date.setHours(23,59,59,999);
+            }
+            else {
+                date = now.clone();
+            }
+            
+            // Handles the case when a personn didn't check in a day (considered not worked)
+            var totalTimeTemp = totalTime(calculationParameters, date);
+            if (totalTimeTemp === undefined) {
+                numberOfDaysWorked--;
+            }
+            else {
+                totalTimeEver += totalTimeTemp;
+            }
         }
     }
-    var informations = {
-        'totalTime' : totalTimeLocal,
-        'numberOfDays' : numberOfDaysWorked,
-    };
-    return informations;
+    
+    calculationParameters['indicators']['numberOfDays'] = numberOfDaysWorked;
+    calculationParameters['indicators']['totalTimeEver'] = totalTimeEver;
+    
+    return totalTimeEver;
 }
 
 // TODO: add doc and test 4 me
-function timeDifference(totalTime, parametres, punches, multipleDays) {
+function timeDifference(calculationParameters) {
+    var multipleDays = calculationParameters['multipleDays'];
     if (multipleDays !== undefined && multipleDays) {
-        return timeDifferenceMultipleDays(parametres, punches);
+        return timeDifferenceMultipleDays(calculationParameters);
     }
     else {
-        return timeDifferenceFromTotalTime(totalTime, parametres);
+        return timeDifferenceFromTotalTime(calculationParameters);
     }
-}
-
-/**
- * Calculates the time left to spend on the task by comparing time to spend,
- * time spent, and integrating the predicted time of break for the day
- * @param totalTime the time spent in milliseconds
- * @param punches the list of all the punches to calculate the predicted time of break
- * @param parametres the time to spend encapsulated in the parametres associative array
- * @return the number of milliseconds left to spend on the task
- */
-function timeDifferenceTotal(totalTime, punches, parametres) {
-	// TODO: complete me
 }
 
 /**
@@ -243,7 +260,11 @@ function parametres2Ms(parametres) {
  * @param timeDiff the time left
  * @return the ratio in %
  */
-function timeRatio(totalTime, timeDiff) {
+function timeRatio(calculationParameters) {
+
+    var totalTime = calculationParameters['indicators']['totalTimeToday'];
+    var timeDiff = calculationParameters['indicators']['timeDiff'];
+
     // Substraction of timeDiff because timeDiff should be negative
 	var divider = totalTime - timeDiff;
 	if (divider != 0) {
@@ -254,11 +275,13 @@ function timeRatio(totalTime, timeDiff) {
 
 /**
  * Calculates the total time spent on a given day
- * @param date the day
+ * @param date the day to calculate the totalTime of
  * @param punches the punches
  * @return the total time spent that day
  */
-function totalTime(date, punches) {
+function totalTime(calculationParameters, date) {
+
+    var punches = calculationParameters['punches'];
 
 	if (date === undefined) {
 		date = new Date();
@@ -308,60 +331,6 @@ function totalTime(date, punches) {
 }
 
 /**
- * Calulates the total time spent on the task in the day
- * @param date now
- * @param punches the list of punches
- * @return the time spent in ms or undefined if the model is corrupted
- */
-function todaysTotalTime(date, punches) {
-
-	if (date === undefined) {
-		date = new Date();
-	}
-	if (punches === undefined) {
-		return undefined;
-	}
-
-	var now = date;
-	var todaysPunches = getDaysPunches(punches);
-	var workdayLength = 0;
-
-	var previousPunch = getFirstCheckIn(todaysPunches);
-	if (previousPunch !== undefined) {
-
-		var j = 1;
-		// TODO: This case shouldn't be happening
-		if (todaysPunches.length === 0) {
-			workdayLength += now.getTime() - previousPunch['date'];
-		} else {
-			for (var index in todaysPunches) {
-
-				var punch = todaysPunches[index];
-
-				// If those conditions are met then the data model is corrupted
-				if (previousPunch['check'] === punch['check'] || previousPunch['date'] > punch['date']) {
-					// TODO: transform -1 into a constant
-					workdayLength = undefined;
-					break;
-				}
-				// If the date is inferior to the punch date something is not right
-				if (punch['date'] <= now.getTime()) {
-					// Check out after a check in
-					if (punch['check'] === 'O' && previousPunch['check'] === 'I') {
-						workdayLength += punch['date'] - previousPunch['date'];
-					} else if (todaysPunches.length === j && punch['check'] === 'I') {
-						workdayLength += now.getTime() - punch['date'];
-					}
-				}
-				j++;
-				previousPunch = punch;
-			}
-		}
-		return workdayLength;
-	}
-}
-
-/**
  * Finds the first check in of punches
  * @param daysPunches the punches of the day
  * @return an associative array representing the first check in of the day
@@ -387,16 +356,16 @@ function getFirstCheckIn(daysPunches) {
 
 /**
  * Gets the last check in of the punches
- * @param todaysPunches the punches of the day
+ * @param daysPunches the punches of the day
  * @return an associative array representing the last check in of the day
  */
-function getLastCheckIn(todaysPunches) {
+function getLastCheckIn(daysPunches) {
 
-	if (todaysPunches === undefined) {
+	if (daysPunches === undefined) {
 		return undefined;
 	}
-	todaysPunches = todaysPunches.reverse();
-	return getFirstCheckIn(todaysPunches);
+	daysPunches = daysPunches.reverse();
+	return getFirstCheckIn(daysPunches);
 }
 
 /**
@@ -406,6 +375,7 @@ function getLastCheckIn(todaysPunches) {
  * @return the fraction of punches that contains the punches maid today
  */
 function getDaysPunches(punches, date) {
+    
     if (punches === undefined) {
 		return undefined;
 	}
@@ -431,40 +401,6 @@ function getDaysPunches(punches, date) {
             continue;
         }
 		if (punchDate < dayStart ) {
-			break;
-		}
-		todaysPunches.push(tempPunch);
-	}
-	return todaysPunches.reverse();
-}
-
-/**
- * Finds the punches that were maid today
- * @param punches the list of all the punches
- * @return the fraction of punches that contains the punches maid today
- */
-function getTodaysPunches(punches) {
-
-	if (punches === undefined) {
-		return undefined;
-	}
-
-	// Cr�ation de la date du jour � minuit (d�but de la journ�e)
-	var dayStart = new Date();
-	dayStart.setHours(0);
-	dayStart.setMinutes(0);
-	dayStart.setSeconds(0);
-	dayStart.setMilliseconds(0);
-
-	// R�cup�ration dans le cookie des punches du jour
-	var i = 0;
-	var tempPunch;
-	var todaysPunches = [];
-	while (i < punches.length) {
-		i++;
-		tempPunch = punches[punches.length - i];
-		var punchDate = new Date(tempPunch['date']);
-		if (punchDate < dayStart) {
 			break;
 		}
 		todaysPunches.push(tempPunch);

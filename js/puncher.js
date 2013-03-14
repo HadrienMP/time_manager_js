@@ -44,6 +44,7 @@ $(document).ready(function(){
 	$('#time-options-button').click(showTimeParametres);
 	$('#options-button').click(showParametres);
 	$('#punches-options-button').click(showPunchesParametres);
+	$('#cookies-button').click(showCookieState);
 	$('#punches-options .add-punch').click(function() {
         addPunchModifier();
         return false;
@@ -123,7 +124,7 @@ function resetPuncher() {
     var punches = $.cookie('punches');
 
     // Loads all the other initial datas
-    initOptions(parametres);
+    initOptions(punches, parametres);
     initCookieInfos(punches);
     updateIndicators(punches, parametres);
 	initToolTip();
@@ -178,7 +179,7 @@ function initToolTip() {
  */
 function initCookieInfos(punches) {
     // Progressbar init
-    var progressbar = $( "#progressbar" ), progressLabel = $( ".progress-label" );
+    var progressbar = $("#progressbar" ), progressLabel = $( ".progress-label" );
 
     progressbar.progressbar({change: function() {
         progressLabel.text( progressbar.progressbar( "value" ) + "%" );
@@ -208,6 +209,7 @@ function updateIndicators(punches, parametres) {
     var firstCalculation = $('#time-end').text() === '';
 
     if (isPowerOn() || firstCalculation) {
+    
         var punches = (typeof punches === "undefined") ? $.cookie('punches') : punches;
         var parametres = (typeof parametres === "undefined") ? $.cookie('parametres') : parametres;
         
@@ -240,8 +242,9 @@ function updateIndicators(punches, parametres) {
             }
         }
         
-        $('#total-time').text(ms2string(indicators['totalTime']));
+        $('#total-time').text(ms2string(indicators['totalTimeToday']));
         $('#time-difference').text(timeDifference);
+        $('#over-time-amount').text(ms2string(indicators['overTimeAmount']));
         
         // The estimated end time is only calculated on the first calculation
         if (firstCalculation && indicators['timeEnd'] !== -1) {
@@ -265,11 +268,12 @@ function updateIndicators(punches, parametres) {
  * @param parametres the associative array representing the parametres, 
  * used to init the parametres options
  */
-function initOptions(parametres) {
+function initOptions(punches, parametres) {
 
 	$('#options-buttons-container #time-options-button').button({ icons: { primary: "ui-icon-clock" }, text: false });
 	$('#options-buttons-container #options-button').button({ icons: { primary: "ui-icon-gear" }, text: false });
 	$('#options-buttons-container #punches-options-button').button({ icons: { primary: "ui-icon-wrench" }, text: false });
+	$('#options-buttons-container #cookies-button').button({ icons: { primary: "ui-icon-document" }, text: false });
 	
     $('#punches-options #newer-punches').button();
     $('#punches-options #older-punches').button();
@@ -277,6 +281,7 @@ function initOptions(parametres) {
     $('#punches-options .add-punch').button({ icons: { primary: "ui-icon-plus" }, text: false });
     
     initGeneralParametres();
+    initCookieInfos(punches);
     
 	if (parametres != undefined) {
 		$('#days').val(parametres['days']);
@@ -304,6 +309,19 @@ function initOptions(parametres) {
 		autoOpen: false,
         width: 400,
         resizable: false,
+		show: {
+			effect: 'fade',
+			duration: 300
+		},
+		hide: {
+			effect: 'fade',
+			duration: 300
+		}
+	});
+	
+	$('#cookie-state').dialog({
+		draggable: true,
+		autoOpen: false,
 		show: {
 			effect: 'fade',
 			duration: 300
@@ -347,7 +365,7 @@ function initGeneralParametres() {
     // is empty, the options are preselected
     $('#tooltips-options input').eq(0).attr('checked','checked');
     $('#button-tooltip-options input').eq(0).attr('checked','checked');
-    $('#right-panel-mode-options input').eq(0).attr('checked','checked');
+    $('#indicators-mode-options input').eq(0).attr('checked','checked');
     
     if (generalParametres !== undefined) {
         // If the option is not on we change its value (is on by default)
@@ -360,14 +378,14 @@ function initGeneralParametres() {
             $('#button-tooltip-options input').eq(1).attr('checked','checked');
         }
         if (!generalParametres['indicators-mode-multiple']) {
-            $('#right-panel-mode-options input').eq(0).removeAttr('checked');
-            $('#right-panel-mode-options input').eq(1).attr('checked','checked');
+            $('#indicators-mode-options input').eq(0).removeAttr('checked');
+            $('#indicators-mode-options input').eq(1).attr('checked','checked');
         }
     }
     
 	$('#tooltips-options').buttonset().change($changeGeneralParametres);
 	$('#button-tooltip-options').buttonset().change($changeGeneralParametres);
-	$('#right-panel-mode-options').buttonset().change($changeGeneralParametres);
+	$('#indicators-mode-options').buttonset().change($changeGeneralParametres);
 }
 
 function $changeGeneralParametres() {
