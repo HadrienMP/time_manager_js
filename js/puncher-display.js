@@ -11,30 +11,30 @@ function togglePuncherState() {
 }
 
 function toggleCookieState() {
-    if (!$('#cookie-button').hasClass('cookie-active')) {
-        $('#cookie-button, #cookie-state').addClass('cookie-active', 1000, "easeInOutCubic");
+    if (!$('#left-panel-button').hasClass('cookie-active')) {
+        $('#left-panel-button, #left-panel').addClass('cookie-active', 1000, "easeInOutCubic");
     } else {
         // FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing
-        $('#cookie-button').removeClass('indicators-active');
-        $('#cookie-button, #cookie-state').removeClass('cookie-active', 1000, "easeInOutCubic");
+        $('#left-panel-button').removeClass('indicators-active');
+        $('#left-panel-button, #left-panel').removeClass('cookie-active', 1000, "easeInOutCubic");
     }
 }
 
 
 function toggleIndicatorsState() {
-    if (!$('#indicators-button').hasClass('indicators-active')) {
-        $('#indicators, #indicators-button').addClass('indicators-active', 1000, "easeInOutCubic");
+    if (!$('#right-panel-button').hasClass('indicators-active')) {
+        $('#right-panel, #right-panel-button').addClass('indicators-active', 1000, "easeInOutCubic");
     } else {
         // FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing
-        $('#cookie-button').addClass('indicators-active');
-        $('#indicators, #indicators-button').removeClass('indicators-active', 1000, "easeInOutCubic");
+        $('#left-panel-button').addClass('indicators-active');
+        $('#right-panel, #right-panel-button').removeClass('indicators-active', 1000, "easeInOutCubic");
     }
 }
 
 function centerPuncher() {
 
     // Centrage automatique
-    var sections = ['cookie-section','indicators-section', 'puncher-section'];
+    var sections = ['left-panel-section','right-panel-section', 'puncher-section'];
     $('#content').css('position','absolute');
     $('#content').css('top', Math.floor($(window).height() / 2 - $('#content').height() / 2));
     for (var index in sections) {
@@ -42,10 +42,10 @@ function centerPuncher() {
         $('#' + sections[index]).css('top', Math.floor($('#puncher-container').height() / 2 - $('#' + sections[index]).height() / 2));
     }
 
-    $('#cookie-section').width($('#puncher-container').width() / 2);
-    $('#indicators-section').width($('#puncher-container').width() / 2);
-    $('#cookie-section').css('right', $('#puncher-container').width() / 2);
-    $('#indicators-section').css('left', $('#puncher-container').width() / 2);
+    $('#left-panel-section').width($('#puncher-container').width() / 2);
+    $('#right-panel-section').width($('#puncher-container').width() / 2);
+    $('#left-panel-section').css('right', $('#puncher-container').width() / 2);
+    $('#right-panel-section').css('left', $('#puncher-container').width() / 2);
 
     $('#puncher-section').css('left', Math.floor($('#puncher-container').outerWidth() / 2 - $('#puncher-section').outerWidth() / 2));
 }

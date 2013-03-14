@@ -86,16 +86,16 @@ strong { font-weight: bold;}
 								Indicateurs
 
 ####################################################################################*/
-#puncher-container #cookie-section, 
-#puncher-container #indicators-section { min-width: 350px;}
-#puncher-container #cookie-section { text-align: right;}
-#puncher-container #indicators-section { text-align: left;}
-	#puncher-container #cookie-button, 
-	#puncher-container #indicators-button { height: 130px; width: 100px; text-indent: -70000px; position: relative;}
-    #puncher-container #cookie-button {border-right-width: 2px; text-align: left;}
-    #puncher-container #indicators-button {border-left-width: 2px;}
-	#puncher-container #cookie-state, 
-	#puncher-container #indicators {
+#puncher-container #left-panel-section, 
+#puncher-container #right-panel-section { min-width: 350px;}
+#puncher-container #left-panel-section { text-align: right;}
+#puncher-container #right-panel-section { text-align: left;}
+	#puncher-container #left-panel-button, 
+	#puncher-container #right-panel-button { height: 130px; width: 100px; text-indent: -70000px; position: relative;}
+    #puncher-container #left-panel-button {border-right-width: 2px; text-align: left;}
+    #puncher-container #right-panel-button {border-left-width: 2px;}
+	#puncher-container #left-panel, 
+	#puncher-container #right-panel {
 		z-index: 2; 
 		font-size: 17px; 
 		overflow: hidden; 
@@ -110,24 +110,24 @@ strong { font-weight: bold;}
 		color: white;
 	}
 		#puncher-container p.ui-widget-header { padding: 4px 0; margin: 10px 0 3px; color: $ui-button-text;}
-		#puncher-container #cookie-state > div { margin: 15px 60px 0 15px; width: 210px;}
-		#puncher-container #indicators > div { margin: 15px 15px 0 65px; width: 210px;}
-			#puncher-container #cookie-state button,
-			#puncher-container #cookie-state #progressbar,
-			#puncher-container #cookie-state p { margin-bottom: 10px;}
+		#puncher-container #left-panel > div { margin: 15px 60px 0 15px; width: 210px;}
+		#puncher-container #right-panel > div { margin: 15px 15px 0 65px; width: 210px;}
+			#puncher-container #left-panel button,
+			#puncher-container #left-panel #progressbar,
+			#puncher-container #left-panel p { margin-bottom: 10px;}
 		
-        #puncher-container #indicators dd, 
-        #puncher-container #indicators dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
-        #puncher-container #indicators dt {clear: both; width: 40px; margin-right: 5px; }
-        #puncher-container #indicators dd {width: 142px;}
-			#puncher-container #indicators #time-difference { font-weight: bold; color:#26B3F7; }
-			#puncher-container.over-time #indicators #time-difference { color: #f00;}
+        #puncher-container #right-panel dd, 
+        #puncher-container #right-panel dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
+        #puncher-container #right-panel dt {clear: both; width: 40px; margin-right: 5px; }
+        #puncher-container #right-panel dd {width: 142px;}
+			#puncher-container #right-panel #time-difference { font-weight: bold; color:#26B3F7; }
+			#puncher-container.over-time #right-panel #time-difference { color: #f00;}
 	/*
 	 * FIXME
 	 * Hack To delete some space between the buttons...
 	 */
-	#puncher-container #cookie-state { margin-left: -4px; border-right: 1px solid #000;}
-	#puncher-container #indicators-button { margin-left: -4px;}
+	#puncher-container #left-panel { margin-left: -4px; border-right: 1px solid #000;}
+	#puncher-container #right-panel-button { margin-left: -4px;}
 	
 /*####################################################################################
 
@@ -205,9 +205,9 @@ strong { font-weight: bold;}
 	
 ####################################################################################*/
 
-#puncher-container #cookie-button.cookie-active,
-#puncher-container #indicators-button.indicators-active { width: 50px; @include box-shadow(0px 0px 30px $light-color); }
-#puncher-container #cookie-state.cookie-active,
-#puncher-container #indicators.indicators-active { width: 280px; }
+#puncher-container #left-panel-button.cookie-active,
+#puncher-container #right-panel-button.indicators-active { width: 50px; @include box-shadow(0px 0px 30px $light-color); }
+#puncher-container #left-panel.cookie-active,
+#puncher-container #right-panel.indicators-active { width: 280px; }
 /* FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing */
-#puncher-container #cookie-button.indicators-active { z-index: 2;}
+#puncher-container #left-panel-button.indicators-active { z-index: 2;}

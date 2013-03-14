@@ -12,13 +12,13 @@ $(document).ready(function(){
 	/*
 	 * Opens or closes the cookie information pane
 	 */
-	$('#cookie-button').click(function(){
+	$('#left-panel-button').click(function(){
 		toggleCookieState();
 	});
 	/*
 	 * Opens or closes the indicators information pane
 	 */
-	$('#indicators-button').click(function(){
+	$('#right-panel-button').click(function(){
 		toggleIndicatorsState();
 	});
 	/*
@@ -158,17 +158,17 @@ function initToolTip() {
     // If no parametres are set, we suppose the default value is on
     // TODO: Move the getter of parametres to cookie-access and provide default values
     if (generalParametres === undefined || generalParametres['tooltips-on']) {
-        $('#cookie-button').tooltip({
+        $('#left-panel-button').tooltip({
             position: { my: "right center", at: "left-15 center" }
         });
-        $('#indicators-button').tooltip({
+        $('#right-panel-button').tooltip({
             position: { my: "left+15 center", at: "right center" }
         });
         $('#options-buttons-container').tooltip();
     }
     else {
-        $('#cookie-button').removeAttr('title');
-        $('#indicators-button').removeAttr('title');
+        $('#left-panel-button').removeAttr('title');
+        $('#right-panel-button').removeAttr('title');
     }
 }
 
@@ -347,7 +347,7 @@ function initGeneralParametres() {
     // is empty, the options are preselected
     $('#tooltips-options input').eq(0).attr('checked','checked');
     $('#button-tooltip-options input').eq(0).attr('checked','checked');
-    $('#indicators-mode-options input').eq(0).attr('checked','checked');
+    $('#right-panel-mode-options input').eq(0).attr('checked','checked');
     
     if (generalParametres !== undefined) {
         // If the option is not on we change its value (is on by default)
@@ -360,14 +360,14 @@ function initGeneralParametres() {
             $('#button-tooltip-options input').eq(1).attr('checked','checked');
         }
         if (!generalParametres['indicators-mode-multiple']) {
-            $('#indicators-mode-options input').eq(0).removeAttr('checked');
-            $('#indicators-mode-options input').eq(1).attr('checked','checked');
+            $('#right-panel-mode-options input').eq(0).removeAttr('checked');
+            $('#right-panel-mode-options input').eq(1).attr('checked','checked');
         }
     }
     
 	$('#tooltips-options').buttonset().change($changeGeneralParametres);
 	$('#button-tooltip-options').buttonset().change($changeGeneralParametres);
-	$('#indicators-mode-options').buttonset().change($changeGeneralParametres);
+	$('#right-panel-mode-options').buttonset().change($changeGeneralParametres);
 }
 
 function $changeGeneralParametres() {
