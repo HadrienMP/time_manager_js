@@ -215,12 +215,13 @@ function updateIndicators(punches, parametres) {
         
         // Gets the general parameters to determine if the calulation must include the previous days
         var generalParametres = $.cookie('general-parametres');
-        var indicatorsModeMultiple = true;
-        if (generalParametres !== undefined && !generalParametres['indicators-mode-multiple']) {
-            indicatorsModeMultiple = false;
+        // Default value is 3 : Infinite data used for calculation
+        var indicatorsMode = 3;
+        if (generalParametres !== undefined) {
+            indicatorsMode = generalParametres['indicators-mode'];
         }
         
-        var indicators = calculateIndicators(new Date(), punches, parametres, firstCalculation, indicatorsModeMultiple);
+        var indicators = calculateIndicators(new Date(), punches, parametres, firstCalculation, indicatorsMode);
         
         var timeDifference = ms2string(indicators['timeDifference']);
         // Si on a dépassé le temps alloué
@@ -377,12 +378,11 @@ function initGeneralParametres() {
             $('#button-tooltip-options input').eq(0).removeAttr('checked');
             $('#button-tooltip-options input').eq(1).attr('checked','checked');
         }
-        if (!generalParametres['indicators-mode-multiple']) {
-            $('#indicators-mode-options input').eq(0).removeAttr('checked');
-            $('#indicators-mode-options input').eq(1).attr('checked','checked');
+        if (generalParametres['indicators-mode'] !== undefined) {
+            var index = generalParametres['indicators-mode'];
+            $('#indicators-mode-options input').eq(index).attr('checked','checked');
         }
     }
-    
 	$('#tooltips-options').buttonset().change($changeGeneralParametres);
 	$('#button-tooltip-options').buttonset().change($changeGeneralParametres);
 	$('#indicators-mode-options').buttonset().change($changeGeneralParametres);
@@ -390,15 +390,14 @@ function initGeneralParametres() {
 
 function $changeGeneralParametres() {
     // $(this) represents the general option that changed
-    $options = $("#options");
-    var tooltipsOn = $options.find("#tooltips-on:checked").length === 1;
-    var buttonTooltipOn = $options.find("#button-tooltip-on:checked").length === 1;
-    var indicatorsModeMultiple = $options.find("#mutliple-days-indicators:checked").length === 1;
+    var tooltipsOn = $("#tooltips-on:checked").length === 1;
+    var buttonTooltipOn = $("#button-tooltip-on:checked").length === 1;
+    var indicatorsMode = $("#indicators-mode-options input").index($(":checked"));
     
     var params = {
         'tooltips-on' : tooltipsOn,
         'button-tooltip-on' : buttonTooltipOn,
-        'indicators-mode-multiple' : indicatorsModeMultiple
+        'indicators-mode' : indicatorsMode
     };
     
     $.cookie('general-parametres',params);

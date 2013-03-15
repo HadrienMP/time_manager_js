@@ -7,7 +7,7 @@
  * Si oui on force le calcul du temps restant
  * @return an array containing the calculated indicators
  */
-function calculateIndicators(date, punches, parametres, firstCalculation, multipleDays) {
+function calculateIndicators(date, punches, parametres, firstCalculation, indicatorsMode) {
 
 	var parametresLocal = parametres;
 	// Récupération des paramètres de l'application
@@ -24,7 +24,7 @@ function calculateIndicators(date, punches, parametres, firstCalculation, multip
         'parametres' : parametres,
         'indicators' : indicators,
         'currentDate' : date,
-        'multipleDays' : multipleDays
+        'indicatorsMode' : indicatorsMode
     };
     
     // Fill the number of days worked and time spent since the beginning of punches
@@ -232,8 +232,8 @@ function totalTimeMultipleDays(calculationParameters) {
 
 // TODO: add doc and test 4 me
 function timeDifference(calculationParameters) {
-    var multipleDays = calculationParameters['multipleDays'];
-    if (multipleDays !== undefined && multipleDays) {
+    var indicatorsMode = calculationParameters['indicatorsMode'];
+    if (indicatorsMode !== undefined && indicatorsMode > 0) {
         return timeDifferenceMultipleDays(calculationParameters);
     }
     else {
