@@ -84,9 +84,10 @@ strong { font-weight: bold;}
             #total-time-options label { width: 70px; text-align: left; margin-left: 10px;}
             #total-time-options input  { text-align: center;}
             
-    #options { text-align: center;}
-        #options p , #options div { display: inline-block; vertical-align: middle; margin-bottom: 10px; }
-        #options p { text-align: left; width: 70%;}
+    #options {}
+        #options p.options-label , #options div.options-input { height: 25px; vertical-align: middle; margin-bottom: 10px; }
+        #options p.options-label {float: left; clear: both; text-align: left; padding-top: 5px;}
+        #options div.options-input {float: right;}
         
     #punches-options {}
         #punches-options button.add-punch {margin-top: 10px;}
@@ -131,15 +132,16 @@ strong { font-weight: bold;}
 		position: relative;
 		color: white;
 	}
-		#puncher-container #left-panel > div { margin: 15px 60px 0 15px; width: $open-panel-content-width;}
-		#puncher-container #right-panel > div { margin: 15px 15px 0 60px; width: $open-panel-content-width;}
-		
-        #puncher-container dd, 
-        #puncher-container  dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
-        #puncher-container dt {clear: both; width: 40px; margin-right: 5px; }
-        #puncher-container dd {width: 142px ;}
-			#puncher-container #time-difference { font-weight: bold; color:#26B3F7; }
-			#puncher-container.over-time #time-difference { color: #f00;}
+		#puncher-container #left-panel > div { margin: 10px 60px 0 15px; width: $open-panel-content-width;}
+		#puncher-container #right-panel > div { margin: 10px 15px 0 60px; width: $open-panel-content-width;}
+            #puncher-container #indicators-mode-options {margin-bottom: 10px;}
+                #puncher-container #indicators-mode-options .ui-button-text {padding: .1em 1em !important;}
+            #puncher-container dd, 
+            #puncher-container  dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
+            #puncher-container dt {clear: both; width: 40px; margin-right: 5px; }
+            #puncher-container dd {width: 142px ;}
+                #puncher-container #time-difference { font-weight: bold; color:#26B3F7; }
+                #puncher-container.over-time #time-difference { color: #f00;}
 	/*
 	 * FIXME
 	 * Hack To delete some space between the buttons...

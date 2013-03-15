@@ -377,12 +377,11 @@ function initGeneralParametres() {
             $('#button-tooltip-options input').eq(0).removeAttr('checked');
             $('#button-tooltip-options input').eq(1).attr('checked','checked');
         }
-        if (!generalParametres['indicators-mode-multiple']) {
-            $('#indicators-mode-options input').eq(0).removeAttr('checked');
-            $('#indicators-mode-options input').eq(1).attr('checked','checked');
+        if (generalParametres['indicators-mode'] !== undefined) {
+            var index = generalParametres['indicators-mode'];
+            $('#indicators-mode-options input').eq(index).attr('checked','checked');
         }
     }
-    
 	$('#tooltips-options').buttonset().change($changeGeneralParametres);
 	$('#button-tooltip-options').buttonset().change($changeGeneralParametres);
 	$('#indicators-mode-options').buttonset().change($changeGeneralParametres);
@@ -393,12 +392,12 @@ function $changeGeneralParametres() {
     $options = $("#options");
     var tooltipsOn = $options.find("#tooltips-on:checked").length === 1;
     var buttonTooltipOn = $options.find("#button-tooltip-on:checked").length === 1;
-    var indicatorsModeMultiple = $options.find("#mutliple-days-indicators:checked").length === 1;
+    var indicatorsMode = $options.find(":checked").index();
     
     var params = {
         'tooltips-on' : tooltipsOn,
         'button-tooltip-on' : buttonTooltipOn,
-        'indicators-mode-multiple' : indicatorsModeMultiple
+        'indicators-mode' : indicatorsMode
     };
     
     $.cookie('general-parametres',params);
