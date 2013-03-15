@@ -263,7 +263,7 @@ function parametres2Ms(parametres) {
 function timeRatio(calculationParameters) {
 
     var totalTime = calculationParameters['indicators']['totalTimeToday'];
-    var timeDiff = calculationParameters['indicators']['timeDiff'];
+    var timeDiff = calculationParameters['indicators']['timeDifference'];
 
     // Substraction of timeDiff because timeDiff should be negative
 	var divider = totalTime - timeDiff;
