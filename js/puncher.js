@@ -74,8 +74,11 @@ function powerOn() {
     $('#puncher-container').addClass('on');
     // Changes the color of the progress bar
     var progressbarColor = "#26B3F7";
-    if ($('#puncher-container').hasClass('over-time')) {
+    if ($('#puncher-container').hasClass('over-time-for-day')) {
         var progressbarColor = "#CC0000";
+    }
+    if ($('#puncher-container').hasClass('over-time')) {
+        var progressbarColor = "#FFBA19";
     }
     $("#knob").trigger('configure', {"fgColor":progressbarColor, "shadow" : true});
 }
@@ -225,10 +228,10 @@ function updateIndicators(punches, parametres) {
         
         var timeDifference = ms2string(indicators['timeDifference']);
         // Si on a dépassé le temps alloué
-        if (indicators['isOverTime']) {
-            if (!$('#puncher-container').hasClass('over-time')) {
+        if (indicators['isOverTimeForDay']) {
+            if (!$('#puncher-container').hasClass('over-time-for-day')) {
                 // Modification des styles pour passer en rouge
-                $('#puncher-container').addClass('over-time');
+                $('#puncher-container').addClass('over-time-for-day');
                 if ($('#puncher-container').hasClass('on')) {
                     $("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
                 }
@@ -236,7 +239,17 @@ function updateIndicators(punches, parametres) {
             // Rectification des indicateurs
             timeDifference = "+ " + timeDifference;
         }
-        else if ($('#puncher-container').hasClass('over-time')) {
+        else if (indicators['isOverTime']) {
+            if (!$('#puncher-container').hasClass('over-time')) {
+                // Modification des styles pour passer en rouge
+                $('#puncher-container').addClass('over-time');
+                if ($('#puncher-container').hasClass('on')) {
+                    $("#knob").trigger('configure', {"fgColor":"#FFBA19", "shadow" : true});
+                }
+            }
+        }
+        else if ($('#puncher-container').hasClass('over-time-for-day') || $('#puncher-container').hasClass('over-time')) {
+            $('#puncher-container').removeClass('over-time-for-day');
             $('#puncher-container').removeClass('over-time');
             if ($('#puncher-container').hasClass('on')) {
                 powerOn();
@@ -245,7 +258,7 @@ function updateIndicators(punches, parametres) {
         
         $('#total-time').text(ms2string(indicators['totalTimeToday']));
         $('#time-difference').text(timeDifference);
-        $('#over-time-amount').text(ms2string(indicators['overTimeAmount']));
+        $('#over-time-for-day-amount').text(ms2string(indicators['overTimeAmount']));
         
         // The estimated end time is only calculated on the first calculation
         if (firstCalculation && indicators['timeEnd'] !== -1) {
@@ -255,7 +268,7 @@ function updateIndicators(punches, parametres) {
         $("#knob").val(Math.round(indicators['dayRatio'] * 100) / 100).trigger('change');
         $('#puncher-button').attr('title', (Math.round(indicators['dayRatio'] * 100) / 100) + '%');
     }
-    else if (!isPowerOn() && !$('#puncher-container').hasClass('over-time')) {
+    else if (!isPowerOn() && !$('#puncher-container').hasClass('over-time-for-day')) {
         // If the puncher is disabled, the end time rises each second
         var endTime = estimateEndTime(new Date(), punches, parametres, getIndicators(new Date()));
         endTime = endTime === undefined ? new Date().getTime() : endTime;

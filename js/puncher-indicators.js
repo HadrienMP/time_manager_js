@@ -19,7 +19,7 @@ function calculateIndicators(date, punches, parametres, firstCalculation, indica
     
     // Here we create a associative array that will hold all the parameters needed
     // by all the calculation functions in order to simplify the functions signatures
-    var calculationParameters = {
+    var calculationParametres = {
         'punches' : punches,
         'parametres' : parametres,
         'indicators' : indicators,
@@ -28,10 +28,10 @@ function calculateIndicators(date, punches, parametres, firstCalculation, indica
     };
     
     // Fill the number of days worked and time spent since the beginning of punches
-    totalTimeMultipleDays(calculationParameters);
+    totalTimeMultipleDays(calculationParametres);
 
     // Fill the time spent
-	var totalTimeLocal = totalTime(calculationParameters, date);
+	var totalTimeLocal = totalTime(calculationParametres, date);
 	indicators['totalTimeToday'] = isNaN(totalTimeLocal) ? 0 : totalTimeLocal;
     
     // The number of days are based on the number of days present in the punches
@@ -42,22 +42,25 @@ function calculateIndicators(date, punches, parametres, firstCalculation, indica
     }
     
     // Fill the time to spend
-	var timeDiff = timeDifference(calculationParameters);
+	var timeDiff = timeDifference(calculationParametres);
 	indicators['timeDifference'] = isNaN(timeDiff) ? 0 : timeDiff;
     
     // Fill the ratio of the day spent
-	var dayRatio = timeRatio(calculationParameters);
+	var dayRatio = timeRatio(calculationParametres);
 	indicators['dayRatio'] = isNaN(dayRatio) ? 0 : dayRatio;
     
     // Fill the amount of over time
-    var overTimeAmount = getOverTimeAmount(calculationParameters);
+    var overTimeAmount = getOverTimeAmount(calculationParametres);
     indicators['overTimeAmount'] = isNaN(overTimeAmount) ? 0 : overTimeAmount,
 
 	indicators['date'] = date.getTime();
-	indicators['isOverTime'] = indicators['dayRatio'] > 100;
-	if (indicators['isOverTime']) {
+	indicators['isOverTimeForDay'] = indicators['dayRatio'] > 100;
+	if (indicators['isOverTimeForDay']) {
 		indicators['dayRatio'] -= 100;
 	}
+    
+    var isOverTime = getIsOverTime(calculationParametres);
+    indicators['isOverTime'] = isOverTime === undefined ? 0 : isOverTime;
 
 	// The estimate end time is calculated in this method only on first calculation
 	if (firstCalculation) {
@@ -85,23 +88,46 @@ function calculateIndicators(date, punches, parametres, firstCalculation, indica
  * @param timeDiff time left to spend for the day
  * @returns the over time amount or undefined if parametres are undefined
  */
-function getOverTimeAmount(calculationParameters) {
+function getOverTimeAmount(calculationParametres) {
     
-    var parametres = calculationParameters['parametres'];
+    var parametres = calculationParametres['parametres'];
     
     if (parametres === undefined) {
         return undefined;
     }
     
-    var totalTimeToday = calculationParameters['indicators']['totalTimeToday'];
-    var totalTimeEver = calculationParameters['indicators']['totalTimeEver'];
-    var numberOfDays = calculationParameters['indicators']['numberOfDays'];
+    var totalTimeToday = calculationParametres['indicators']['totalTimeToday'];
+    var totalTimeEver = calculationParametres['indicators']['totalTimeEver'];
+    var numberOfDays = calculationParametres['indicators']['numberOfDays'];
 
     var timeToSpendNormally = parametres2Ms(parametres);
     
     var overTime = (totalTimeEver - totalTimeToday) - timeToSpendNormally * (numberOfDays - 1);
     
     return overTime < 0 ? 0 : overTime;
+}
+
+/**
+ * Calculates if the task is over time according to previous overTime entries
+ * @param calculationParametres the global parameters (see calculateIndicators)
+ */
+function getIsOverTime(calculationParametres) {
+
+    var parametres = calculationParametres['parametres'];
+    var dayLength = parametres2Ms(parametres);
+    var overTimeAmount = calculationParametres['indicators']['overTimeAmount'];
+    
+    overTimePoint = dayLength - overTimeAmount;
+
+    // Determine at which ratio of the day we're in overTime
+    overTimeRatio = __timeRatio(overTimePoint,parametres);
+    
+    if (calculationParametres['indicators']['dayRatio'] > overTimeRatio) {
+        return true;
+    } 
+    else {
+        return false;
+    }
 }
 
 /**
@@ -144,20 +170,20 @@ function estimateEndTime(date, punches, parametres, indicators) {
  * @param parametres the time to spend encapsulated in the parametres associative array
  * @return the number of milliseconds left to spend on the task
  */
-function timeDifferenceFromTotalTime(calculationParameters) {
+function timeDifferenceFromTotalTime(calculationParametres) {
     
-    var parametres = calculationParameters['parametres'];
-    var totalTime = calculationParameters['indicators']['totalTimeToday'];
+    var parametres = calculationParametres['parametres'];
+    var totalTime = calculationParametres['indicators']['totalTimeToday'];
     
 	var totalTimeMax = parametres2Ms(parametres);
 	return totalTime - totalTimeMax;
 }
 
 // TODO: Add doc and tests 4 me
-function timeDifferenceMultipleDays(calculationParameters) {
+function timeDifferenceMultipleDays(calculationParametres) {
 
-    var parametres = calculationParameters['parametres'];
-    var punches = calculationParameters['punches'];
+    var parametres = calculationParametres['parametres'];
+    var punches = calculationParametres['punches'];
 
     var totalTimeDifference = 0;
     
@@ -165,24 +191,24 @@ function timeDifferenceMultipleDays(calculationParameters) {
         return undefined;
     }
     else if (punches !== undefined) {
-        var totalTime = calculationParameters['indicators']['totalTimeEver'];
+        var totalTime = calculationParametres['indicators']['totalTimeEver'];
         var totalTimeMax = parametres2Ms(parametres);
-        totalTimeMax = totalTimeMax * calculationParameters['indicators']['numberOfDays'];
+        totalTimeMax = totalTimeMax * calculationParametres['indicators']['numberOfDays'];
         totalTimeDifference = totalTime - totalTimeMax;
     }
     
-	return totalTimeDifference === 0 ? timeDifferenceFromTotalTime(calculationParameters) : totalTimeDifference;
+	return totalTimeDifference === 0 ? timeDifferenceFromTotalTime(calculationParametres) : totalTimeDifference;
 }
 
 // TODO: add tests 4 me
 /**
  * Calculates the time spent and the number of days worked since the beginning of punches. 
  * It Sets the results of its calculation directly in the indicators.
- * @param calculationParameters the global parameters (see calculateIndicators)
+ * @param calculationParametres the global parameters (see calculateIndicators)
  */
-function totalTimeMultipleDays(calculationParameters) {
+function totalTimeMultipleDays(calculationParametres) {
 
-    var punches = calculationParameters['punches'];
+    var punches = calculationParametres['punches'];
     
     var numberOfDaysWorked = 0;
     var totalTimeEver = 0;
@@ -214,7 +240,7 @@ function totalTimeMultipleDays(calculationParameters) {
             }
             
             // Handles the case when a personn didn't check in a day (considered not worked)
-            var totalTimeTemp = totalTime(calculationParameters, date);
+            var totalTimeTemp = totalTime(calculationParametres, date);
             if (totalTimeTemp === undefined) {
                 numberOfDaysWorked--;
             }
@@ -224,20 +250,20 @@ function totalTimeMultipleDays(calculationParameters) {
         }
     }
     
-    calculationParameters['indicators']['numberOfDays'] = numberOfDaysWorked;
-    calculationParameters['indicators']['totalTimeEver'] = totalTimeEver;
+    calculationParametres['indicators']['numberOfDays'] = numberOfDaysWorked;
+    calculationParametres['indicators']['totalTimeEver'] = totalTimeEver;
     
     return totalTimeEver;
 }
 
 // TODO: add doc and test 4 me
-function timeDifference(calculationParameters) {
-    var indicatorsMode = calculationParameters['indicatorsMode'];
+function timeDifference(calculationParametres) {
+    var indicatorsMode = calculationParametres['indicatorsMode'];
     if (indicatorsMode !== undefined && indicatorsMode > 0) {
-        return timeDifferenceMultipleDays(calculationParameters);
+        return timeDifferenceMultipleDays(calculationParametres);
     }
     else {
-        return timeDifferenceFromTotalTime(calculationParameters);
+        return timeDifferenceFromTotalTime(calculationParametres);
     }
 }
 
@@ -260,15 +286,19 @@ function parametres2Ms(parametres) {
  * @param timeDiff the time left
  * @return the ratio in %
  */
-function timeRatio(calculationParameters) {
+function timeRatio(calculationParametres) {
 
-    var totalTime = calculationParameters['indicators']['totalTimeToday'];
-    var timeDiff = calculationParameters['indicators']['timeDifference'];
+    var totalTime = calculationParametres['indicators']['totalTimeToday'];
+    var parametres = calculationParametres['parametres'];
+    
+    return __timeRatio(totalTime,parametres);
+}
 
-    // Substraction of timeDiff because timeDiff should be negative
-	var divider = totalTime - timeDiff;
-	if (divider != 0) {
-		return totalTime * 100 / divider
+function __timeRatio(totalTime,parametres) {
+
+	var maxTime = parametres2Ms(parametres);
+	if (maxTime != 0) {
+		return totalTime * 100 / maxTime;
 	}
 	return 100;
 }
@@ -279,9 +309,9 @@ function timeRatio(calculationParameters) {
  * @param punches the punches
  * @return the total time spent that day
  */
-function totalTime(calculationParameters, date) {
+function totalTime(calculationParametres, date) {
 
-    var punches = calculationParameters['punches'];
+    var punches = calculationParametres['punches'];
 
 	if (date === undefined) {
 		date = new Date();

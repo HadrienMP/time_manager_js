@@ -14,7 +14,8 @@
 $border-color: #111;
 $box-bottom-color:rgb(33,33,33);
 $box-top-color:rgb(64,64,64);
-$warning-color: #c00;
+$serious-warning-color: #f00;
+$warning-color: #FFBA19;
 $light-color: #26B3F7;
 $disabled : #999;
 $ui-button-text: #ddd;;
@@ -141,7 +142,8 @@ strong { font-weight: bold;}
             #puncher-container dt {clear: both; width: 40px; margin-right: 5px; }
             #puncher-container dd {width: 142px ;}
                 #puncher-container #time-difference { font-weight: bold; color:#26B3F7; }
-                #puncher-container.over-time #time-difference { color: #f00;}
+                #puncher-container.over-time-for-day #time-difference { color: $serious-warning-color;}
+                #puncher-container.over-time #time-difference { color: $warning-color;}
 	/*
 	 * FIXME
 	 * Hack To delete some space between the buttons...
@@ -166,6 +168,7 @@ strong { font-weight: bold;}
 	@include box-shadow( inset 0px 3px 0px $border-color);
 }
   #puncher-container section#puncher-section canvas {margin: 2px 0 0 1px;}
+	#puncher-container.over-time-for-day .box-active { @include box-shadow( 0px 0px 30px $serious-warning-color);}
 	#puncher-container.over-time .box-active { @include box-shadow( 0px 0px 30px $warning-color);}
 	#puncher-container #puncher-button { 
 		border-radius: 100px; 
