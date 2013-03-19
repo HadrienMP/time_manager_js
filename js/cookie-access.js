@@ -39,11 +39,13 @@ function getIndicators(date) {
             'totalTimeEver' : 0,
             'dayRatio' : 0,
             'timeDifference' : 0,
+            'timeLeftOverTime' : 0,
             'date' : date.getTime(),
             'isOverTimeForDay' : false,
             'isOverTime' : true,
             'overTimeAmount' : 0,
             'timeEnd' : date.getTime(),
+            'endTimeOverTime' : date.getTime(),
             'corruptedModel' : false,
             'numberOfDays' : 1,
         };

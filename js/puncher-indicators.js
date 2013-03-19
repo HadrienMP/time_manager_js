@@ -259,7 +259,7 @@ function totalTimeMultipleDays(calculationParametres) {
 // TODO: add doc and test 4 me
 function timeDifference(calculationParametres) {
     var indicatorsMode = calculationParametres['indicatorsMode'];
-    if (indicatorsMode !== undefined && indicatorsMode > 0) {
+    if (indicatorsMode !== undefined && indicatorsMode > 0 && false) {
         return timeDifferenceMultipleDays(calculationParametres);
     }
     else {

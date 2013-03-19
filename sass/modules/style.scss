@@ -142,7 +142,7 @@ strong { font-weight: bold;}
             #puncher-container dt {clear: both; width: 40px; margin-right: 5px; }
             #puncher-container dd {width: 142px ;}
                 #puncher-container #time-difference { font-weight: bold; color:#26B3F7; }
-                #puncher-container.over-time-for-day #time-difference { color: $serious-warning-color;}
+                #puncher-container.over-time-for-day #time-difference { color: $serious-warning-color !important;}
                 #puncher-container.over-time #time-difference { color: $warning-color;}
 	/*
 	 * FIXME
