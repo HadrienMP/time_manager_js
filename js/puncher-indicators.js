@@ -64,7 +64,7 @@ function calculateIndicators(date, punches, parametres, firstCalculation, indica
 	// The estimate end time is calculated in this method only on first calculation
 	if (firstCalculation) {
 		var timeEnd = estimateEndTime(date, punches, parametres, indicators);
-		indicators['timeEnd'] = isNaN(timeEnd) ? 0 : timeEnd;
+		indicators['endTime'] = isNaN(timeEnd) ? 0 : timeEnd;
 	}
 
 	// If any of those indicators are undefined it meens the model is having a problem$
@@ -144,7 +144,8 @@ function estimateEndTime(date, punches, parametres, indicators) {
 		return undefined;
 	}
 
-	var timeDifference;
+	var timeLeft;
+    var timeLeftOverTime;
 	if (indicators === undefined) {	
 		
 		var parametresLocal = parametres;
@@ -153,14 +154,21 @@ function estimateEndTime(date, punches, parametres, indicators) {
 			parametresLocal = getParametresAndRaiseAlert();
 		}
 		
-		timeDifference = parametres2Ms(parametresLocal);
+		timeLeft = parametres2Ms(parametresLocal);
+        timeLeftOverTime = timeLeft;
 		
 	} else {
-		timeDifference = indicators['timeLeft']
+		timeLeft = indicators['timeLeft'];
+		timeLeftOverTime = indicators['timeLeftOverTime'];
 	}
 	// Here we substract the time difference because it is supposed to be negative like 3 hours left = -3h
-    var endTime = date.getTime() - timeDifference
-	return isNaN(endTime) ? undefined : endTime;
+    var endTime = date.getTime() - timeLeft;
+    var endTimeOverTime = date.getTime() - timeLeftOverTime;
+    
+    indicators['endTime'] = isNaN(endTime) ? 0 : endTime;
+    indicators['endTimeOverTime'] = isNaN(endTimeOverTime) ? 0 : endTimeOverTime;
+    
+	return indicators;
 }
 
 /**

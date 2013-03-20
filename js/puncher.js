@@ -270,8 +270,9 @@ function updateIndicators(punches, parametres) {
         $('#over-time-for-day-amount').text(ms2string(indicators['overTimeAmount']));
         
         // The estimated end time is only calculated on the first calculation
-        if (firstCalculation && indicators['timeEnd'] !== -1) {
-            $('#time-end').text(myDateFormat(indicators['timeEnd']));
+        if (firstCalculation && indicators['endTime'] !== -1) {
+            $('#time-end').text(myDateFormat(indicators['endTime']));
+            $('#time-end-over-time').text(myDateFormat(indicators['endTimeOverTime']));
         }
         
         $("#knob").val(Math.round(indicators['dayRatio'] * 100) / 100).trigger('change');
@@ -279,9 +280,11 @@ function updateIndicators(punches, parametres) {
     }
     else if (!isPowerOn() && !$('#puncher-container').hasClass('over-time-for-day')) {
         // If the puncher is disabled, the end time rises each second
-        var endTime = estimateEndTime(new Date(), punches, parametres, getIndicators(new Date()));
-        endTime = endTime === undefined ? new Date().getTime() : endTime;
+        var indicators = estimateEndTime(new Date(), punches, parametres, getIndicators(new Date()));
+        var endTime = indicators === undefined ? new Date().getTime() : indicators['endTime'];
+        var endTimeOverTime = indicators === undefined ? new Date().getTime() : indicators['endTimeOverTime'];
         $('#time-end').text(myDateFormat(endTime));
+        $('#time-end-over-time').text(myDateFormat(endTimeOverTime));
     }
 }
 

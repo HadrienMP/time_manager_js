@@ -44,7 +44,7 @@ function getIndicators(date) {
             'isOverTimeForDay' : false,
             'isOverTime' : true,
             'overTimeAmount' : 0,
-            'timeEnd' : date.getTime(),
+            'endTime' : date.getTime(),
             'endTimeOverTime' : date.getTime(),
             'corruptedModel' : false,
             'numberOfDays' : 1,
