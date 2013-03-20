@@ -141,9 +141,9 @@ strong { font-weight: bold;}
             #puncher-container  dt {display: block; float: left; padding: 4px; margin-bottom: 10px; color: $ui-button-text;}
             #puncher-container dt {clear: both; width: 40px; margin-right: 5px; }
             #puncher-container dd {width: 142px ;}
-                #puncher-container #time-difference { font-weight: bold; color:#26B3F7; }
-                #puncher-container.over-time-for-day #time-difference { color: $serious-warning-color !important;}
-                #puncher-container.over-time #time-difference { color: $warning-color;}
+                #puncher-container .time-difference { font-weight: bold; color:#26B3F7; }
+                #puncher-container.over-time-for-day .time-difference { color: $serious-warning-color !important;}
+                #puncher-container.over-time .time-difference { color: $warning-color;}
 	/*
 	 * FIXME
 	 * Hack To delete some space between the buttons...

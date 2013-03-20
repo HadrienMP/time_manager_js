@@ -45,16 +45,16 @@
 					
 				<!-- Cookie informations -->
 				<section id="left-panel-section">
-					<a href="#left-panel" id="left-panel-button" class="box corner-left" title="Indicateurs Globaux" >&lt;</a>
+					<a href="#left-panel" id="left-panel-button" class="box corner-left" title="Indicateurs Heures Supplémentaires" >&lt;</a>
 					<div id="left-panel" class="box" >
 						<div>
 							<dl>
 								<dt class="ui-widget-header ui-corner-all" title="Heures supplémentaires totales">H.Sup</dt>
 								<dd id="over-time-for-day-amount"></dd>
-								<dt class="ui-widget-header ui-corner-all" title="Temps restant en comptant les heures supplémentaires">Diff</dt>
-								<dd id="time-left-over-time"></dd>
-								<dt class="ui-widget-header ui-corner-all" title="Heure de fin estimée en comptant les heures supplémentaires">Fin</dt>
-								<dd id="end-time-over-time"></dd>
+								<dt class="ui-widget-header ui-corner-all">Diff</dt>
+								<dd id="time-left-over-time" class="time-difference" title="Temps restant (récupération d'heures sup)"></dd>
+								<dt class="ui-widget-header ui-corner-all">Fin</dt>
+								<dd id="time-end-min" title="Heure de fin estimée minimum (récupération d'heures sup)"></dd>
                             </dl>
 						</div>
 					</div>
@@ -77,9 +77,9 @@
 								<dt class="ui-widget-header ui-corner-all">Total</dt>
 								<dd id="total-time" title="Temps passé pendant la journée"></dd>
 								<dt class="ui-widget-header ui-corner-all">Diff</dt>
-								<dd id="time-difference" title="Temps restant"></dd>
+								<dd id="time-difference" class="time-difference" title="Temps restant"></dd>
 								<dt class="ui-widget-header ui-corner-all">Fin</dt>
-								<dd id="time-end" title="Heure de fin estimée"></dd>
+								<dd id="time-end" title="Heure de fin estimée maximum (sans récupération d'heures sup)"></dd>
 							</dl>
 						</div>
 					</div>

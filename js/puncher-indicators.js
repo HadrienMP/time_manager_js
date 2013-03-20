@@ -42,8 +42,7 @@ function calculateIndicators(date, punches, parametres, firstCalculation, indica
     }
     
     // Fill the time to spend
-	var timeDiff = timeDifference(calculationParametres);
-	indicators['timeDifference'] = isNaN(timeDiff) ? 0 : timeDiff;
+	fillTimeDifferences(calculationParametres);
     
     // Fill the ratio of the day spent
 	var dayRatio = timeRatio(calculationParametres);
@@ -69,7 +68,7 @@ function calculateIndicators(date, punches, parametres, firstCalculation, indica
 	}
 
 	// If any of those indicators are undefined it meens the model is having a problem$
-	if (totalTime === undefined || dayRatio === undefined || timeDiff === undefined) {
+	if (totalTime === undefined || dayRatio === undefined || indicators['timeLeft'] === undefined) {
 		indicators['corruptedModel'] = true;
 	} else {
 		indicators['corruptedModel'] = false;
@@ -157,7 +156,7 @@ function estimateEndTime(date, punches, parametres, indicators) {
 		timeDifference = parametres2Ms(parametresLocal);
 		
 	} else {
-		timeDifference = indicators['timeDifference']
+		timeDifference = indicators['timeLeft']
 	}
 	// Here we substract the time difference because it is supposed to be negative like 3 hours left = -3h
     var endTime = date.getTime() - timeDifference
@@ -256,15 +255,15 @@ function totalTimeMultipleDays(calculationParametres) {
     return totalTimeEver;
 }
 
-// TODO: add doc and test 4 me
-function timeDifference(calculationParametres) {
-    var indicatorsMode = calculationParametres['indicatorsMode'];
-    if (indicatorsMode !== undefined && indicatorsMode > 0 && false) {
-        return timeDifferenceMultipleDays(calculationParametres);
-    }
-    else {
-        return timeDifferenceFromTotalTime(calculationParametres);
-    }
+/**
+ * Fills the indicators with the estimated end dates whith and without including over time
+ * @param calculationParametres the global parameters (see calculateIndicators)
+ */
+function fillTimeDifferences(calculationParametres) {
+    var timeLeftOverTime = timeDifferenceMultipleDays(calculationParametres);
+    var timeLeft = timeDifferenceFromTotalTime(calculationParametres);
+    calculationParametres['indicators']['timeLeft'] = isNaN(timeLeft) ? 0 : timeLeft;
+    calculationParametres['indicators']['timeLeftOverTime'] = isNaN(timeLeftOverTime) ? 0 : timeLeftOverTime;
 }
 
 /**

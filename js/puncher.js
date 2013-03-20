@@ -226,7 +226,8 @@ function updateIndicators(punches, parametres) {
         
         var indicators = calculateIndicators(new Date(), punches, parametres, firstCalculation, indicatorsMode);
         
-        var timeDifference = ms2string(indicators['timeDifference']);
+        var timeLeft = ms2string(indicators['timeLeft']);
+        var timeLeftOverTime = ms2string(indicators['timeLeftOverTime']);
         // Si on a dépassé le temps alloué
         if (indicators['isOverTimeForDay']) {
             if (!$('#puncher-container').hasClass('over-time-for-day')) {
@@ -237,9 +238,11 @@ function updateIndicators(punches, parametres) {
                 }
             }
             // Rectification des indicateurs
-            timeDifference = "+ " + timeDifference;
+            timeLeft = "+ " + timeLeft;
         }
         else if (indicators['isOverTime']) {
+            // the isOverTime is true when we are over time including the previous
+            // over time done
             if (!$('#puncher-container').hasClass('over-time')) {
                 // Modification des styles pour passer en rouge
                 $('#puncher-container').addClass('over-time');
@@ -247,6 +250,8 @@ function updateIndicators(punches, parametres) {
                     $("#knob").trigger('configure', {"fgColor":"#FFBA19", "shadow" : true});
                 }
             }
+            // Rectification des indicateurs
+            timeLeftOverTime = "+ " + timeLeftOverTime;
         }
         else if ($('#puncher-container').hasClass('over-time-for-day') || $('#puncher-container').hasClass('over-time')) {
             $('#puncher-container').removeClass('over-time-for-day');
@@ -257,7 +262,8 @@ function updateIndicators(punches, parametres) {
         }
         
         $('#total-time').text(ms2string(indicators['totalTimeToday']));
-        $('#time-difference').text(timeDifference);
+        $('#time-difference').text(timeLeft);
+        $('#time-left-over-time').text(timeLeftOverTime);
         $('#over-time-for-day-amount').text(ms2string(indicators['overTimeAmount']));
         
         // The estimated end time is only calculated on the first calculation

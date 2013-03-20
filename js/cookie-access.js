@@ -38,7 +38,7 @@ function getIndicators(date) {
             'totalTimeToday' : 0,
             'totalTimeEver' : 0,
             'dayRatio' : 0,
-            'timeDifference' : 0,
+            'timeLeft' : 0,
             'timeLeftOverTime' : 0,
             'date' : date.getTime(),
             'isOverTimeForDay' : false,
