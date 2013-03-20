@@ -233,12 +233,14 @@ function updateIndicators(punches, parametres) {
             if (!$('#puncher-container').hasClass('over-time-for-day')) {
                 // Modification des styles pour passer en rouge
                 $('#puncher-container').addClass('over-time-for-day');
+                $('#puncher-container').removeClass('over-time');
                 if ($('#puncher-container').hasClass('on')) {
                     $("#knob").trigger('configure', {"fgColor":"#CC0000", "shadow" : true});
                 }
             }
             // Rectification des indicateurs
             timeLeft = "+ " + timeLeft;
+            timeLeftOverTime = "+ " + timeLeftOverTime;
         }
         else if (indicators['isOverTime']) {
             // the isOverTime is true when we are over time including the previous
@@ -246,6 +248,7 @@ function updateIndicators(punches, parametres) {
             if (!$('#puncher-container').hasClass('over-time')) {
                 // Modification des styles pour passer en rouge
                 $('#puncher-container').addClass('over-time');
+                $('#puncher-container').removeClass('over-time-for-day');
                 if ($('#puncher-container').hasClass('on')) {
                     $("#knob").trigger('configure', {"fgColor":"#FFBA19", "shadow" : true});
                 }

@@ -12,22 +12,22 @@ function togglePuncherState() {
 
 function toggleCookieState() {
     if (!$('#left-panel-button').hasClass('cookie-active')) {
-        $('#left-panel-button, #left-panel').addClass('cookie-active', 1000, "easeInOutCubic");
+        $('#left-panel-button, #left-panel').addClass('cookie-active box-active', 1000, "easeInOutCubic");
     } else {
         // FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing
         $('#left-panel-button').removeClass('indicators-active');
-        $('#left-panel-button, #left-panel').removeClass('cookie-active', 1000, "easeInOutCubic");
+        $('#left-panel-button, #left-panel').removeClass('cookie-active box-active', 1000, "easeInOutCubic");
     }
 }
 
 
 function toggleIndicatorsState() {
     if (!$('#right-panel-button').hasClass('indicators-active')) {
-        $('#right-panel, #right-panel-button').addClass('indicators-active', 1000, "easeInOutCubic");
+        $('#right-panel, #right-panel-button').addClass('indicators-active box-active', 1000, "easeInOutCubic");
     } else {
         // FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing
         $('#left-panel-button').addClass('indicators-active');
-        $('#right-panel, #right-panel-button').removeClass('indicators-active', 1000, "easeInOutCubic");
+        $('#right-panel, #right-panel-button').removeClass('indicators-active box-active', 1000, "easeInOutCubic");
     }
 }
 

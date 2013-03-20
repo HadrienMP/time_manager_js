@@ -103,7 +103,7 @@ function getOverTimeAmount(calculationParametres) {
     
     var overTime = (totalTimeEver - totalTimeToday) - timeToSpendNormally * (numberOfDays - 1);
     
-    return overTime < 0 ? 0 : overTime;
+    return overTime;
 }
 
 /**

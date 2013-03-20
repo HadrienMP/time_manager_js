@@ -170,6 +170,7 @@ strong { font-weight: bold;}
   #puncher-container section#puncher-section canvas {margin: 2px 0 0 1px;}
 	#puncher-container.over-time-for-day .box-active { @include box-shadow( 0px 0px 30px $serious-warning-color);}
 	#puncher-container.over-time .box-active { @include box-shadow( 0px 0px 30px $warning-color);}
+    #puncher-container #puncher-section .box-active {text-shadow: 0px 0px 10px #fff; }
 	#puncher-container #puncher-button { 
 		border-radius: 100px; 
 		height: $puncher-section-size * 0.75; 
@@ -217,7 +218,9 @@ p.ui-widget-header { padding: 4px 0; margin: 10px 0 3px; color: $ui-button-text;
 	@include box-shadow(0px 5px 0px $border-color);
 	@include background(linear-gradient(bottom, $box-bottom-color 12%, $box-top-color 65%));
 }
-.box-active { color: #fff; text-shadow: 0px 0px 10px #fff; @include box-shadow(0px 0px 30px $light-color); }
+.box-active { color: #fff; @include box-shadow(0px 0px 30px $light-color); }
+.over-time .box-active { @include box-shadow(0px 0px 30px $warning-color); }
+.over-time-for-day .box-active { @include box-shadow(0px 0px 30px $serious-warning-color); }
 .corner-left { border-radius: 30px 0 0 30px; }
 .corner-right { border-radius: 0 30px 30px 0; }
 .progress-label { text-align: center; width: 100%; float: left; margin-top: 5px; text-shadow: 1px 1px 0 $border-color;}
@@ -231,7 +234,7 @@ p.ui-widget-header { padding: 4px 0; margin: 10px 0 3px; color: $ui-button-text;
 ####################################################################################*/
 
 #puncher-container #left-panel-button.cookie-active,
-#puncher-container #right-panel-button.indicators-active { width: $panel-button-width / 2; @include box-shadow(0px 0px 30px $light-color); }
+#puncher-container #right-panel-button.indicators-active { width: $panel-button-width / 2; text-shadow: 0;}
 #puncher-container #left-panel.cookie-active,
 #puncher-container #right-panel.indicators-active { width: $open-panel-width; }
 /* FIXME Hack to prevent the glow of the indicators button to show on the cookie button when closing */
