@@ -63,8 +63,7 @@ function calculateIndicators(date, punches, parametres, firstCalculation, indica
 
 	// The estimate end time is calculated in this method only on first calculation
 	if (firstCalculation) {
-		var timeEnd = estimateEndTime(date, punches, parametres, indicators);
-		indicators['endTime'] = isNaN(timeEnd) ? 0 : timeEnd;
+		estimateEndTime(date, punches, parametres, indicators);
 	}
 
 	// If any of those indicators are undefined it meens the model is having a problem$
