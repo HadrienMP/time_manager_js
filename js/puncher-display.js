@@ -1,5 +1,5 @@
 function togglePuncherState() {
-    if (canPunchIn()) {
+    if (cookieHasPlace()) {
         if (!isPowerOn()) {
             powerOn();
             // Save the state
@@ -75,8 +75,15 @@ function showParametres() {
 function showPunchesParametres() {
 	$('#punches-options').dialog("open");
 }
-function showCookieState() {
+function showCookieState(warning) {
 	$('#cookie-state').dialog("open");
+    
+    if (!cookieHasPlace()) {
+        $("#cookie-state .ui-state-error").show();
+    }
+    else {
+        $("#cookie-state .ui-state-error").hide();
+    }
 }
 
 function printPunchesValues(values) {

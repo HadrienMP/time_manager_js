@@ -61,10 +61,13 @@ function sizeRatio(punches) {
     return Math.round((punches.length * 100 / 68) * 100) / 100;
 }
 
-function canPunchIn() {
+function cookieHasPlace() {
     var punches = $.cookie('punches');
     var canPunchIn = false;
-    if (punches === undefined || punches.length < 67) {
+    if (punches === undefined 
+        || (!isPowerOn() && punches.length < 67) 
+        || (isPowerOn() && punches.length <= 67)) {
+        
         canPunchIn = true;
     }
     return canPunchIn;

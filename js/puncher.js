@@ -197,8 +197,8 @@ function initCookieInfos(punches) {
     }
 
     // Button init
-    $('#delete-cookie').button({ icons: { primary: "ui-icon-trash" }, text: false });
-    $('#delete-cookies').button({ icons: { primary: "ui-icon-closethick" } , text: false});
+    $('#delete-cookie').button({ icons: { primary: "ui-icon-trash" } });
+    $('#save-cookie').button({ icons: { primary: "ui-icon-disk" }});
 }
 
 /**

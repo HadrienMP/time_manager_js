@@ -3,6 +3,8 @@ Time Manager JS
 
 Time Manager JS permet de suivre le temps que vous passez sur une tâche, un projet, un travail... Plus qu'un simple chronomètre, Time Manager JS vous offre de nombreuses informations sur le temps passé sur la tâche dans la journée par rapport au temps que vous vous étiez fixé.
 
+Attention : La version javascript est limitée à 68 check-in stockés simultanément (limite fixée par la taille maximum d'un cookie).
+
 Demo
 ----
 Une démonstration du code courant fonctionnel est accessible à l'url suivante : http://time-manager.hadrienmp.com

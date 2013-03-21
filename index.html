@@ -177,9 +177,15 @@
                     
                     
                     <div id="cookie-state" title="Remplissage du cookie">
+                        <div class="ui-state-error ui-corner-all" style="padding: 0 .7em; display: none">
+							<p>
+                                <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;margin-bottom: -5px;margin-top: -3px;"></span>
+                                <strong>Alerte:</strong> Vous n'avez plus assez de place dans le cookie pour pouvoir continuer à utiliser l'application correctement.
+                            </p>
+						</div>
                         <div id="progressbar"><div class="progress-label">0%</div></div>
-                        <button id="delete-cookie" title="Vider le cookie">&nbsp;</button>
-                        <button id="delete-cookies" title="Supprimer tous les cookies">&nbsp;</button>
+                        <button id="save-cookie">Sauver</button>
+                        <button id="delete-cookie">Vider</button>
                     </div>
 				</div>
 				
