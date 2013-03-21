@@ -80,10 +80,6 @@ function roughSizeOfObject( object ) {
     return bytes;
 }
 
-function sizeRatio(object) {
-    return (Math.round(roughSizeOfObject(object) * 100 * 100 / 2188) / 100);
-}
-
 function myDateFormat(time) {
     return new XDate(time).toString('dd/MM HH:mm');
 }

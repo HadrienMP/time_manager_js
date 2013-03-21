@@ -57,6 +57,10 @@ function getPunches() {
 
 }
 
+function sizeRatio(punches) {
+    return Math.round((punches.length * 100 / 68) * 100) / 100;
+}
+
 /**
  * Saves the state and time of the punch
  * @param string check either I or O
