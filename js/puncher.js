@@ -391,7 +391,7 @@ function initGeneralParametres() {
     // is empty, the options are preselected
     $('#tooltips-options input').eq(0).attr('checked','checked');
     $('#button-tooltip-options input').eq(0).attr('checked','checked');
-    $('#indicators-mode-options input').eq(0).attr('checked','checked');
+    $('#indicators-mode-options input').eq(3).attr('checked','checked');
     
     if (generalParametres !== undefined) {
         // If the option is not on we change its value (is on by default)

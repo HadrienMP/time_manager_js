@@ -222,16 +222,45 @@ function totalTimeMultipleDays(calculationParametres) {
         // For each day between the start and the end of the punches we 
         // calculate the time spent and match it with the time to spend
         // so that we get the time left to spend for all the days combined
+        
+        var indicatorsMode = calculationParametres['indicatorsMode'];
+        if (indicatorsMode === undefined || isNaN(indicatorsMode)) {
+            // If the indicatorsMode is not defined we suppose it's 3 (infinite)
+            indicatorsMode = 3;
+        }
+        
+        // Calculates the number of days in totality in the punches
         var firstPunchDate = new XDate(punches[0]['date']);
-        var now = new XDate();
         var numberOfDays = Math.ceil(firstPunchDate.diffDays(now));
+        var now = new XDate();
+        switch (indicatorsMode) {
+            // Day Mode
+            case 0:
+                numberOfDays = 1;
+            break;
+            // Week Mode
+            case 1:
+                var monday = now.clone();
+                monday.setWeek(now.getWeek());
+                if (monday.diffDays(now) < numberOfDays) {
+                    numberOfDays = Math.ceil(monday.diffDays(now));
+                }
+            break;
+            // Month Mode
+            case 2:
+                if (now.getDate() < numberOfDays) {
+                    numberOfDays = now.getDate();
+                }
+            break;
+            // The infinite mode is already calculated with the firstPunchDate
+        }
+        
         var numberOfDaysWorked = numberOfDays;
         var totalTimeEver = 0;
+        var date = now;
+        // We calculate the totalTime from now to the last day included in the calculation
+        // according to the indicators' mode
         for ( var i = 0 ; i <  numberOfDays ; i++) {
-            
-            // Get the date to get the time spent
-            var date = firstPunchDate.clone();
-            date.addDays(i);
             
             // If the date is not today we set the time to before midnight
             // because if the personn forgot to punch out we have to count 
@@ -253,6 +282,8 @@ function totalTimeMultipleDays(calculationParametres) {
             else {
                 totalTimeEver += totalTimeTemp;
             }
+            
+            date.addDays(-1);
         }
     }
     
