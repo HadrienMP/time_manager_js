@@ -61,6 +61,15 @@ function sizeRatio(punches) {
     return Math.round((punches.length * 100 / 68) * 100) / 100;
 }
 
+function canPunchIn() {
+    var punches = $.cookie('punches');
+    var canPunchIn = false;
+    if (punches === undefined || punches.length < 67) {
+        canPunchIn = true;
+    }
+    return canPunchIn;
+}
+
 /**
  * Saves the state and time of the punch
  * @param string check either I or O
