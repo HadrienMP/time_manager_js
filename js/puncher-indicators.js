@@ -267,7 +267,7 @@ function totalTimeMultipleDays(calculationParametres) {
             // the time spent between the punch in and the end of the day
             // TODO: Handle the bug when the person didn't punch in
             // Should it calculate until midnight or until check out the next day?
-            if (date.getDate() !== now.getDate()) {
+            if (date.diffDays(now) !== 0) {
                 date.setHours(23,59,59,999);
             }
             else {
