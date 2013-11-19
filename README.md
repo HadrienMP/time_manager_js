@@ -7,7 +7,7 @@ Attention : La version javascript est limitée à 68 check-in stockés simultan�
 
 Demo
 ----
-Une démonstration du code courant fonctionnel est accessible à l'url suivante : http://time-manager.hadrienmp.com
+Une démonstration du code courant fonctionnel est accessible à l'url suivante : http://puncher.hadrienmp.fr
 
 Fonctionnalités
 ---------------
